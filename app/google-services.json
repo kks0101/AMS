@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1000904350290",
+    "firebase_url": "https://collegeams-8b3c4.firebaseio.com",
+    "project_id": "collegeams-8b3c4",
+    "storage_bucket": "collegeams-8b3c4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1000904350290:android:834907ebc6dbe5f5545d8b",
+        "android_client_info": {
+          "package_name": "com.example.ams"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1000904350290-k8lg5fkqn40lk9loca79q61djj0r9dhi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsYNETIoZwvl59XVvNsdivJ3_aOgL33ck"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1000904350290-k8lg5fkqn40lk9loca79q61djj0r9dhi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
