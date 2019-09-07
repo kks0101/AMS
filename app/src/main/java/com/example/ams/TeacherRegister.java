@@ -187,14 +187,6 @@ public class TeacherRegister extends BaseActivity implements View.OnClickListene
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
-            //show progress dialog
-            /*progressDialog = new ProgressDialog(TeacherRegister.this);
-            progressDialog.setCancelable(true);
-            progressDialog.setMessage("Loading...");
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            progressDialog.setProgress(0);
-            progressDialog.show();*/
             hideProgressDialog();
             showProgressDialog("Updating..please wait..");
             name = nameField.getText().toString();
@@ -304,7 +296,7 @@ public class TeacherRegister extends BaseActivity implements View.OnClickListene
                 Toast.makeText(TeacherRegister.this, "Coudlnt connect to PHPServer", Toast.LENGTH_LONG).show();
             }
             else {
-                s = s.substring(1, s.length());
+
                 //otherwise string would contain the JSON returned from php
                 JSONParser parser = new JSONParser();
                 JSONObject jsonObject = null;
@@ -332,6 +324,7 @@ public class TeacherRegister extends BaseActivity implements View.OnClickListene
                 else {
                     Intent intent = new Intent(getApplicationContext(), TeacherActivity.class);
                     startActivity(intent);
+                    finish();
                 }
             }
         }
