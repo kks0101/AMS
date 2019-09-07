@@ -7,6 +7,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -28,8 +29,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import org.json.JSONObject;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -40,14 +39,14 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.net.URLEncoder;
-import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.ParseException;
 
 public class TeacherRegister extends BaseActivity implements View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback{
     private EditText nameField, teacherIdField, emailField, phnNoField, passwordField, retypePasswordField;
@@ -184,11 +183,20 @@ public class TeacherRegister extends BaseActivity implements View.OnClickListene
     private class CreateNewTeacher extends AsyncTask<String, String , String >{
         String name, id, email, phnNo, deviceId, userId ;
         Boolean verified = false;
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+
+            //show progress dialog
+            /*progressDialog = new ProgressDialog(TeacherRegister.this);
+            progressDialog.setCancelable(true);
+            progressDialog.setMessage("Loading...");
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setProgress(0);
+            progressDialog.show();*/
             hideProgressDialog();
-            showProgressDialog("Updating details..Please Wait");
+            showProgressDialog("Updating..please wait..");
             name = nameField.getText().toString();
             id = teacherIdField.getText().toString();
             email = emailField.getText().toString();
@@ -209,6 +217,7 @@ public class TeacherRegister extends BaseActivity implements View.OnClickListene
         @Override
         protected String doInBackground(String... strings) {
             ///ContentValues params = new ContentValues();
+
             HashMap<String, Object> params = new HashMap<String, Object>();
             params.put("name", name);
             params.put("id", id);
@@ -236,30 +245,6 @@ public class TeacherRegister extends BaseActivity implements View.OnClickListene
                 }
                 Log.d("Debug", data);
 
-                /*URL url = new URL(link);
-                URLConnection conn = url.openConnection();
-
-                conn.setDoOutput(true);
-
-                OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
-
-                wr.write(data);
-                wr.flush();
-                Log.d("Debug","below flush");
-                BufferedReader reader = new BufferedReader(new
-                        InputStreamReader(conn.getInputStream()));
-                Log.d("Debug","below buffered reader");
-                StringBuilder sb = new StringBuilder();
-                String line = null;
-
-                // Read Server Response
-                while((line = reader.readLine()) != null) {
-                    sb.append(line);
-                    break;
-                }
-
-                return sb.toString();*/
-
                 URL url=new URL(link);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                 httpURLConnection.setRequestMethod("POST");
@@ -274,13 +259,19 @@ public class TeacherRegister extends BaseActivity implements View.OnClickListene
                 bufferedWriter.flush();
                 bufferedWriter.close();
                 InputStream inputStream = new BufferedInputStream(httpURLConnection.getInputStream());
+
+
                 String result = convertStreamToString(inputStream);
                 httpURLConnection.disconnect();
-                Log.d("TAG",result+"");
+                Log.d("TAG",result);
+                //teacherId is defined in sql as primary key
+                //so if any user login with the same teacherId, delete this already created user in Firebase
 
+
+                return result;
             }
             catch(Exception e){
-                Log.d("debug",e.getMessage());
+                    Log.d("debug",e.getMessage());
                 e.printStackTrace();
             }
             return null;
@@ -308,10 +299,41 @@ public class TeacherRegister extends BaseActivity implements View.OnClickListene
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            hideProgressDialog();
-            Intent intent = new Intent(getApplicationContext(), TeacherActivity.class);
-            startActivity(intent);
+            //if string returned from doinbackground is null, that means Exception occured while connectioon to server
+            if(s==null){
+                Toast.makeText(TeacherRegister.this, "Coudlnt connect to PHPServer", Toast.LENGTH_LONG).show();
+            }
+            else {
+                s = s.substring(1, s.length());
+                //otherwise string would contain the JSON returned from php
+                JSONParser parser = new JSONParser();
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = (JSONObject) parser.parse(s);
+                }catch(ParseException e){
+                    e.printStackTrace();
+                }
+                int successCode = 0;
+                if(jsonObject!=null) {
+                    Object p = jsonObject.get("success");
+                    successCode = Integer.parseInt(p.toString());
+                }
+                if( successCode==0){
+                    Toast.makeText(TeacherRegister.this, "Some error occurred", Toast.LENGTH_LONG).show();
+                }
+                if (s.toLowerCase().contains("duplicate")) {
 
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    if (user != null)
+                        user.delete();
+                    //if data is Not updated to mysql server
+                    Toast.makeText(TeacherRegister.this, "Teacher Id already exists", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    Intent intent = new Intent(getApplicationContext(), TeacherActivity.class);
+                    startActivity(intent);
+                }
+            }
         }
     }
 }
