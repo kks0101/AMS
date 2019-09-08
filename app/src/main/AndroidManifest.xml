@@ -14,7 +14,8 @@
         android:theme="@style/AppTheme">
         <activity android:name=".TeacherRegister"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"></activity>
-        <activity android:name=".StudentRegister" />
+        <activity android:name=".StudentRegister"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"></activity>
         <activity android:name=".TeacherActivity" />
         <activity android:name=".StudentActivity" />
         <activity android:name=".MainActivity">
