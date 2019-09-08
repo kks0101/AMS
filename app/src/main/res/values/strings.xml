@@ -2,4 +2,26 @@
     <string name="app_name">AMS</string>
     <string name="email">Email</string>
     <string name="Username">Username</string>
+    <string name="branch">Branch</string>
+    <string name="group">Group</string>
+    <string-array name="available_branch">
+        <item>IT</item>
+        <item>CSE</item>
+        <item>ECE</item>
+        <item>EE</item>
+        <item>CE</item>
+        <item>ME</item>
+    </string-array>
+
+    <string-array name="groups">
+        <item>A</item>
+        <item>B</item>
+        <item>CS(A)</item>
+        <item>CS(B)</item>
+        <item>IT</item>
+        <item>ME1</item>
+        <item>ME2</item>
+        <item>CE1</item>
+        <item>CE2</item>
+    </string-array>
 </resources>
