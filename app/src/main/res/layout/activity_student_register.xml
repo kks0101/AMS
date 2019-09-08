@@ -4,88 +4,172 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".StudentRegister">
+    tools:context=".StudentRegister"
+    android:background="@color/colorAccent">
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Student Registration"
         android:id="@+id/display"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="0dp"
+        android:text="Student Registration"
+        android:layout_alignParentLeft="true"
+        android:layout_centerHorizontal="true"
+        android:paddingTop="10dp"
+        android:textColor="#FFFFFF"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        android:background="@drawable/text_edit"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
     <LinearLayout
+        android:id="@+id/registerItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:layout_below="@+id/display"
-        android:gravity="bottom"
         android:orientation="vertical"
-        android:paddingTop="100dp">
+        android:paddingTop="50dp">
 
         <EditText
             android:id="@+id/studentNameField"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:textColorHint="@color/textColor"
+            android:layout_width="300dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:drawableLeft="@drawable/name"
+            android:background="@drawable/edit_round"
+            android:drawablePadding="10dp"
+            android:paddingLeft="10dp"
+            android:textColor="@color/black"
             android:hint="Name" />
 
         <EditText
             android:id="@+id/studentRegNo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:textColorHint="@color/textColor"
+            android:layout_width="300dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:drawableLeft="@drawable/regiter"
+            android:background="@drawable/edit_round"
+            android:drawablePadding="10dp"
+            android:paddingLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/black"
             android:hint="Registration Number" />
+
+
+        <EditText
+            android:id="@+id/studentEmailField"
+            android:textColorHint="@color/textColor"
+            android:layout_width="300dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:drawableLeft="@drawable/email"
+            android:background="@drawable/edit_round"
+            android:drawablePadding="10dp"
+            android:paddingLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:hint="Email"
+            android:textColor="@color/black"/>
+
+        <EditText
+            android:id="@+id/studentPhoneNoField"
+            android:textColorHint="@color/textColor"
+            android:layout_width="300dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:drawableLeft="@drawable/phone"
+            android:background="@drawable/edit_round"
+            android:drawablePadding="10dp"
+            android:paddingLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:hint="Phone No"
+            android:textColor="@color/black"/>
+
 
         <Spinner
             android:id="@+id/branchSpinner"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="300dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/edit_round"
+            android:drawablePadding="10dp"
+            android:paddingLeft="10dp"
+            android:layout_marginTop="5dp"
             android:prompt="@string/branch"
             android:spinnerMode="dialog"/>
 
         <EditText
-            android:id="@+id/studentEmailField"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Email" />
-
-        <EditText
             android:id="@+id/studentSemesterField"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Semester" />
-
-        <EditText
-            android:id="@+id/studentPhoneNoField"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Phone No" />
+            android:textColorHint="@color/textColor"
+            android:layout_width="300dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:drawableLeft="@drawable/semester"
+            android:background="@drawable/edit_round"
+            android:drawablePadding="10dp"
+            android:paddingLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:hint="Semester"
+            android:textColor="@color/black"/>
 
         <Spinner
             android:id="@+id/groupSpinner"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="300dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:popupBackground="@color/colorAccent"
+            android:background="@drawable/edit_round"
+            android:drawablePadding="10dp"
+            android:paddingLeft="10dp"
+            android:layout_marginTop="5dp"
             android:prompt="@string/group"
-            android:spinnerMode="dialog"
-            />
+            android:spinnerMode="dialog"/>
 
         <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:id="@+id/passwordField"
+            android:textColorHint="@color/textColor"
+            android:layout_width="300dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:drawableLeft="@drawable/password"
+            android:background="@drawable/edit_round"
+            android:drawablePadding="10dp"
+            android:paddingLeft="10dp"
+            android:layout_marginTop="5dp"
             android:hint="Password"
             android:inputType="textPassword"
-            android:id="@+id/passwordField"/>
+            android:textColor="@color/black"/>
 
         <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:id="@+id/retypePassword"
+            android:textColorHint="@color/textColor"
+            android:layout_width="300dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:drawableLeft="@drawable/password"
+            android:background="@drawable/edit_round"
+            android:drawablePadding="10dp"
+            android:paddingLeft="10dp"
+            android:layout_marginTop="5dp"
             android:hint="Retype Password"
             android:inputType="textPassword"
-            android:id="@+id/retypePassword"/>
+            android:textColor="@color/black"/>
     </LinearLayout>
 
     <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Register"
         android:id="@+id/studentRegister"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
         android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"/>
+        android:layout_below="@+id/registerItem"
+        android:layout_marginTop="27dp"
+        android:background="@drawable/button_round"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textSize="20dp"
+        android:text="Register" />
 </RelativeLayout>
