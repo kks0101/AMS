@@ -16,8 +16,9 @@
         android:background="@drawable/edit_round"
         android:drawableLeft="@drawable/username"
         android:drawablePadding="10dp"
-        android:hint="@string/Username"
+        android:hint="@string/email"
         android:inputType="text"
+        android:textColorHint="@color/textColor"
         android:paddingLeft="10dp"/>
 
     <EditText
@@ -30,8 +31,9 @@
         android:drawableLeft="@drawable/password"
         android:background="@drawable/edit_round"
         android:paddingLeft="10dp"
-        android:drawablePadding="10dp"
+        android:drawablePadding="16dp"
         android:hint="Password"
+        android:textColorHint="@color/textColor"
         android:inputType="textPassword"/>
 
     <Button
