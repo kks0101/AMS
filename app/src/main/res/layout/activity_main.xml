@@ -5,21 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:background="#E6FAFB">
+    android:background="#B9E7EB">
 
-
-    <!--<TextView
-        android:id="@+id/loginText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:text="LOGIN"
-        android:textAlignment="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:fontFamily="sans-serif-medium"
-        android:textColor="@color/colorPrimary"
-        android:textStyle="bold" />
-       -->
     <EditText
         android:id="@+id/email"
         android:layout_width="300dp"
@@ -29,9 +16,9 @@
         android:background="@drawable/edit_round"
         android:drawableLeft="@drawable/username"
         android:drawablePadding="10dp"
-        android:hint="Username"
+        android:hint="@string/Username"
         android:inputType="text"
-        android:paddingLeft="10dp" />
+        android:paddingLeft="10dp"/>
 
     <EditText
         android:id="@+id/password"
@@ -77,10 +64,7 @@
             android:layout_gravity="center_horizontal"
             android:paddingLeft="80dp"
             android:textAllCaps="false"
-            android:textColor="#044553"
-
-
-            />
+            android:textColor="#044553"/>
 
         <Button
             android:id="@+id/studentSignUPButton"
@@ -104,7 +88,5 @@
             android:textColor="#FFFFFF"
             android:background="@drawable/button_round"
             />
-
-
     </LinearLayout>
 </RelativeLayout>

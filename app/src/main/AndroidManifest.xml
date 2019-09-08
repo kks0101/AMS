@@ -12,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".TeacherRegister"></activity>
+        <activity android:name=".TeacherRegister"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"></activity>
         <activity android:name=".StudentRegister" />
         <activity android:name=".TeacherActivity" />
         <activity android:name=".StudentActivity" />
