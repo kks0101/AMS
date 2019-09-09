@@ -325,7 +325,7 @@ public class TeacherRegister extends BaseActivity implements View.OnClickListene
                     Toast.makeText(TeacherRegister.this, "Teacher Id/Device Id already exists", Toast.LENGTH_LONG).show();
                 }
                 else {
-                    Intent intent = new Intent(getApplicationContext(), TeacherActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), TeacherSubject.class);
                     startActivity(intent);
                     finish();
                 }

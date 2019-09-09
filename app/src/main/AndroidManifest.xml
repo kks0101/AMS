@@ -18,6 +18,7 @@
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"></activity>
         <activity android:name=".TeacherActivity" />
         <activity android:name=".StudentActivity" />
+        <activity android:name=".TeacherSubject" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -1,8 +1,8 @@
 package com.example.ams;
 
 public class TeacherSubjectDetail {
-    private String subjectCode;
-    private String branch;
+    public String subjectCode;
+    public String branch;
 
     TeacherSubjectDetail(String subjectCode, String branch){
         this.subjectCode = subjectCode;
@@ -13,18 +13,18 @@ public class TeacherSubjectDetail {
 
     }
 
-    void setSubjectCode(String subjectCode){
+    public void setSubjectCode(String subjectCode){
         this.subjectCode = subjectCode;
     }
 
-    void setBranch(String branch){
+    public void setBranch(String branch){
         this.branch = branch;
     }
 
-    String getSubjectCode(){
+    public String getSubjectCode(){
         return this.subjectCode;
     }
-    String getBranch(){
+    public String getBranch(){
         return this.branch;
     }
 }
