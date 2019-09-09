@@ -1,5 +1,7 @@
 package com.example.ams;
 
+import androidx.annotation.Nullable;
+
 public class TeacherSubjectDetail {
     public String subjectCode;
     public String branch;
@@ -26,5 +28,14 @@ public class TeacherSubjectDetail {
     }
     public String getBranch(){
         return this.branch;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if(!(obj instanceof TeacherSubjectDetail)){
+            return false;
+        }
+        TeacherSubjectDetail teacherSubjectDetail = (TeacherSubjectDetail) obj;
+        return teacherSubjectDetail.subjectCode.equals(subjectCode) && teacherSubjectDetail.branch.equals(branch);
     }
 }

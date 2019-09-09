@@ -54,9 +54,9 @@ public class TeacherSubject extends BaseActivity {
     private ListView listView;
     List<String> selectedSubjectList = new ArrayList<>();
     //to get the list of objects of TeacherSubjectDetail to be used in Firebase realtime db
-    List<TeacherSubjectDetail> teacherSubjectDetailsList = new ArrayList<>();
+    ArrayList<TeacherSubjectDetail> teacherSubjectDetailsList = new ArrayList<>();
     private Button addSubject, adddSubjectsToDb;
-    private ArrayAdapter<String> arrayAdapter;
+    private TeacherSubjectAdapter teacherSubjectAdapter;
     private DatabaseReference mDatabase;
     private FirebaseDatabase firebaseDatabase;
     private final String BASE_URL = "http://192.168.43.99:1234/ams/";
@@ -73,8 +73,8 @@ public class TeacherSubject extends BaseActivity {
         //to store list of subjects and grouups selected
         firebaseDatabase = FirebaseDatabase.getInstance();
         mDatabase = firebaseDatabase.getReference("teachers");
-        arrayAdapter = new ArrayAdapter<>(this, R.layout.activity_listview, R.id.textView, selectedSubjectList);
-        listView.setAdapter(arrayAdapter);
+        teacherSubjectAdapter = new TeacherSubjectAdapter(getApplicationContext(), teacherSubjectDetailsList);
+        listView.setAdapter(teacherSubjectAdapter);
 
 
 
@@ -130,9 +130,11 @@ public class TeacherSubject extends BaseActivity {
                 String branch = branchSpinner.getSelectedItem().toString();
                 String subjectCode = subjectSpinner.getSelectedItem().toString();
                 TeacherSubjectDetail teacherSubjectDetail = new TeacherSubjectDetail(subjectCode, branch);
-                teacherSubjectDetailsList.add(teacherSubjectDetail);
-                selectedSubjectList.add(branch + " -- " + subjectCode);
-                arrayAdapter.notifyDataSetChanged();
+                if(!teacherSubjectDetailsList.contains(teacherSubjectDetail)) {
+                    teacherSubjectDetailsList.add(teacherSubjectDetail);
+                    selectedSubjectList.add(branch + " -- " + subjectCode);
+                    teacherSubjectAdapter.notifyDataSetChanged();
+                }
             }
         });
 
