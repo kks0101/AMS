@@ -3,11 +3,13 @@
     <string name="email">Email</string>
     <string name="branch">Branch</string>
     <string name="group">Group</string>
+    <string name="subject">Subject</string>
     <string-array name="available_branch">
-        <item>IT</item>
+        <item>EE</item>
+        <item>IT5</item>
         <item>CSE</item>
         <item>ECE</item>
-        <item>EE</item>
+
         <item>CE</item>
         <item>ME</item>
     </string-array>

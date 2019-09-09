@@ -310,8 +310,11 @@ public class TeacherRegister extends BaseActivity implements View.OnClickListene
                     Object p = jsonObject.get("success");
                     successCode = Integer.parseInt(p.toString());
                 }
-                if( successCode==0){
+                if(jsonObject!=null && successCode==0){
                     Toast.makeText(TeacherRegister.this, "Some error occurred", Toast.LENGTH_LONG).show();
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    if (user != null)
+                        user.delete();
                 }
                 if (s.toLowerCase().contains("duplicate")) {
 
@@ -319,10 +322,10 @@ public class TeacherRegister extends BaseActivity implements View.OnClickListene
                     if (user != null)
                         user.delete();
                     //if data is Not updated to mysql server
-                    Toast.makeText(TeacherRegister.this, "Teacher Id already exists", Toast.LENGTH_LONG).show();
+                    Toast.makeText(TeacherRegister.this, "Teacher Id/Device Id already exists", Toast.LENGTH_LONG).show();
                 }
                 else {
-                    Intent intent = new Intent(getApplicationContext(), TeacherActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), TeacherSubject.class);
                     startActivity(intent);
                     finish();
                 }
