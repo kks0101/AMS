@@ -27,7 +27,7 @@ import java.io.ByteArrayOutputStream;
 public class TeacherTakeAttendance extends BaseActivity {
     private TextView displaySubjectCode, displayGroup;
     private Button generateQr;
-    private static int QRCodeWidth = 500;
+    private static int QRCodeWidth = 1000;
     private Bitmap bitmap;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +82,7 @@ public class TeacherTakeAttendance extends BaseActivity {
         }
         Bitmap bitmap = Bitmap.createBitmap(bitMatrixWidth, bitMatrixHeight, Bitmap.Config.ARGB_8888);
 
-        bitmap.setPixels(pixels, 0, 500, 0, 0, bitMatrixWidth, bitMatrixHeight);
+        bitmap.setPixels(pixels, 0, QRCodeWidth, 0, 0, bitMatrixWidth, bitMatrixHeight);
         return bitmap;
     }
 

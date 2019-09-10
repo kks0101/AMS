@@ -237,7 +237,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                     Object p = jsonObject.get("success");
                     successCode = Integer.parseInt(p.toString());
                 }
-                if( successCode==0){
+                if( jsonObject!=null && successCode==0){
                     Toast.makeText(MainActivity.this, "Some error occurred", Toast.LENGTH_LONG).show();
                     //if could not know whether the current user is student or teacher
                     FirebaseAuth.getInstance().signOut();
