@@ -27,7 +27,7 @@ import java.io.ByteArrayOutputStream;
 public class TeacherTakeAttendance extends BaseActivity {
     private TextView displaySubjectCode, displayGroup;
     private Button generateQr;
-    private static int QRCodeWidth = 1000;
+    private static int QRCodeWidth = 500;
     private Bitmap bitmap;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +48,7 @@ public class TeacherTakeAttendance extends BaseActivity {
             public void onClick(View view) {
                 GenerateQr generateQr = new GenerateQr();
                 generateQr.execute();
+
 
             }
         });
