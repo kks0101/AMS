@@ -17,7 +17,7 @@
             android:id="@+id/branch"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:prompt="@string/branch" />
+            android:prompt="@string/group" />
 
         <Spinner
             android:id="@+id/subjectSpinner"

@@ -101,7 +101,7 @@ public class TeacherTakeAttendance extends BaseActivity {
             JSONObject credentials = new JSONObject();
             try{
                 credentials.put("subject", subject);
-                credentials.put("branch", branch);
+                credentials.put("group", branch);
             }catch (JSONException e){
                 e.printStackTrace();
             }

@@ -217,6 +217,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             //if string returned from doinbackground is null, that means Exception occured while connectioon to server
+            hideProgressDialog();
             if(s==null){
                 Toast.makeText(MainActivity.this, "Coudlnt connect to PHPServer", Toast.LENGTH_LONG).show();
                 //if could not know whether the current user is student or teacher

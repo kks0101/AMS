@@ -6,7 +6,7 @@
     <string name="subject">Subject</string>
     <string-array name="available_branch">
         <item>EE</item>
-        <item>IT5</item>
+        <item>IT</item>
         <item>CSE</item>
         <item>ECE</item>
 
@@ -17,9 +17,10 @@
     <string-array name="groups">
         <item>A</item>
         <item>B</item>
-        <item>CS(A)</item>
-        <item>CS(B)</item>
-        <item>IT</item>
+        <item>CS1A</item>
+        <item>CS1B</item>
+        <item>EE1</item>
+        <item>IT5</item>
         <item>ME1</item>
         <item>ME2</item>
         <item>CE1</item>

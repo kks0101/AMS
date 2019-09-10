@@ -79,7 +79,7 @@ public class TeacherSubject extends BaseActivity {
 
 
         ArrayAdapter<CharSequence> branchAdapter = ArrayAdapter.createFromResource(this,
-                R.array.available_branch, android.R.layout.simple_spinner_item);
+                R.array.groups, android.R.layout.simple_spinner_item);
         branchAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         branchSpinner.setAdapter(branchAdapter);
         //function to get the subjects of the selected branch from the spinner
