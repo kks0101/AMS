@@ -20,4 +20,26 @@
         android:text="Log Out"
         android:layout_below="@+id/emailTextView"/>
 
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/teacherListView"
+        android:layout_below="@+id/logout"
+        android:dividerHeight="1dp"/>
+
+    <LinearLayout
+        android:id="@+id/linlaHeaderProgress"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <ProgressBar
+            android:id="@+id/pbHeaderProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </ProgressBar>
+    </LinearLayout>
+
 </RelativeLayout>
