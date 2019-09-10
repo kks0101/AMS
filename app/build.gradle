@@ -33,5 +33,9 @@ dependencies {
         exclude group: 'org.hamcrest', module: 'hamcrest-core'
     }
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    //zxing library
+    implementation 'com.journeyapps:zxing-android-embedded:3.4.0'
+    implementation 'com.google.zxing:core:3.2.1'
 }
 apply plugin: 'com.google.gms.google-services'

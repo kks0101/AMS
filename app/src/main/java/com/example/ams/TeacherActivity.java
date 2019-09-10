@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -34,7 +35,8 @@ public class TeacherActivity extends BaseActivity implements View.OnClickListene
     private Button logOut;
     private ListView teacherListView;
     FirebaseDatabase mDatabase;
-
+    ArrayList<String> stringArrayList = new ArrayList<>();
+    List<TeacherSubjectDetail> recievedList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,8 +64,8 @@ public class TeacherActivity extends BaseActivity implements View.OnClickListene
                 linlaHeaderProgress.setVisibility(View.GONE);
 
                 GenericTypeIndicator<List<TeacherSubjectDetail>> t = new GenericTypeIndicator<List<TeacherSubjectDetail>>() {};
-                List<TeacherSubjectDetail> recievedList = dataSnapshot.getValue(t);
-                ArrayList<String> stringArrayList = new ArrayList<>();
+                 recievedList = dataSnapshot.getValue(t);
+                stringArrayList = new ArrayList<>();
 
                 if(recievedList!=null) {
                     for (TeacherSubjectDetail tsd : recievedList) {
@@ -77,6 +79,17 @@ public class TeacherActivity extends BaseActivity implements View.OnClickListene
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        teacherListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //Toast.makeText(getApplicationContext(), stringArrayList.get(i), Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(TeacherActivity.this, TeacherTakeAttendance.class);
+                intent.putExtra("TeacherSubjectDetail", recievedList.get(i));
+                startActivity(intent);
 
             }
         });

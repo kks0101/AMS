@@ -2,7 +2,10 @@ package com.example.ams;
 
 import androidx.annotation.Nullable;
 
-public class TeacherSubjectDetail {
+import java.io.Serializable;
+
+//implements Serializable, inorder to pass the object of this class directly through intent
+public class TeacherSubjectDetail implements Serializable {
     public String subjectCode;
     public String branch;
 

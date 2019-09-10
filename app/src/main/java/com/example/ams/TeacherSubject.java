@@ -141,15 +141,21 @@ public class TeacherSubject extends BaseActivity {
         adddSubjectsToDb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                //if user is currently logged in
-                if(user!=null) {
-                    String userId = user.getUid();
+                //to ensure that Teacher do provide subjects
+                if(teacherSubjectDetailsList==null){
+                    Toast.makeText(getApplicationContext(), "Please enter subjects", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    //if user is currently logged in
+                    if (user != null) {
+                        String userId = user.getUid();
 
-                    mDatabase.child(userId).setValue(teacherSubjectDetailsList);
-                    Intent intent = new Intent(TeacherSubject.this, TeacherActivity.class);
-                    startActivity(intent);
-                    finish();
+                        mDatabase.child(userId).setValue(teacherSubjectDetailsList);
+                        Intent intent = new Intent(TeacherSubject.this, TeacherActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
                 }
             }
         });
