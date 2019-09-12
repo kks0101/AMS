@@ -2,6 +2,8 @@ package com.example.ams;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
@@ -51,8 +53,8 @@ import java.util.Set;
 public class TeacherSubject extends BaseActivity {
     private Spinner branchSpinner, subjectSpinner;
     private List<String> subjectList;
-    private ListView listView;
-    List<String> selectedSubjectList = new ArrayList<>();
+    private RecyclerView recyclerView;
+
     //to get the list of objects of TeacherSubjectDetail to be used in Firebase realtime db
     ArrayList<TeacherSubjectDetail> teacherSubjectDetailsList = new ArrayList<>();
     private Button addSubject, adddSubjectsToDb;
@@ -67,32 +69,28 @@ public class TeacherSubject extends BaseActivity {
 
         branchSpinner = (Spinner)findViewById(R.id.branch);
         subjectSpinner = (Spinner) findViewById(R.id.subjectSpinner);
-        listView = (ListView) findViewById(R.id.listView);
+
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         addSubject = (Button)findViewById(R.id.addSubject);
         adddSubjectsToDb = (Button) findViewById(R.id.addSubjectsToDb);
         //to store list of subjects and grouups selected
+
         firebaseDatabase = FirebaseDatabase.getInstance();
         mDatabase = firebaseDatabase.getReference("teachers");
-        teacherSubjectAdapter = new TeacherSubjectAdapter(getApplicationContext(), teacherSubjectDetailsList);
-        listView.setAdapter(teacherSubjectAdapter);
 
+        teacherSubjectAdapter = new TeacherSubjectAdapter(getApplicationContext(), teacherSubjectDetailsList);
+        recyclerView.setAdapter(teacherSubjectAdapter);
 
 
         ArrayAdapter<CharSequence> branchAdapter = ArrayAdapter.createFromResource(this,
                 R.array.groups, android.R.layout.simple_spinner_item);
         branchAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         branchSpinner.setAdapter(branchAdapter);
-        //function to get the subjects of the selected branch from the spinner
-        //searchForSubject(branchSpinner.getSelectedItem().toString());
 
-        //creating adapter for group spinner
         subjectList = new ArrayList<>();
-        /*//list to contain subjects of specific branch fetched from server
-        ArrayAdapter<String> subjectSpinnerAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, subjectList);
-
-        subjectSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        subjectSpinner.setAdapter(subjectSpinnerAdapter);*/
 
         branchSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -129,10 +127,10 @@ public class TeacherSubject extends BaseActivity {
             public void onClick(View view) {
                 String branch = branchSpinner.getSelectedItem().toString();
                 String subjectCode = subjectSpinner.getSelectedItem().toString();
-                TeacherSubjectDetail teacherSubjectDetail = new TeacherSubjectDetail(subjectCode, branch);
+                TeacherSubjectDetail teacherSubjectDetail = new TeacherSubjectDetail(subjectCode.substring(0, subjectCode.indexOf("-")), branch, subjectCode.substring(subjectCode.lastIndexOf("-")+1));
                 if(!teacherSubjectDetailsList.contains(teacherSubjectDetail)) {
                     teacherSubjectDetailsList.add(teacherSubjectDetail);
-                    selectedSubjectList.add(branch + " -- " + subjectCode);
+                    //selectedSubjectList.add(branch + " -- " + subjectCode);
                     teacherSubjectAdapter.notifyDataSetChanged();
                 }
             }
@@ -153,6 +151,7 @@ public class TeacherSubject extends BaseActivity {
 
                         mDatabase.child(userId).setValue(teacherSubjectDetailsList);
                         Intent intent = new Intent(TeacherSubject.this, TeacherActivity.class);
+                        intent.putExtra("TeacherSubjectDetail", teacherSubjectDetailsList);
                         startActivity(intent);
                         finish();
                     }
@@ -176,7 +175,7 @@ public class TeacherSubject extends BaseActivity {
 
     private void searchForSubject(String branch){
         GetSubjectDetails getSubjectDetails = new GetSubjectDetails();
-        getSubjectDetails.execute(branch);
+        getSubjectDetails.execute();
     }
 
     private class GetSubjectDetails extends AsyncTask<String, String , String > {
@@ -197,7 +196,7 @@ public class TeacherSubject extends BaseActivity {
             ///ContentValues params = new ContentValues();
 
             HashMap<String, Object> params = new HashMap<String, Object>();
-            String branch_table_name = "subject_" + strings[0].toLowerCase();
+            String branch_table_name = "subject_" + branch.toLowerCase();
             params.put("branch_table_name", branch_table_name.trim());
 
             String link = BASE_URL + "get_subject_details.php";
@@ -279,22 +278,21 @@ public class TeacherSubject extends BaseActivity {
 
                 //otherwise string would contain the JSON returned from php
                 JSONParser parser = new JSONParser();
-                JSONArray  jsonArray = null;
+                JSONObject jsonObject = null;
                 try {
                     //jsonObject = (JSONObject) parser.parse(s);
-                    jsonArray = (JSONArray)parser.parse(s);
-                } catch (ParseException e) {
+                    org.json.JSONArray jb= new org.json.JSONArray(s);
+                    org.json.JSONObject job1 = (org.json.JSONObject) jb.getJSONObject(0);
+                    org.json.JSONObject job2 = (org.json.JSONObject) jb.getJSONObject(1);
+                    org.json.JSONArray st1 = job1.getJSONArray("subject_code");
+                    org.json.JSONArray st2 = job2.getJSONArray("subject_name");
+                    for(int i=0;i<st1.length();i++){
+                        subjectList.add(st1.getString(i) + "-" + st2.getString(i));
+                    }
+
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
-                //List<String> subjects = new ArrayList<>();
-                if(jsonArray==null)
-                    Toast.makeText(TeacherSubject.this, "ARRAY empty !", Toast.LENGTH_LONG).show();
-                if(jsonArray!=null) {
-                    for (Object json : jsonArray) {
-                        subjectList.add(json.toString());
-                    }
-                }
-                //list to contain subjects of specific branch fetched from server
                 ArrayAdapter<String> subjectSpinnerAdapter = new ArrayAdapter<String>(TeacherSubject.this,
                         android.R.layout.simple_spinner_item, subjectList);
 
