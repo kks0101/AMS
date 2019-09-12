@@ -17,7 +17,7 @@
             android:id="@+id/branch"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:prompt="@string/group" />
+            android:prompt="@string/branch" />
 
         <Spinner
             android:id="@+id/subjectSpinner"
@@ -33,11 +33,17 @@
 
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
         android:layout_below="@+id/linear"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp"
+        android:divider="#000000"
+        android:dividerHeight="1dp"
+        android:listSelector="@color/colorAccent" />
 
     <Button
         android:layout_width="match_parent"

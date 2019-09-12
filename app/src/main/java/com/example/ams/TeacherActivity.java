@@ -2,13 +2,10 @@ package com.example.ams;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -31,25 +28,27 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TeacherActivity extends BaseActivity{
+public class TeacherActivity extends BaseActivity implements View.OnClickListener{
     FirebaseAuth mAuth;
-    private RecyclerView recyclerView;
-    ArrayList<String> stringArrayList = new ArrayList<>();
-    ArrayList<TeacherSubjectDetail> recievedList = new ArrayList<>();
+    private TextView textView;
+    private Button logOut;
+    private ListView teacherListView;
+    FirebaseDatabase mDatabase;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_teacher);
 
         mAuth = FirebaseAuth.getInstance();
-        //to display the list of subjects of the teacher
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-
-        final LinearLayout linlaHeaderProgress = (LinearLayout) findViewById(R.id.progressBar);
+        textView = (TextView)findViewById(R.id.emailTextView);
+        logOut = (Button) findViewById(R.id.logout);
+        final LinearLayout linlaHeaderProgress = (LinearLayout) findViewById(R.id.linlaHeaderProgress);
         linlaHeaderProgress.setVisibility(View.VISIBLE);
+        teacherListView = (ListView) findViewById(R.id.teacherListView);
+        textView.setText("Your Email " + mAuth.getCurrentUser().getEmail());
+        logOut.setOnClickListener(this);
+
 
         FirebaseUser user=FirebaseAuth.getInstance().getCurrentUser();
         String userid=user.getUid();
@@ -61,15 +60,19 @@ public class TeacherActivity extends BaseActivity{
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 linlaHeaderProgress.setVisibility(View.GONE);
-                //fetch data from Firebase database corresponding to current user
-                GenericTypeIndicator<ArrayList<TeacherSubjectDetail>> t = new GenericTypeIndicator<ArrayList<TeacherSubjectDetail>>() {};
-                 recievedList = dataSnapshot.getValue(t);
-                stringArrayList = new ArrayList<>();
 
-                TeacherSubjectAdapter adapter = new TeacherSubjectAdapter(getApplicationContext(), recievedList);
+                GenericTypeIndicator<List<TeacherSubjectDetail>> t = new GenericTypeIndicator<List<TeacherSubjectDetail>>() {};
+                List<TeacherSubjectDetail> recievedList = dataSnapshot.getValue(t);
+                ArrayList<String> stringArrayList = new ArrayList<>();
 
-                //setting adapter to recyclerview
-                recyclerView.setAdapter(adapter);
+                if(recievedList!=null) {
+                    for (TeacherSubjectDetail tsd : recievedList) {
+                        stringArrayList.add(tsd.getSubjectCode() + " -- " + tsd.getBranch());
+                    }
+                }
+
+                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, stringArrayList);
+                teacherListView.setAdapter(arrayAdapter);
             }
 
             @Override
@@ -77,20 +80,22 @@ public class TeacherActivity extends BaseActivity{
 
             }
         });
+    }
 
-        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-                Intent intent = new Intent(TeacherActivity.this, TeacherTakeAttendance.class);
-                intent.putExtra("TeacherSubjectDetail", recievedList.get(position));
-                startActivity(intent);
-            }
+    @Override
+    public void onClick(View view) {
+        if(view.getId() == R.id.logout){
+            showProgressDialog("Logging You out!!");
+            AuthUI.getInstance().signOut(this)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            startActivity(new Intent(TeacherActivity.this, MainActivity.class));
+                            finish();
+                        }
+                    });
 
-            @Override
-            public void onLongClick(View view, int position) {
-
-            }
-        }));
+        }
     }
 
 }
