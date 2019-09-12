@@ -14,10 +14,30 @@
 
     <Button
         android:id="@+id/logout"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="301dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="105dp"
         android:text="Logout" />
+
+    <TextView
+        android:id="@+id/detailTextView"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/logout"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:id="@+id/subjectListView"
+        android:layout_below="@+id/detailTextView"
+        android:dividerHeight="1dp"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="Give Attendance"
+        android:id="@+id/scanQrCodeButton"
+        android:layout_alignParentBottom="true" />
 </RelativeLayout>

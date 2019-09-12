@@ -2,19 +2,26 @@ package com.example.ams;
 
 import androidx.annotation.Nullable;
 
-public class TeacherSubjectDetail {
+import java.io.Serializable;
+
+//implements Serializable, inorder to pass the object of this class directly through intent
+public class TeacherSubjectDetail implements Serializable {
     public String subjectCode;
+    public String subjectName;
     public String branch;
 
-    TeacherSubjectDetail(String subjectCode, String branch){
+    TeacherSubjectDetail(String subjectCode, String branch, String subjectName){
         this.subjectCode = subjectCode;
         this.branch = branch;
+        this.subjectName = subjectName;
     }
 
     TeacherSubjectDetail(){
 
     }
-
+    public void setSubjectName(String subjectName){
+        this.subjectName = subjectName;
+    }
     public void setSubjectCode(String subjectCode){
         this.subjectCode = subjectCode;
     }
@@ -25,6 +32,9 @@ public class TeacherSubjectDetail {
 
     public String getSubjectCode(){
         return this.subjectCode;
+    }
+    public String getSubjectName(){
+        return this.subjectName;
     }
     public String getBranch(){
         return this.branch;
