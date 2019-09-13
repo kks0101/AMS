@@ -9,17 +9,20 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -87,7 +90,79 @@ public class StudentRegister extends BaseActivity implements View.OnClickListene
         }
 
         //creating adapter for branch Spinner
-        ArrayAdapter<CharSequence> branchAdapter = ArrayAdapter.createFromResource(this,
+        String array[] = getApplicationContext().getResources().getStringArray(R.array.available_branch);
+
+        ArrayAdapter<String> branchSpinnerArrayAdapter = new ArrayAdapter<String>(
+                this,android.R.layout.simple_spinner_item,array){
+            @Override
+            public boolean isEnabled(int position){
+                if(position == 0)
+                {
+                    // Disable the first item from Spinner
+                    // First item will be use for hint
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            @Override
+            public View getDropDownView(int position, View convertView,
+                                        ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                if(position == 0){
+                    // Set the hint text color gray
+                    tv.setTextColor(Color.GRAY);
+                }
+                else {
+                    tv.setTextColor(Color.WHITE);
+                }
+                return view;
+            }
+        };
+
+        branchSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        branchSpinner.setAdapter(branchSpinnerArrayAdapter);
+
+        String groupArray[] = getApplicationContext().getResources().getStringArray(R.array.groups);
+
+        ArrayAdapter<String> groupSpinnerArrayAdapter = new ArrayAdapter<String>(
+                this,android.R.layout.simple_spinner_item,groupArray){
+            @Override
+            public boolean isEnabled(int position){
+                if(position == 0)
+                {
+                    // Disable the first item from Spinner
+                    // First item will be use for hint
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            @Override
+            public View getDropDownView(int position, View convertView,
+                                        ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                if(position == 0){
+                    // Set the hint text color gray
+                    tv.setTextColor(Color.GRAY);
+                }
+                else {
+                    tv.setTextColor(Color.WHITE);
+                }
+                return view;
+            }
+        };
+
+        groupSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        groupSpinner.setAdapter(groupSpinnerArrayAdapter);
+
+        /*ArrayAdapter<CharSequence> branchAdapter = ArrayAdapter.createFromResource(this,
                 R.array.available_branch, android.R.layout.simple_spinner_item);
         branchAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mAuth = FirebaseAuth.getInstance();
@@ -99,7 +174,7 @@ public class StudentRegister extends BaseActivity implements View.OnClickListene
         studentAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mAuth = FirebaseAuth.getInstance();
         groupSpinner.setAdapter(studentAdapter);
-
+    */
 
         studentRegister.setOnClickListener(this);
         branchSpinner.setOnItemSelectedListener(this);

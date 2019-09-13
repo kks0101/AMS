@@ -5,16 +5,18 @@
     <string name="group">Group</string>
     <string name="subject">Subject</string>
     <string-array name="available_branch">
+        <item>Select branch..</item>
         <item>EE</item>
         <item>IT</item>
         <item>CSE</item>
         <item>ECE</item>
-
         <item>CE</item>
         <item>ME</item>
+
     </string-array>
 
     <string-array name="groups">
+        <item>Select group..</item>
         <item>A</item>
         <item>B</item>
         <item>CS1A</item>
@@ -25,5 +27,6 @@
         <item>ME2</item>
         <item>CE1</item>
         <item>CE2</item>
+
     </string-array>
 </resources>

@@ -39,7 +39,7 @@
         android:background="@drawable/input_shape"
         android:padding="10dp"
         android:hint="name"
-        android:textColorHint="@color/colorAccent1"
+        android:textColorHint="@color/grey"
         android:textColor="@color/colorAccent1"
         android:id="@+id/studentNameField"/>
     <EditText
@@ -52,7 +52,7 @@
         android:background="@drawable/input_shape"
         android:padding="10dp"
         android:hint="Registration Number"
-        android:textColorHint="@color/colorAccent1"
+        android:textColorHint="@color/grey"
         android:textColor="@color/colorAccent1"
         android:id="@+id/studentRegNo"/>
     <EditText
@@ -65,7 +65,7 @@
         android:background="@drawable/input_shape"
         android:padding="10dp"
         android:hint="email"
-        android:textColorHint="@color/colorAccent1"
+        android:textColorHint="@color/grey"
         android:textColor="@color/colorAccent1"
         android:id="@+id/studentEmailField"/>
     <EditText
@@ -78,7 +78,7 @@
         android:background="@drawable/input_shape"
         android:padding="10dp"
         android:hint="phone"
-        android:textColorHint="@color/colorAccent1"
+        android:textColorHint="@color/grey"
         android:textColor="@color/colorAccent1"
         android:id="@+id/studentPhoneNoField"/>
     <Spinner
@@ -104,7 +104,7 @@
         android:background="@drawable/input_shape"
         android:padding="10dp"
         android:hint="semester"
-        android:textColorHint="@color/colorAccent1"
+        android:textColorHint="@color/grey"
         android:textColor="@color/colorAccent1"
         android:id="@+id/studentSemesterField"/>
     <Spinner
@@ -133,7 +133,7 @@
         android:padding="10dp"
         android:inputType="textPassword"
         android:hint="Password"
-        android:textColorHint="@color/colorAccent1"
+        android:textColorHint="@color/grey"
         android:textColor="@color/colorAccent1"
         android:id="@+id/passwordField"/>
     <EditText
@@ -147,7 +147,7 @@
         android:padding="10dp"
         android:inputType="textPassword"
         android:hint="Re-enter Password"
-        android:textColorHint="@color/colorAccent1"
+        android:textColorHint="@color/grey"
         android:textColor="@color/colorAccent1"
         android:id="@+id/retypePassword"/>
     <Button
