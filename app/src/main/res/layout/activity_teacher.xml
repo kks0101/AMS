@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bgapps"
+    android:background="@drawable/login"
     tools:context=".MainActivity">
 
     <LinearLayout
@@ -12,6 +12,7 @@
         android:layout_width="wrap_content"
         android:gravity="center"
         android:layout_height="wrap_content"
+        android:background="#80485563"
         android:orientation="vertical">
         <ProgressBar
             android:layout_width="wrap_content"
@@ -23,7 +24,8 @@
         android:id="@+id/linearLayout"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="#80485563">
 
         <RelativeLayout
             android:layout_marginTop="32dp"
