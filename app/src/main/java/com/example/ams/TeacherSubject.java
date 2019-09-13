@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -53,12 +54,12 @@ import java.util.Set;
 public class TeacherSubject extends BaseActivity {
     private Spinner branchSpinner, subjectSpinner;
     private List<String> subjectList;
-    private RecyclerView recyclerView;
+    private ListView listView;
 
     //to get the list of objects of TeacherSubjectDetail to be used in Firebase realtime db
     ArrayList<TeacherSubjectDetail> teacherSubjectDetailsList = new ArrayList<>();
     private Button addSubject, adddSubjectsToDb;
-    private TeacherSubjectAdapter teacherSubjectAdapter;
+    private SubjectListAdapter subjectListAdapter;
     private DatabaseReference mDatabase;
     private FirebaseDatabase firebaseDatabase;
     private final String BASE_URL = "http://192.168.43.99:1234/ams/";
@@ -70,19 +71,19 @@ public class TeacherSubject extends BaseActivity {
         branchSpinner = (Spinner)findViewById(R.id.branch);
         subjectSpinner = (Spinner) findViewById(R.id.subjectSpinner);
 
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        listView = (ListView) findViewById(R.id.listView);
 
         addSubject = (Button)findViewById(R.id.addSubject);
         adddSubjectsToDb = (Button) findViewById(R.id.addSubjectsToDb);
         //to store list of subjects and grouups selected
 
+        ImageButton deleteButton = (ImageButton)findViewById(R.id.deleteButton);
+
         firebaseDatabase = FirebaseDatabase.getInstance();
         mDatabase = firebaseDatabase.getReference("teachers");
 
-        teacherSubjectAdapter = new TeacherSubjectAdapter(getApplicationContext(), teacherSubjectDetailsList);
-        recyclerView.setAdapter(teacherSubjectAdapter);
+        subjectListAdapter = new SubjectListAdapter(getApplicationContext(), teacherSubjectDetailsList);
+        listView.setAdapter(subjectListAdapter);
 
 
         ArrayAdapter<CharSequence> branchAdapter = ArrayAdapter.createFromResource(this,
@@ -131,7 +132,7 @@ public class TeacherSubject extends BaseActivity {
                 if(!teacherSubjectDetailsList.contains(teacherSubjectDetail)) {
                     teacherSubjectDetailsList.add(teacherSubjectDetail);
                     //selectedSubjectList.add(branch + " -- " + subjectCode);
-                    teacherSubjectAdapter.notifyDataSetChanged();
+                    subjectListAdapter.notifyDataSetChanged();
                 }
             }
         });
@@ -158,6 +159,23 @@ public class TeacherSubject extends BaseActivity {
                 }
             }
         });
+
+        //to change the list when item is deleted
+        /*recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                Toast.makeText(getApplicationContext(), "Inside click", Toast.LENGTH_SHORT).show();
+                if(view == view.findViewById(R.id.deleteButton)){
+                    teacherSubjectDetailsList.remove(position);
+                    subjectListAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));*/
 
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override

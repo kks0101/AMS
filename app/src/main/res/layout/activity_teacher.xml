@@ -8,6 +8,18 @@
     tools:context=".MainActivity">
 
     <LinearLayout
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"/>
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/linearLayout"
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -44,17 +56,7 @@
                 android:layout_height="62dp"/>
 
         </RelativeLayout>
-        <LinearLayout
-            android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
-            android:gravity="center"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <ProgressBar
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"/>
-        </LinearLayout>
+
 
 
         <androidx.recyclerview.widget.RecyclerView

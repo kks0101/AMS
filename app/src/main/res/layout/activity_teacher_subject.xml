@@ -33,16 +33,19 @@
 
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_below="@+id/linear"
+    <ListView
+        android:id="@+id/listView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="400dp"
+        android:layout_marginTop="20dp"
+        android:divider="@color/colorPrimary"
+        android:layout_below="@+id/linear"
+        android:dividerHeight="1dp"/>
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Add Subjects"
-        android:id="@+id/addSubjectsToDb"
-        android:layout_alignParentBottom="true"/>
+        android:layout_alignParentBottom="true"
+        android:id="@+id/addSubjectsToDb"/>
 </RelativeLayout>

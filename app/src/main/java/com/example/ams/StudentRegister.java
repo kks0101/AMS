@@ -162,20 +162,6 @@ public class StudentRegister extends BaseActivity implements View.OnClickListene
         groupSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         groupSpinner.setAdapter(groupSpinnerArrayAdapter);
 
-        /*ArrayAdapter<CharSequence> branchAdapter = ArrayAdapter.createFromResource(this,
-                R.array.available_branch, android.R.layout.simple_spinner_item);
-        branchAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mAuth = FirebaseAuth.getInstance();
-        branchSpinner.setAdapter(branchAdapter);
-
-        //creating adapter for group spinner
-        ArrayAdapter<CharSequence> studentAdapter = ArrayAdapter.createFromResource(this,
-                R.array.groups, android.R.layout.simple_spinner_item);
-        studentAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mAuth = FirebaseAuth.getInstance();
-        groupSpinner.setAdapter(studentAdapter);
-    */
-
         studentRegister.setOnClickListener(this);
         branchSpinner.setOnItemSelectedListener(this);
         groupSpinner.setOnItemSelectedListener(this);
