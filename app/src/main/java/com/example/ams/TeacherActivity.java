@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -48,6 +49,14 @@ public class TeacherActivity extends BaseActivity{
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        ImageButton profileButton = (ImageButton)findViewById(R.id.profileButton);
+        profileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TeacherActivity.this, TeacherProfile.class);
+                startActivity(intent);
+            }
+        });
 
         final LinearLayout linlaHeaderProgress = (LinearLayout) findViewById(R.id.progressBar);
         linlaHeaderProgress.setVisibility(View.VISIBLE);
