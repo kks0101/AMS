@@ -4,172 +4,165 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".StudentRegister"
-    android:background="@color/colorAccent">
-
-    <TextView
-        android:id="@+id/display"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginTop="0dp"
-        android:text="Student Registration"
-        android:layout_alignParentLeft="true"
-        android:layout_centerHorizontal="true"
-        android:paddingTop="10dp"
-        android:textColor="#FFFFFF"
-        android:textSize="25dp"
-        android:textStyle="bold"
-        android:background="@drawable/text_edit"
-        android:textAlignment="center"
-        android:textAllCaps="false"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+    tools:context=".MainActivity">
 
     <LinearLayout
-        android:id="@+id/registerItem"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/login"
+        android:gravity="center"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimaryDark1"
+        android:alpha="0.5"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="Student Registration"
+        android:textColor="@color/colorPrimary1"
+        style="@style/TextAppearance.AppCompat.Headline"
+        android:fontFamily="sans-serif"
+        android:textSize="20dp"
+        android:id="@+id/txt"
+        />
+    <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/display"
-        android:orientation="vertical"
-        android:paddingTop="50dp">
-
-        <EditText
-            android:id="@+id/studentNameField"
-            android:textColorHint="@color/textColor"
-            android:layout_width="300dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center_horizontal"
-            android:drawableLeft="@drawable/name"
-            android:background="@drawable/edit_round"
-            android:drawablePadding="10dp"
-            android:paddingLeft="10dp"
-            android:textColor="@color/black"
-            android:hint="Name" />
-
-        <EditText
-            android:id="@+id/studentRegNo"
-            android:textColorHint="@color/textColor"
-            android:layout_width="300dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center_horizontal"
-            android:drawableLeft="@drawable/regiter"
-            android:background="@drawable/edit_round"
-            android:drawablePadding="10dp"
-            android:paddingLeft="10dp"
-            android:layout_marginTop="5dp"
-            android:textColor="@color/black"
-            android:hint="Registration Number" />
-
-
-        <EditText
-            android:id="@+id/studentEmailField"
-            android:textColorHint="@color/textColor"
-            android:layout_width="300dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center_horizontal"
-            android:drawableLeft="@drawable/email"
-            android:background="@drawable/edit_round"
-            android:drawablePadding="10dp"
-            android:paddingLeft="10dp"
-            android:layout_marginTop="5dp"
-            android:hint="Email"
-            android:textColor="@color/black"/>
-
-        <EditText
-            android:id="@+id/studentPhoneNoField"
-            android:textColorHint="@color/textColor"
-            android:layout_width="300dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center_horizontal"
-            android:drawableLeft="@drawable/phone"
-            android:background="@drawable/edit_round"
-            android:drawablePadding="10dp"
-            android:paddingLeft="10dp"
-            android:layout_marginTop="5dp"
-            android:hint="Phone No"
-            android:textColor="@color/black"/>
-
-
-        <Spinner
-            android:id="@+id/branchSpinner"
-            android:layout_width="300dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center_horizontal"
-            android:background="@drawable/edit_round"
-            android:drawablePadding="10dp"
-            android:paddingLeft="10dp"
-            android:layout_marginTop="5dp"
-            android:prompt="@string/branch"
-            android:spinnerMode="dialog"/>
-
-        <EditText
-            android:id="@+id/studentSemesterField"
-            android:textColorHint="@color/textColor"
-            android:layout_width="300dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center_horizontal"
-            android:drawableLeft="@drawable/semester"
-            android:background="@drawable/edit_round"
-            android:drawablePadding="10dp"
-            android:paddingLeft="10dp"
-            android:layout_marginTop="5dp"
-            android:hint="Semester"
-            android:textColor="@color/black"/>
-
-        <Spinner
-            android:id="@+id/groupSpinner"
-            android:layout_width="300dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center_horizontal"
-            android:popupBackground="@color/colorAccent"
-            android:background="@drawable/edit_round"
-            android:drawablePadding="10dp"
-            android:paddingLeft="10dp"
-            android:layout_marginTop="5dp"
-            android:prompt="@string/group"
-            android:spinnerMode="dialog"/>
-
-        <EditText
-            android:id="@+id/passwordField"
-            android:textColorHint="@color/textColor"
-            android:layout_width="300dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center_horizontal"
-            android:drawableLeft="@drawable/password"
-            android:background="@drawable/edit_round"
-            android:drawablePadding="10dp"
-            android:paddingLeft="10dp"
-            android:layout_marginTop="5dp"
-            android:hint="Password"
-            android:inputType="textPassword"
-            android:textColor="@color/black"/>
-
-        <EditText
-            android:id="@+id/retypePassword"
-            android:textColorHint="@color/textColor"
-            android:layout_width="300dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center_horizontal"
-            android:drawableLeft="@drawable/password"
-            android:background="@drawable/edit_round"
-            android:drawablePadding="10dp"
-            android:paddingLeft="10dp"
-            android:layout_marginTop="5dp"
-            android:hint="Retype Password"
-            android:inputType="textPassword"
-            android:textColor="@color/black"/>
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/studentRegister"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
+        android:layout_below="@+id/txt"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="70dp"
+        android:background="@drawable/input_shape"
+        android:padding="10dp"
+        android:hint="name"
+        android:textColorHint="@color/colorAccent1"
+        android:textColor="@color/colorAccent1"
+        android:id="@+id/studentNameField"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/registerItem"
-        android:layout_marginTop="27dp"
-        android:background="@drawable/button_round"
-        android:textAllCaps="false"
-        android:textColor="#FFFFFF"
-        android:textSize="20dp"
-        android:text="Register" />
+        android:layout_below="@+id/studentNameField"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="70dp"
+        android:background="@drawable/input_shape"
+        android:padding="10dp"
+        android:hint="Registration Number"
+        android:textColorHint="@color/colorAccent1"
+        android:textColor="@color/colorAccent1"
+        android:id="@+id/studentRegNo"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/studentRegNo"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="70dp"
+        android:background="@drawable/input_shape"
+        android:padding="10dp"
+        android:hint="email"
+        android:textColorHint="@color/colorAccent1"
+        android:textColor="@color/colorAccent1"
+        android:id="@+id/studentEmailField"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/studentEmailField"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="70dp"
+        android:background="@drawable/input_shape"
+        android:padding="10dp"
+        android:hint="phone"
+        android:textColorHint="@color/colorAccent1"
+        android:textColor="@color/colorAccent1"
+        android:id="@+id/studentPhoneNoField"/>
+    <Spinner
+        android:id="@+id/branchSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="70dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/studentPhoneNoField"
+        android:background="@drawable/input_shape"
+        android:drawablePadding="10dp"
+        android:paddingLeft="10dp"
+        android:prompt="@string/branch"
+        android:spinnerMode="dialog"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/branchSpinner"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="70dp"
+        android:background="@drawable/input_shape"
+        android:padding="10dp"
+        android:hint="semester"
+        android:textColorHint="@color/colorAccent1"
+        android:textColor="@color/colorAccent1"
+        android:id="@+id/studentSemesterField"/>
+    <Spinner
+        android:id="@+id/groupSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="70dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/studentSemesterField"
+        android:background="@drawable/input_shape"
+        android:drawablePadding="10dp"
+        android:paddingLeft="10dp"
+        android:prompt="@string/group"
+        android:spinnerMode="dialog"/>
+
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/groupSpinner"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="70dp"
+        android:background="@drawable/input_shape"
+        android:padding="10dp"
+        android:inputType="textPassword"
+        android:hint="Password"
+        android:textColorHint="@color/colorAccent1"
+        android:textColor="@color/colorAccent1"
+        android:id="@+id/passwordField"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/passwordField"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="70dp"
+        android:background="@drawable/input_shape"
+        android:padding="10dp"
+        android:inputType="textPassword"
+        android:hint="Re-enter Password"
+        android:textColorHint="@color/colorAccent1"
+        android:textColor="@color/colorAccent1"
+        android:id="@+id/retypePassword"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/retypePassword"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="70dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/shape2"
+        android:text="Register"
+        android:textColor="@color/colorPrimaryDark1"
+        android:id="@+id/studentRegister"/>
+
+
+
+
 </RelativeLayout>
