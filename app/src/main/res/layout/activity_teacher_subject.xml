@@ -4,45 +4,90 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TeacherSubject">
+    tools:context=".MainActivity">
 
     <LinearLayout
-        android:id="@+id/linear"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/teachersubject"
+        android:gravity="center"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimaryDark1"
+        android:alpha="0.5"/>
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:orientation="vertical">
+        android:layout_marginTop="10dp"
+        android:gravity="left"
+        android:text="choose your subjects"
+        android:textColor="@color/colorAccent1"
+        style="@style/TextAppearance.AppCompat.Headline"
+        android:fontFamily="sans-serif"
+        android:textSize="20dp"
+        android:id="@+id/txt"
+        />
+    <Spinner
+        android:id="@+id/branch"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="70dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/txt"
+        android:background="@drawable/input_shape"
+        android:drawablePadding="10dp"
+        android:paddingLeft="10dp"
+        android:prompt="@string/group"
+        android:spinnerMode="dialog"/>
+    <Spinner
+        android:id="@+id/subjectSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="70dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/branch"
+        android:background="@drawable/input_shape"
+        android:drawablePadding="10dp"
+        android:paddingLeft="10dp"
+        android:prompt="@string/subject"
+        android:spinnerMode="dialog"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
 
-        <Spinner
-            android:id="@+id/branch"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:prompt="@string/group" />
-
-        <Spinner
-            android:id="@+id/subjectSpinner"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:prompt="@string/subject" />
-
-        <Button
-            android:id="@+id/addSubject"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="ADD" />
-
-    </LinearLayout>
+        android:layout_marginLeft="70dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/subjectSpinner"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/shape2"
+        android:text="Add"
+        android:textColor="@color/colorPrimaryDark1"
+        android:id="@+id/addSubject"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_below="@+id/linear"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/addSubject"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add Subjects"
-        android:id="@+id/addSubjectsToDb"
-        android:layout_alignParentBottom="true"/>
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="70dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/shape2"
+        android:text="Add Subject"
+        android:textColor="@color/colorPrimaryDark1"
+        android:id="@+id/addSubjectsToDb"/>
+
+
+
+
 </RelativeLayout>
