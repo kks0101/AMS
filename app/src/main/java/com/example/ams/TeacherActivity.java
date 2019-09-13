@@ -58,6 +58,8 @@ public class TeacherActivity extends BaseActivity{
             }
         });
 
+
+
         final LinearLayout linlaHeaderProgress = (LinearLayout) findViewById(R.id.progressBar);
         linlaHeaderProgress.setVisibility(View.VISIBLE);
 
@@ -80,6 +82,8 @@ public class TeacherActivity extends BaseActivity{
 
                 //setting adapter to recyclerview
                 recyclerView.setAdapter(adapter);
+                TextView textView = (TextView) findViewById(R.id.countSubjectTextView);
+                textView.setText(recievedList.size() + " subjects");
             }
 
             @Override
