@@ -70,6 +70,7 @@ public class TeacherTakeAttendance extends BaseActivity {
         if(teacherSubjectDetail!=null) {
             displaySubjectCode.setText(teacherSubjectDetail.getSubjectCode());
             displayGroup.setText(teacherSubjectDetail.getBranch());
+            displaySubjectName.setText(teacherSubjectDetail.getSubjectName());
         }
 
         generateQr.setOnClickListener(new View.OnClickListener(){
