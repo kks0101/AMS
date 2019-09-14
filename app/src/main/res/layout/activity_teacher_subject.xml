@@ -4,15 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@drawable/login">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/linear"
         android:orientation="vertical"
-        android:background="@color/colorPrimaryDark1"
-        android:alpha="0.5">
+        android:alpha="0.5"
+        android:background="">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -61,7 +62,8 @@
         android:layout_centerHorizontal="true"
         android:layout_below="@id/subjectSpinner"
         android:layout_marginTop="10dp"
-        android:background="@drawable/shape2"
+        android:layout_marginBottom="10dp"
+        android:background="#FA5213"
         android:text="Add"
         android:textColor="@color/colorPrimaryDark1"
         android:id="@+id/addSubject"/>
