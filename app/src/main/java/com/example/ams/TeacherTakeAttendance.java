@@ -73,7 +73,7 @@ public class TeacherTakeAttendance extends BaseActivity {
             public void onClick(View view) {
                 //to refresh the flush field to note the current present absent for the desired subject
                 RefreshTheFlushField refreshTheFlushField = new RefreshTheFlushField();
-                refreshTheFlushField.execute(displayGroup.getText().toString());
+                refreshTheFlushField.execute(displayGroup.getText().toString(), displaySubjectCode.getText().toString());
 
             }
         });
@@ -96,7 +96,7 @@ public class TeacherTakeAttendance extends BaseActivity {
 
             HashMap<String, Object> params = new HashMap<String, Object>();
             params.put("table_name",  "table_" + strings[0].toLowerCase().trim());
-
+            params.put("subjectCode_tc", strings[1].toLowerCase().trim() + "_tc");
             String link = BASE_URL + "refresh_the_flush_field.php";
 
             Set set = params.entrySet();

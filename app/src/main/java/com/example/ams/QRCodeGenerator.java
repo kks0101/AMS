@@ -102,7 +102,8 @@ public class QRCodeGenerator extends BaseActivity implements View.OnClickListene
                 //delete all the attendance i.e refresh the flush field in the attedance entry of current subject
                 RefreshTheFlushField refreshTheFlushField = new RefreshTheFlushField();
                 String group_name = getIntent().getStringExtra("group");
-                refreshTheFlushField.execute(group_name);
+                String subjectCode = getIntent().getStringExtra("subject");
+                refreshTheFlushField.execute(group_name, subjectCode);
             }
         });
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -132,8 +133,10 @@ public class QRCodeGenerator extends BaseActivity implements View.OnClickListene
             //to get the current date of attendance
             Calendar calendar = Calendar.getInstance();
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd_MM_yyyy");
-            String currentDate = simpleDateFormat.format(calendar.getTime());
 
+            String currentDate = simpleDateFormat.format(calendar.getTime());
+            //Toast.makeText(getApplicationContext(), currentDate, Toast.LENGTH_LONG).show();
+            Log.d("TAG", currentDate);
             HashMap<String, Object> params = new HashMap<String, Object>();
             params.put("groupName",  groupName.toLowerCase().trim());
             params.put("subjectCode", subjectCode.toLowerCase().trim());
@@ -257,7 +260,7 @@ public class QRCodeGenerator extends BaseActivity implements View.OnClickListene
 
             HashMap<String, Object> params = new HashMap<String, Object>();
             params.put("table_name",  "table_" + strings[0].toLowerCase().trim());
-
+            params.put("subjectCode_tc", strings[1].toLowerCase().trim() + "_tc");
             String link = BASE_URL + "refresh_the_flush_field.php";
 
             Set set = params.entrySet();

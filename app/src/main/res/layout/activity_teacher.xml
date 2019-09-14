@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/login"
     tools:context=".MainActivity">
-
     <LinearLayout
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:gravity="center"
+        android:layout_centerInParent="true"
         android:layout_height="wrap_content"
         android:background="#80485563"
         android:orientation="vertical">
@@ -46,13 +46,15 @@
                 android:textSize="14sp"
                 android:textColor="#52BAFF"
                 android:text="12 items"
+                android:id="@+id/countSubjectTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
 
-            <ImageView
+            <ImageButton
 
                 android:layout_alignParentRight="true"
+                android:id="@+id/profileButton"
                 android:src="@drawable/person"
                 android:layout_width="62dp"
                 android:layout_height="62dp"/>
@@ -70,4 +72,4 @@
 
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>
