@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,6 +65,7 @@ public class StudentActivity extends BaseActivity {
 
     private RecyclerView recyclerView;
     ArrayList<TeacherSubjectDetail> recievedList = new ArrayList<>();
+    LinearLayout linlaHeaderProgress;
 
     String name , regNo, emailId, branch, semester, phoneNo,groupName;
     @Override
@@ -74,7 +76,8 @@ public class StudentActivity extends BaseActivity {
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
+        linlaHeaderProgress = (LinearLayout) findViewById(R.id.progressBar);
+        linlaHeaderProgress.setVisibility(View.VISIBLE);
         scanQrCodeButton = (Button) findViewById(R.id.giveAttendance);
         mAuth = FirebaseAuth.getInstance();
         GetProfileDetails getProfileDetails = new GetProfileDetails();
@@ -486,7 +489,8 @@ public class StudentActivity extends BaseActivity {
                     for(int i=0;i<st1.length();i++){
                         recievedList.add(new TeacherSubjectDetail(st1.getString(i), branch, st2.getString(i)));
                     }
-                    TeacherSubjectAdapter adapter = new TeacherSubjectAdapter(getApplicationContext(), recievedList);
+                    linlaHeaderProgress.setVisibility(View.GONE);
+                    StudentSubjectAdapter adapter = new StudentSubjectAdapter(getApplicationContext(), recievedList);
 
                     //setting adapter to recyclerview
                     recyclerView.setAdapter(adapter);

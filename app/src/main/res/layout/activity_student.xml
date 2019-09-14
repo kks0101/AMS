@@ -24,7 +24,7 @@
         android:id="@+id/linearLayout"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:background="#80485563">
 
         <RelativeLayout
@@ -60,17 +60,15 @@
 
         </RelativeLayout>
 
-
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
-            android:layout_marginTop="50dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-
     </LinearLayout>
 
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/linearLayout"
+        android:layout_above="@+id/giveAttendance"
+        android:layout_height="wrap_content" />
     <Button
         android:id="@+id/giveAttendance"
         android:layout_width="match_parent"
