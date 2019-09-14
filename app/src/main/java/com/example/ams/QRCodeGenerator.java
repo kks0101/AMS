@@ -74,6 +74,10 @@ public class QRCodeGenerator extends BaseActivity implements View.OnClickListene
                     Toast.makeText(getApplicationContext(), "Attendance Successfully taken", Toast.LENGTH_LONG).show();
                     AlterTable alterTable = new AlterTable();
                     alterTable.execute();
+                    Intent intent = new Intent(QRCodeGenerator.this, TeacherAfterAttendance.class);
+                    intent.putExtra("subjectCode", subjectCode);
+                    intent.putExtra("groupName", groupName);
+                    startActivity(intent);
                     finish();
                 }
             });

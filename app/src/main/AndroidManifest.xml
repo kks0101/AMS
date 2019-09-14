@@ -13,7 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".DisplayShortAttendance"></activity>
+        <activity android:name=".TeacherAfterAttendance"></activity>
+        <activity android:name=".DisplayShortAttendance" />
         <activity
             android:name=".QRCodeGenerator"
             android:theme="@style/Theme.AppCompat" />
