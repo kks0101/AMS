@@ -76,7 +76,6 @@
         android:divider="@color/colorPrimary"
         android:layout_below="@+id/linear"
         android:dividerHeight="1dp"/>
-
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

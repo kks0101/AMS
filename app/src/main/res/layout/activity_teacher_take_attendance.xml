@@ -1,35 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TeacherTakeAttendance">
+    android:background="@drawable/login">
 
-    <TextView
-        android:id="@+id/displaySubjectCode"
+    <LinearLayout
+        android:id="@+id/details"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="24dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+        android:layout_height="245dp"
+        android:orientation="vertical"
+        android:background="#80485563">
 
-    <TextView
-        android:id="@+id/displayGroup"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="80dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+        <TextView
+            android:id="@+id/displaySubjectCode"
+            android:layout_width="290dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:paddingLeft="10dp"
+            android:textColor="@color/colorPrimary1"
+            style="@style/TextAppearance.AppCompat.Headline"
+            android:fontFamily="sans-serif"
+            android:textSize="30dp"
+            android:text="sub_code"/>
+
+        <TextView
+            android:id="@+id/subjectName"
+            android:layout_width="290dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="10dp"
+            android:textColor="@color/colorPrimary1"
+            style="@style/TextAppearance.AppCompat.Headline"
+            android:fontFamily="sans-serif"
+            android:textSize="20dp"
+            android:text="sub_name" />
+
+        <TextView
+            android:id="@+id/displayGroup"
+            android:layout_width="290dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="10dp"
+            android:textColor="@color/colorPrimary1"
+            style="@style/TextAppearance.AppCompat.Headline"
+            android:fontFamily="sans-serif"
+            android:textSize="20dp"
+            android:text="sub_branch" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/details"
+        android:layout_marginTop="40dp">
+        <Button
+            android:id="@+id/scanQrCode"
+            android:layout_width="300dp"
+
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/details"
+            android:background="@drawable/shape2"
+            android:textColor="@color/colorPrimaryDark1"
+            android:text="Take attendance"
+            />
+        <Button
+            android:id="@+id/lessAttendance"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/scanQrCode"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/shape2"
+            android:textColor="@color/colorPrimaryDark1"
+            android:text="less than 75%"
+            />
+        <Button
+            android:id="@+id/generatePDF"
+            android:layout_width="300dp"
+            android:layout_centerHorizontal="true"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/lessAttendance"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/shape2"
+            android:textColor="@color/colorPrimaryDark1"
+            android:text="generate pdf"
+            />
+    </LinearLayout>
 
     <Button
+        android:id="@+id/backToDashboard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/scanQrCode"
-        android:text="Take Attendance"
-        android:layout_alignParentBottom="true"/>
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/shape2"
+        android:textColor="@color/colorPrimaryDark1"
+        android:text="Dashboard"
+        />
+
+
 </RelativeLayout>
