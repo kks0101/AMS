@@ -79,6 +79,7 @@ public class StudentRegister extends BaseActivity implements View.OnClickListene
         groupSpinner = (Spinner) findViewById(R.id.groupSpinner);
         studentRegister = (Button) findViewById(R.id.studentRegister);
 
+        mAuth = FirebaseAuth.getInstance();
         ///check for permission
         if (ContextCompat.checkSelfPermission( StudentRegister.this,android.Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED )
         {

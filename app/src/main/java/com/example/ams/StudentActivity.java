@@ -2,9 +2,11 @@ package com.example.ams;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -124,14 +126,20 @@ public class StudentActivity extends BaseActivity {
     }
 
     private class GiveAttendance extends AsyncTask<String, String , String > {
-        String userId;
+        String deviceId;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             hideProgressDialog();
             showProgressDialog("Updating..please wait..");
-            userId = mAuth.getCurrentUser().getUid();
+            TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+            try {
+                //uniquely identifies phone
+                deviceId = telephonyManager.getDeviceId();
+            } catch (SecurityException e) {
+                Log.i("PERMISSION", e.toString());
+            }
         }
 
 
@@ -140,7 +148,7 @@ public class StudentActivity extends BaseActivity {
             ///ContentValues params = new ContentValues();
 
             HashMap<String, Object> params = new HashMap<String, Object>();
-            params.put("userId", userId);
+            params.put("deviceId", deviceId);
             params.put("table_name", "table_" + strings[1].toLowerCase().trim());
 
             params.put("subjectCode_tp", strings[0].toLowerCase().trim() + "_tp");

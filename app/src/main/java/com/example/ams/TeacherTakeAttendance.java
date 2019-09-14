@@ -263,7 +263,7 @@ public class TeacherTakeAttendance extends BaseActivity {
                 byte[] byteArray = stream.toByteArray();
 
                 intent.putExtra("bitmap", byteArray);
-                intent.putExtra("Subject", subject);
+                intent.putExtra("subject", subject);
                 intent.putExtra("group", branch);
                 startActivity(intent);
             } catch (WriterException e) {

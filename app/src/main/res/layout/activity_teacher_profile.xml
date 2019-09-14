@@ -27,6 +27,7 @@
             android:layout_below="@+id/profileImage"
             android:text="Your Name"
             android:textAlignment="center"
+            android:textColor="@color/white"
             android:textStyle="normal"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
