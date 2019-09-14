@@ -47,8 +47,8 @@ import java.util.Map;
 import java.util.Set;
 
 public class TeacherTakeAttendance extends BaseActivity {
-    private TextView displaySubjectCode, displayGroup;
-    private Button generateQr;
+    private TextView displaySubjectCode, displayGroup, displaySubjectName;
+    private Button generateQr, lessThan75, generatePdf, backToDashboard;
     private static int QRCodeWidth = 500;
     private final String BASE_URL = "http://192.168.43.99:1234/ams/";
     private Bitmap bitmap;
@@ -60,8 +60,12 @@ public class TeacherTakeAttendance extends BaseActivity {
         TeacherSubjectDetail teacherSubjectDetail = (TeacherSubjectDetail) getIntent().getSerializableExtra("TeacherSubjectDetail");
         displaySubjectCode = (TextView)findViewById(R.id.displaySubjectCode);
         displayGroup = (TextView)findViewById(R.id.displayGroup);
+        displaySubjectName = (TextView)findViewById(R.id.subjectName);
 
         generateQr = (Button)findViewById(R.id.scanQrCode);
+        lessThan75 = (Button)findViewById(R.id.lessAttendance);
+        generatePdf = (Button) findViewById(R.id.generatePDF);
+        backToDashboard = (Button)findViewById(R.id.backToDashboard);
 
         if(teacherSubjectDetail!=null) {
             displaySubjectCode.setText(teacherSubjectDetail.getSubjectCode());
@@ -77,7 +81,20 @@ public class TeacherTakeAttendance extends BaseActivity {
 
             }
         });
+
+        lessThan75.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TeacherTakeAttendance.this, DisplayShortAttendance.class);
+                intent.putExtra("group", displayGroup.getText().toString());
+                intent.putExtra("subject", displaySubjectCode.getText().toString());
+                startActivity(intent);
+            }
+        });
     }
+
+
+
 
     //inorder to refresh the flush field of the database
     private class RefreshTheFlushField extends AsyncTask<String, String , String >{
