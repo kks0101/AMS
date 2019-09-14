@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -79,7 +80,21 @@ public class StudentActivity extends BaseActivity {
         linlaHeaderProgress = (LinearLayout) findViewById(R.id.progressBar);
         linlaHeaderProgress.setVisibility(View.VISIBLE);
         scanQrCodeButton = (Button) findViewById(R.id.giveAttendance);
+
+        ImageButton profileButton = (ImageButton)findViewById(R.id.profileButton);
+        profileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(StudentActivity.this, StudentProfile.class);
+                startActivity(intent);
+            }
+        });
+
+
         mAuth = FirebaseAuth.getInstance();
+
+
+
         GetProfileDetails getProfileDetails = new GetProfileDetails();
         getProfileDetails.execute();
 
