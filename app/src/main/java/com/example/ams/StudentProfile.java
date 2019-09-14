@@ -2,6 +2,7 @@ package com.example.ams;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -57,6 +58,9 @@ public class StudentProfile extends BaseActivity {
             @Override
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(StudentProfile.this, MainActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
 
