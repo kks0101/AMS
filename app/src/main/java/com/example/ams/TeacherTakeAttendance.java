@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
@@ -41,6 +42,8 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -82,6 +85,19 @@ public class TeacherTakeAttendance extends BaseActivity {
 
             }
         });
+
+        generatePdf.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GeneratePdf generatePdf = new GeneratePdf();
+                generatePdf.execute();
+//                Intent intent = new Intent(TeacherTakeAttendance.this, PdfViewer.class);
+//                intent.putExtra("group", displayGroup.getText().toString());
+//                intent.putExtra("subject", displaySubjectCode.getText().toString());
+//                startActivity(intent);
+            }
+        });
+
 
         lessThan75.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -303,6 +319,83 @@ public class TeacherTakeAttendance extends BaseActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             hideProgressDialog();
+        }
+    }
+
+    private class GeneratePdf extends AsyncTask<String, String , String >{
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            hideProgressDialog();
+            showProgressDialog("Generating pdf\n..please wait..");
+        }
+
+
+        @Override
+        protected String doInBackground(String... strings) {
+            ///ContentValues params = new ContentValues();
+            //to get the current date of attendance
+            Calendar calendar = Calendar.getInstance();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd_MM_yyyy");
+
+            String currentDate = simpleDateFormat.format(calendar.getTime());
+            //Toast.makeText(getApplicationContext(), currentDate, Toast.LENGTH_LONG).show();
+            Log.d("TAG", currentDate);
+            HashMap<String, Object> params = new HashMap<String, Object>();
+            params.put("groupName",  displayGroup.getText().toString());
+            params.put("subjectCode", displaySubjectCode.getText().toString());
+            String link = BASE_URL + "generate_pdf.php";
+
+            Set set = params.entrySet();
+            Iterator iterator = set.iterator();
+            try {
+                String data = "";
+                while (iterator.hasNext()) {
+                    Map.Entry mEntry = (Map.Entry) iterator.next();
+                    data += URLEncoder.encode(mEntry.getKey().toString(), "UTF-8") + "=" +
+                            URLEncoder.encode(mEntry.getValue().toString(), "UTF-8");
+                    data += "&";
+                }
+
+                if (data != null && data.length() > 0 && data.charAt(data.length() - 1) == '&') {
+                    data = data.substring(0, data.length() - 1);
+                }
+                Log.d("Debug", data);
+
+                URL url=new URL(link);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setRequestMethod("GET");
+                httpURLConnection.setDoInput(true);
+                httpURLConnection.setDoOutput(true);
+                httpURLConnection.setRequestProperty("Accept","*/*");
+                OutputStream out = httpURLConnection.getOutputStream();
+                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
+
+                Log.d("data", data);
+                return data;
+            }
+            catch(Exception e){
+                Log.d("debug",e.getMessage());
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            hideProgressDialog();
+            //if string returned from doinbackground is null, that means Exception occured while connectioon to server
+            if(s==null){
+                Toast.makeText(TeacherTakeAttendance.this, "Coudlnt connect to PHPServer", Toast.LENGTH_LONG).show();
+            }
+            else {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(BASE_URL + "generate_pdf.php"+"?" + s));
+                    startActivity(browserIntent);
+                    Toast.makeText(getApplicationContext(), "Pdf Downloading", Toast.LENGTH_LONG).show();
+            }
         }
     }
 }
