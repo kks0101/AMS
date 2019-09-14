@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/login"
-    tools:context=".MainActivity">
+    tools:context=".StudentActivity">
+
     <LinearLayout
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
@@ -24,7 +25,7 @@
         android:id="@+id/linearLayout"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:background="#80485563">
 
         <RelativeLayout
@@ -54,24 +55,21 @@
 
                 android:layout_alignParentRight="true"
                 android:id="@+id/profileButton"
-                android:src="@drawable/ic_profile"
-                android:background="@color/imageBackground"
+                android:src="@drawable/person"
                 android:layout_width="62dp"
                 android:layout_height="62dp"/>
 
         </RelativeLayout>
 
-
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
-            android:layout_marginTop="50dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-
     </LinearLayout>
 
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/linearLayout"
+        android:layout_above="@+id/giveAttendance"
+        android:layout_height="wrap_content" />
     <Button
         android:id="@+id/giveAttendance"
         android:layout_width="match_parent"

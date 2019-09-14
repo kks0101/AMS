@@ -1,6 +1,8 @@
 package com.example.ams;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +13,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,26 +63,41 @@ public class StudentActivity extends BaseActivity {
     private ListView listView;
     private IntentIntegrator qrScan;
     private Button scanQrCodeButton;
+
+    private RecyclerView recyclerView;
+    ArrayList<TeacherSubjectDetail> recievedList = new ArrayList<>();
+    LinearLayout linlaHeaderProgress;
+
+    String name , regNo, emailId, branch, semester, phoneNo,groupName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student);
 
-        Button logout = (Button) findViewById(R.id.logoutStudent);
-        scanQrCodeButton = (Button) findViewById(R.id.scanQrCode);
-        mAuth = FirebaseAuth.getInstance();
-        SearchUser searchUser = new SearchUser();
-        searchUser.execute();
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        linlaHeaderProgress = (LinearLayout) findViewById(R.id.progressBar);
+        linlaHeaderProgress.setVisibility(View.VISIBLE);
+        scanQrCodeButton = (Button) findViewById(R.id.giveAttendance);
 
-        logout.setOnClickListener(new View.OnClickListener() {
+        ImageButton profileButton = (ImageButton)findViewById(R.id.profileButton);
+        profileButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(StudentActivity.this, MainActivity.class);
+            public void onClick(View v) {
+                Intent intent = new Intent(StudentActivity.this, StudentProfile.class);
                 startActivity(intent);
-                finish();
             }
         });
+
+
+        mAuth = FirebaseAuth.getInstance();
+
+
+
+        GetProfileDetails getProfileDetails = new GetProfileDetails();
+        getProfileDetails.execute();
+
         qrScan = new IntentIntegrator(this);
         scanQrCodeButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -249,14 +268,13 @@ public class StudentActivity extends BaseActivity {
         }
     }
 
-    private class SearchUser extends AsyncTask<String, String , String > {
+    private class GetProfileDetails extends AsyncTask<String, String , String > {
         String userId;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            hideProgressDialog();
-            showProgressDialog("Getting User details..please wait..");
+            showProgressDialog("Retrieving details\n..please wait..");
             userId = mAuth.getCurrentUser().getUid();
         }
 
@@ -305,10 +323,6 @@ public class StudentActivity extends BaseActivity {
                 String result = convertStreamToString(inputStream);
                 httpURLConnection.disconnect();
                 Log.d("TAG",result);
-                //teacherId is defined in sql as primary key
-                //so if any user login with the same teacherId, delete this already created user in Firebase
-
-
                 return result;
             }
             catch(Exception e){
@@ -340,12 +354,11 @@ public class StudentActivity extends BaseActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            hideProgressDialog();
             //if string returned from doinbackground is null, that means Exception occured while connectioon to server
+            hideProgressDialog();
             if(s==null){
                 Toast.makeText(StudentActivity.this, "Coudlnt connect to PHPServer", Toast.LENGTH_LONG).show();
                 //if could not know whether the current user is student or teacher
-                FirebaseAuth.getInstance().signOut();
             }
             else {
 
@@ -359,19 +372,25 @@ public class StudentActivity extends BaseActivity {
                 }
                 int successCode = 0;
                 if(jsonObject!=null) {
-                    Object json = jsonObject.get("name");
-                    String name = json.toString();
+                    Object p = jsonObject.get("success");
+                    successCode = Integer.parseInt(p.toString());
+                }
+                if( jsonObject!=null && successCode==0){
+                    Toast.makeText(StudentActivity.this, "Some error occurred", Toast.LENGTH_LONG).show();
+                    //if could not know whether the current user is student or teacher
 
-                    Object jsonRegNo = jsonObject.get("regNo");
-                    String regNo = jsonRegNo.toString();
-                    Object jsonGroup = jsonObject.get("groupName");
-                    GetSubjectDetails getSubjectDetails = new GetSubjectDetails();
-                    getSubjectDetails.execute(jsonGroup.toString().trim());
-                    detailTextView.setText(name + "--" + regNo);
-                    Toast.makeText(getApplicationContext(), name + " -- " + regNo, Toast.LENGTH_LONG).show();
                 }
                 else{
-                    Toast.makeText(getApplicationContext(), "Json Object Null", Toast.LENGTH_LONG).show();
+                    name = jsonObject.get("name").toString();
+                    regNo = jsonObject.get("regNo").toString();
+                    emailId = jsonObject.get("emailId").toString();
+                    branch = jsonObject.get("branch").toString();
+                    semester = jsonObject.get("semester").toString();
+                    phoneNo = jsonObject.get("phoneNo").toString();
+                    groupName = jsonObject.get("groupName").toString();
+
+                    GetSubjectDetails getSubjectDetails = new GetSubjectDetails();
+                    getSubjectDetails.execute(groupName);
                 }
             }
         }
@@ -474,27 +493,26 @@ public class StudentActivity extends BaseActivity {
 
                 //otherwise string would contain the JSON returned from php
                 JSONParser parser = new JSONParser();
-                JSONArray  jsonArray = null;
+                JSONObject jsonObject = null;
                 try {
                     //jsonObject = (JSONObject) parser.parse(s);
-                    jsonArray = (JSONArray)parser.parse(s);
-                } catch (ParseException e) {
+                    org.json.JSONArray jb= new org.json.JSONArray(s);
+                    org.json.JSONObject job1 = (org.json.JSONObject) jb.getJSONObject(0);
+                    org.json.JSONObject job2 = (org.json.JSONObject) jb.getJSONObject(1);
+                    org.json.JSONArray st1 = job1.getJSONArray("subject_code");
+                    org.json.JSONArray st2 = job2.getJSONArray("subject_name");
+                    for(int i=0;i<st1.length();i++){
+                        recievedList.add(new TeacherSubjectDetail(st1.getString(i), branch, st2.getString(i)));
+                    }
+                    linlaHeaderProgress.setVisibility(View.GONE);
+                    StudentSubjectAdapter adapter = new StudentSubjectAdapter(getApplicationContext(), recievedList);
+
+                    //setting adapter to recyclerview
+                    recyclerView.setAdapter(adapter);
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
-                //List<String> subjects = new ArrayList<>();
-                if(jsonArray==null)
-                    Toast.makeText(StudentActivity.this, "ARRAY empty !", Toast.LENGTH_LONG).show();
-                if(jsonArray!=null) {
-                    for (Object json : jsonArray) {
-                        subjectList.add(json.toString());
-                    }
-                }
-                //list to contain subjects of specific branch fetched from server
-                ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(StudentActivity.this,
-                        android.R.layout.simple_list_item_1, subjectList);
 
-                listView.setAdapter(listAdapter);
-                Log.d("SUB", subjectList.toString());
             }
         }
     }
