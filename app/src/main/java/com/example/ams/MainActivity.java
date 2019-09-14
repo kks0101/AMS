@@ -54,6 +54,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if(user!=null){
+            Intent intent = new Intent(this, TeacherActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
         emailField = (EditText) findViewById(R.id.email);
         passwordField = (EditText) findViewById(R.id.password);
         loginButton = (Button) findViewById(R.id.loginButton);

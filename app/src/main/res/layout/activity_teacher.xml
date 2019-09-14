@@ -45,7 +45,6 @@
                 android:layout_marginTop="6dp"
                 android:textSize="14sp"
                 android:textColor="#52BAFF"
-                android:text="12 items"
                 android:id="@+id/countSubjectTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>

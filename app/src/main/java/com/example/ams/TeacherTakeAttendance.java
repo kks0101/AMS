@@ -91,6 +91,15 @@ public class TeacherTakeAttendance extends BaseActivity {
                 startActivity(intent);
             }
         });
+
+        backToDashboard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TeacherTakeAttendance.this, TeacherActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 
 
