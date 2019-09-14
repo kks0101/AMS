@@ -64,10 +64,8 @@ public class StudentActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student);
 
-        Button logout = (Button) findViewById(R.id.logout);
-        detailTextView = (TextView) findViewById(R.id.detailTextView);
-        listView = (ListView) findViewById(R.id.subjectListView);
-        scanQrCodeButton = (Button) findViewById(R.id.scanQrCodeButton);
+        Button logout = (Button) findViewById(R.id.logoutStudent);
+        scanQrCodeButton = (Button) findViewById(R.id.scanQrCode);
         mAuth = FirebaseAuth.getInstance();
         SearchUser searchUser = new SearchUser();
         searchUser.execute();

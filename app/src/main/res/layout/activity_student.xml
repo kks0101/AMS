@@ -4,48 +4,81 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".StudentActivity"
-    android:background="@drawable/login">
+    android:background="@drawable/login"
+    tools:context=".MainActivity">
+    <LinearLayout
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:gravity="center"
+        android:layout_centerInParent="true"
+        android:layout_height="wrap_content"
+        android:background="#80485563"
+        android:orientation="vertical">
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"/>
+    </LinearLayout>
 
-    <TextView
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Welcome Stduent "
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textColor="@color/colorPrimary1"
-        />
+        android:background="#80485563">
+
+        <RelativeLayout
+            android:layout_marginTop="32dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/textDashboard"
+                android:textSize="24sp"
+                android:textColor="#FFFF"
+                android:text="My Dashboard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:layout_below="@+id/textDashboard"
+                android:layout_marginTop="6dp"
+                android:textSize="14sp"
+                android:textColor="#52BAFF"
+                android:id="@+id/countSubjectTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+
+            <ImageButton
+
+                android:layout_alignParentRight="true"
+                android:id="@+id/profileButton"
+                android:src="@drawable/ic_profile"
+                android:background="@color/imageBackground"
+                android:layout_width="62dp"
+                android:layout_height="62dp"/>
+
+        </RelativeLayout>
+
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_marginTop="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+    </LinearLayout>
 
     <Button
-        android:id="@+id/logout"
+        android:id="@+id/giveAttendance"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="105dp"
-        android:text="Logout"
+        android:layout_alignParentBottom="true"
         android:background="@drawable/shape2"
-        />
+        android:textColor="@color/colorPrimaryDark1"
+        android:text="Give Attendance"/>
 
-    <TextView
-        android:id="@+id/detailTextView"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_below="@+id/logout"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
-
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:id="@+id/subjectListView"
-        android:layout_below="@+id/detailTextView"
-        android:dividerHeight="1dp"/>
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:text="Give Attendance"
-        android:id="@+id/scanQrCodeButton"
-        android:background="@drawable/signup"
-        android:textColor="@color/colorAccent1"
-        android:layout_alignParentBottom="true" />
 </RelativeLayout>

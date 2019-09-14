@@ -83,7 +83,6 @@
             android:layout_width="300dp"
             android:layout_centerHorizontal="true"
             android:layout_height="wrap_content"
-            android:layout_below="@id/lessAttendance"
             android:layout_marginTop="10dp"
             android:background="#D9ff0000"
             android:textColor="@color/colorAccent1"
