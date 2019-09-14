@@ -13,11 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".StudentProfile"></activity>
-        <activity android:name=".TeacherProfile" />
-        <activity
-            android:name=".QRCodeGenerator"
-            android:theme="@style/Theme.AppCompat" />
+        <activity android:name=".QRCodeGenerator"
+            android:theme="@style/Theme.AppCompat"></activity>
+
         <activity android:name=".TeacherTakeAttendance" />
         <activity
             android:name=".SplashActivity"

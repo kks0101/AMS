@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bgapps"
+    android:background="@drawable/login"
     tools:context=".MainActivity">
 
     <LinearLayout
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:gravity="center"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
         android:layout_height="wrap_content"
+        android:background="#80485563"
         android:orientation="vertical">
         <ProgressBar
             android:layout_width="wrap_content"
@@ -25,7 +24,8 @@
         android:id="@+id/linearLayout"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="#80485563">
 
         <RelativeLayout
             android:layout_marginTop="32dp"
@@ -37,28 +37,25 @@
                 android:id="@+id/textDashboard"
                 android:textSize="24sp"
                 android:textColor="#FFFF"
-                android:text="Welcome"
+                android:text="My Dashboard"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <TextView
                 android:layout_below="@+id/textDashboard"
                 android:layout_marginTop="6dp"
                 android:textSize="14sp"
-                android:id="@+id/countSubjectTextView"
                 android:textColor="#52BAFF"
                 android:text="12 items"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
 
-            <ImageButton
+            <ImageView
+
                 android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
                 android:src="@drawable/person"
-                android:background="@null"
-                android:id="@+id/profileButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_width="62dp"
+                android:layout_height="62dp"/>
 
         </RelativeLayout>
 
@@ -73,4 +70,4 @@
 
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

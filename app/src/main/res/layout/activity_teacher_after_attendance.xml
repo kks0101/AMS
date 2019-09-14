@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login">
+
+    <LinearLayout
+        android:id="@+id/details"
+        android:layout_width="match_parent"
+        android:layout_height="245dp"
+        android:orientation="vertical"
+        android:background="#80485563">
+
+        <TextView
+            android:id="@+id/subjectCode"
+            android:layout_width="290dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:paddingLeft="10dp"
+            android:textColor="@color/colorPrimary1"
+            style="@style/TextAppearance.AppCompat.Headline"
+            android:fontFamily="sans-serif"
+            android:textSize="30dp"
+            android:text="sub_code"/>
+
+        <TextView
+            android:id="@+id/subjectName"
+            android:layout_width="290dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="10dp"
+            android:textColor="@color/colorPrimary1"
+            style="@style/TextAppearance.AppCompat.Headline"
+            android:fontFamily="sans-serif"
+            android:textSize="20dp"
+            android:text="sub_name" />
+
+        <TextView
+            android:id="@+id/branchAttendance"
+            android:layout_width="290dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="10dp"
+            android:textColor="@color/colorPrimary1"
+            style="@style/TextAppearance.AppCompat.Headline"
+            android:fontFamily="sans-serif"
+            android:textSize="20dp"
+            android:text="sub_branch" />
+
+        <TextView
+            android:id="@+id/totalPresent"
+            android:layout_width="290dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="30dp"
+            android:paddingLeft="10dp"
+            android:textColor="@color/colorPrimary1"
+            style="@style/TextAppearance.AppCompat.Headline"
+            android:fontFamily="sans-serif"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:text="total_present:" />
+
+        <TextView
+            android:id="@+id/totalAbsent"
+            android:layout_width="290dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="10dp"
+            android:textColor="@color/colorPrimary1"
+            style="@style/TextAppearance.AppCompat.Headline"
+            android:fontFamily="sans-serif"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            android:text="total_absent:" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/listOfAbsentees"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_below="@+id/details"
+        android:layout_marginTop="5dp"
+        android:paddingRight="7dp"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimary1"
+        style="@style/TextAppearance.AppCompat.Headline"
+        android:fontFamily="sans-serif"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        android:text="ABSENTEES LIST"/>
+
+    <Button
+        android:id="@+id/backToDashboard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/shape2"
+        android:textColor="@color/colorPrimaryDark1"
+        android:text="Dashboard"
+        />
+
+    />
+
+
+</RelativeLayout>
