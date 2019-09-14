@@ -18,7 +18,7 @@
             android:layout_height="50dp"
             android:layout_marginTop="10dp"
             android:paddingLeft="10dp"
-            android:textColor="@color/colorPrimary1"
+            android:textColor="@color/colorAccent1"
             style="@style/TextAppearance.AppCompat.Headline"
             android:fontFamily="sans-serif"
             android:textSize="30dp"
@@ -30,7 +30,7 @@
             android:layout_height="30dp"
             android:layout_marginTop="5dp"
             android:paddingLeft="10dp"
-            android:textColor="@color/colorPrimary1"
+            android:textColor="@color/colorAccent1"
             style="@style/TextAppearance.AppCompat.Headline"
             android:fontFamily="sans-serif"
             android:textSize="20dp"
@@ -42,7 +42,7 @@
             android:layout_height="30dp"
             android:layout_marginTop="5dp"
             android:paddingLeft="10dp"
-            android:textColor="@color/colorPrimary1"
+            android:textColor="@color/colorAccent1"
             style="@style/TextAppearance.AppCompat.Headline"
             android:fontFamily="sans-serif"
             android:textSize="20dp"
@@ -63,8 +63,8 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_below="@id/details"
-            android:background="@drawable/shape2"
-            android:textColor="@color/colorPrimaryDark1"
+            android:background="#D9ff0000"
+            android:textColor="@color/colorAccent1"
             android:text="Take attendance"
             />
         <Button
@@ -74,8 +74,8 @@
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/scanQrCode"
             android:layout_marginTop="10dp"
-            android:background="@drawable/shape2"
-            android:textColor="@color/colorPrimaryDark1"
+            android:background="#D9ff0000"
+            android:textColor="@color/colorAccent1"
             android:text="less than 75%"
             />
         <Button
@@ -85,8 +85,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/lessAttendance"
             android:layout_marginTop="10dp"
-            android:background="@drawable/shape2"
-            android:textColor="@color/colorPrimaryDark1"
+            android:background="#D9ff0000"
+            android:textColor="@color/colorAccent1"
             android:text="generate pdf"
             />
     </LinearLayout>

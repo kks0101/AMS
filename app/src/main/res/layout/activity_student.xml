@@ -4,13 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".StudentActivity">
+    tools:context=".StudentActivity"
+    android:background="@drawable/login">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:text="Welcome Stduent "
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="@color/colorPrimary1"
+        />
 
     <Button
         android:id="@+id/logout"
@@ -18,7 +22,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginTop="105dp"
-        android:text="Logout" />
+        android:text="Logout"
+        android:background="@drawable/shape2"
+        />
 
     <TextView
         android:id="@+id/detailTextView"
@@ -39,5 +45,7 @@
         android:layout_height="40dp"
         android:text="Give Attendance"
         android:id="@+id/scanQrCodeButton"
+        android:background="@drawable/signup"
+        android:textColor="@color/colorAccent1"
         android:layout_alignParentBottom="true" />
 </RelativeLayout>

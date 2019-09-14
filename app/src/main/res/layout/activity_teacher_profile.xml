@@ -5,12 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:background="@drawable/bgapps">
+    android:background="@drawable/login">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:id="@+id/relative1">
+        android:id="@+id/relative1"
+        android:background="#80485563">
         <ImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
