@@ -22,51 +22,53 @@
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#80485563">
+        android:background="#80485563"
+        android:orientation="vertical">
 
         <RelativeLayout
-            android:layout_marginTop="32dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginRight="20dp">
+
             <TextView
                 android:id="@+id/textDashboard"
-                android:textSize="24sp"
-                android:textColor="#FFFF"
-                android:text="My Dashboard"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:text="My Dashboard"
+                android:textColor="#FFFF"
+                android:textSize="24sp" />
+
             <TextView
-                android:layout_below="@+id/textDashboard"
-                android:layout_marginTop="6dp"
-                android:textSize="14sp"
-                android:textColor="#52BAFF"
                 android:id="@+id/countSubjectTextView"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textDashboard"
+                android:layout_marginTop="6dp"
+                android:textColor="#52BAFF"
+                android:textSize="14sp" />
 
 
             <ImageButton
 
-                android:layout_alignParentRight="true"
                 android:id="@+id/profileButton"
-                android:src="@drawable/person"
                 android:layout_width="62dp"
-                android:layout_height="62dp"/>
+                android:layout_height="62dp"
+                android:layout_alignParentRight="true"
+                android:background="@color/imageBackground"
+                android:src="@drawable/ic_profile" />
 
         </RelativeLayout>
 
 
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
-            android:layout_marginTop="50dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp" />
 
 
     </LinearLayout>

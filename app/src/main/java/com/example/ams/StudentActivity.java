@@ -1,12 +1,18 @@
 package com.example.ams;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
@@ -40,8 +46,11 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.sql.Time;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -69,7 +78,8 @@ public class StudentActivity extends BaseActivity {
     private RecyclerView recyclerView;
     ArrayList<TeacherSubjectDetail> recievedList = new ArrayList<>();
     LinearLayout linlaHeaderProgress;
-
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+    private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS= 1;
     String name , regNo, emailId, branch, semester, phoneNo,groupName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +92,23 @@ public class StudentActivity extends BaseActivity {
         linlaHeaderProgress = (LinearLayout) findViewById(R.id.progressBar);
         linlaHeaderProgress.setVisibility(View.VISIBLE);
         scanQrCodeButton = (Button) findViewById(R.id.giveAttendance);
+
+        if (ContextCompat.checkSelfPermission( StudentActivity.this,android.Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED )
+        {
+
+            ActivityCompat.requestPermissions(StudentActivity.this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    MY_PERMISSIONS_REQUEST_LOCATION );
+
+        }
+        if (ContextCompat.checkSelfPermission( StudentActivity.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED )
+        {
+
+            ActivityCompat.requestPermissions(StudentActivity.this,
+                    new String[]{Manifest.permission.READ_PHONE_STATE},
+                    MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+
+        }
 
         ImageButton profileButton = (ImageButton)findViewById(R.id.profileButton);
         profileButton.setOnClickListener(new View.OnClickListener() {
@@ -104,7 +131,19 @@ public class StudentActivity extends BaseActivity {
         scanQrCodeButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                qrScan.initiateScan();
+                if (ContextCompat.checkSelfPermission(StudentActivity.this,
+                        Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+                    Toast.makeText(getApplicationContext(), "You need to provide the location access Permission", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    if (ContextCompat.checkSelfPermission( StudentActivity.this,android.Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED ){
+                        Toast.makeText(getApplicationContext(), "You need to provide Permission to read phone state", Toast.LENGTH_LONG).show();
+                    }
+                    else {
+                        qrScan.initiateScan();
+                    }
+                }
+
             }
         });
 
@@ -113,15 +152,21 @@ public class StudentActivity extends BaseActivity {
             public void onClick(View view, int position) {
                 String deviceId = null;
                 TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-                try {
-                    //uniquely identifies phone
-                    deviceId = telephonyManager.getDeviceId();
+                if (ContextCompat.checkSelfPermission( StudentActivity.this, Manifest.permission.READ_PHONE_STATE ) != PackageManager.PERMISSION_GRANTED ){
+                    Toast.makeText(getApplicationContext(), "Permission required to read phone state!", Toast.LENGTH_LONG).show();
                 }
-                catch(SecurityException e){
-                    Log.i("PERMISSION", e.toString());
+                else{
+                    try {
+                        //uniquely identifies phone
+                        deviceId = telephonyManager.getDeviceId();
+                    }
+                    catch(SecurityException e){
+                        Log.i("PERMISSION", e.toString());
+                    }
+                    Log.d("TAG", deviceId);
+                        GetSpecificDetails getSpecificDetails = new GetSpecificDetails();
+                        getSpecificDetails.execute(deviceId, groupName, recievedList.get(position).getSubjectCode());
                 }
-                    GetSpecificDetails getSpecificDetails = new GetSpecificDetails();
-                    getSpecificDetails.execute(deviceId, groupName, recievedList.get(position).getSubjectCode());
             }
 
             @Override
@@ -129,6 +174,48 @@ public class StudentActivity extends BaseActivity {
 
             }
         }));
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (ContextCompat.checkSelfPermission( StudentActivity.this,android.Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED )
+        {
+
+            ActivityCompat.requestPermissions(StudentActivity.this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    MY_PERMISSIONS_REQUEST_LOCATION );
+
+        }
+        if (ContextCompat.checkSelfPermission( StudentActivity.this,android.Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED )
+        {
+
+            ActivityCompat.requestPermissions(StudentActivity.this,
+                    new String[]{Manifest.permission.READ_PHONE_STATE},
+                    MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+
+        }
+    }
+
+    private double distanceLoc(double lat1, double lon1, double lat2, double lon2) {
+        double theta = lon1 - lon2;
+        double dist = Math.sin(deg2rad(lat1))
+                * Math.sin(deg2rad(lat2))
+                + Math.cos(deg2rad(lat1))
+                * Math.cos(deg2rad(lat2))
+                * Math.cos(deg2rad(theta));
+        dist = Math.acos(dist);
+        dist = rad2deg(dist);
+        dist = dist * 60 * 1.1515;
+        return (dist);
+    }
+
+    private double deg2rad(double deg) {
+        return (deg * Math.PI / 180.0);
+    }
+
+    private double rad2deg(double rad) {
+        return (rad * 180.0 / Math.PI);
     }
 
     //to get the result after scan
@@ -148,9 +235,54 @@ public class StudentActivity extends BaseActivity {
                     //name.setText(obj.getString("name"));
                     String subjectCode = obj.getString("subject");
                     String groupName = obj.getString("group");
-
-                    GiveAttendance giveAttendance = new GiveAttendance();
-                    giveAttendance.execute(subjectCode.toLowerCase().trim(), groupName.toLowerCase().trim());
+                    String long1 = obj.getString("longitude");
+                    String lat1 = obj.getString("latitude");
+                    String dateObtained = obj.getString("date");
+                    String timeObtained = obj.getString("time");
+                    LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                    Double longitude = 0.00, latitude = 0.00;
+                    Location location = null;
+                    try {
+                        location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                    } catch (SecurityException e) {
+                        e.printStackTrace();
+                    }
+                    if(location!=null) {
+                        longitude = location.getLongitude();
+                        latitude = location.getLatitude();
+                    }
+                    Location location1 = new Location("");
+                    location1.setLongitude(Double.parseDouble(long1));
+                    location1.setLatitude(Double.parseDouble(lat1));
+                    Location location2 = new Location("");
+                    location2.setLongitude(longitude);
+                    location2.setLatitude(latitude);
+                    double distance = distanceLoc(Double.parseDouble(lat1), Double.parseDouble(long1), latitude, longitude)/1000;
+                    int valid = 1;
+                    Log.d("DIS", Double.toString(distance) + " " + latitude +" "+ longitude);
+                    if(distance>=10.00000){
+                        valid =0;
+                    }
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
+                    String getCurrentDate = sdf.format(new Date());
+                    if(!getCurrentDate.equals(dateObtained))
+                        valid = 0;
+                    SimpleDateFormat sdf1 = new SimpleDateFormat("HH:mm");
+                    String getCurrentTime = sdf1.format(new Date());
+                    //Date date1  = sdf1.parse(getCurrentTime);
+                    Log.d("DIS", Double.toString(distance) + " " + latitude +" "+ longitude +" " +  getCurrentDate + " "+getCurrentTime);
+                   // long millis = Time.valueOf(timeObtained).getTime() - Time.valueOf(getCurrentTime).getTime();
+                   // int minute = (int)(millis/(1000*60));
+                    //time should be less than 20 minutes
+                    //if(minute>20)
+                      //  valid = 0;
+                    if(valid==1) {
+                        GiveAttendance giveAttendance = new GiveAttendance();
+                        giveAttendance.execute(subjectCode.toLowerCase().trim(), groupName.toLowerCase().trim());
+                    }
+                    else{
+                        Toast.makeText(getApplicationContext(), "Your Attendance could not be updated\nCredentials mismatch", Toast.LENGTH_LONG).show();
+                    }
                     //address.setText(obj.getString("address"));
                 } catch (JSONException e) {
                     e.printStackTrace();

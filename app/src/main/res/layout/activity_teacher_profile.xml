@@ -13,13 +13,14 @@
         android:id="@+id/relative1"
         android:background="#80485563">
         <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
             android:layout_marginTop="20dp"
             android:layout_gravity="center"
             android:layout_centerHorizontal="true"
             android:id="@+id/profileImage"
-            android:background="@drawable/teacherimage"/>
+            android:src="@drawable/ic_profile2"
+            android:background="@color/imageBackground"/>
 
         <TextView
             android:layout_width="300dp"

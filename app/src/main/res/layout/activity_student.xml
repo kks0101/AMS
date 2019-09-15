@@ -54,7 +54,8 @@
 
                 android:layout_alignParentRight="true"
                 android:id="@+id/profileButton"
-                android:src="@drawable/person"
+                android:background="@color/imageBackground"
+                android:src="@drawable/ic_profile"
                 android:layout_width="62dp"
                 android:layout_height="62dp"/>
 
