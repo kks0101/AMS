@@ -3,6 +3,7 @@ package com.example.ams;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -57,6 +58,10 @@ public class TeacherProfile extends BaseActivity {
         logoutButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+                SharedPreferences pref = getApplicationContext().getSharedPreferences("details", 0); //Mode_private
+                SharedPreferences.Editor editor = pref.edit();
+                editor.putString("user", null);
+                editor.commit();
                 FirebaseAuth.getInstance().signOut();
                 Intent intent = new Intent(TeacherProfile.this, MainActivity.class);
                 startActivity(intent);

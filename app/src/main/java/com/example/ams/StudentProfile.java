@@ -3,6 +3,7 @@ package com.example.ams;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -58,6 +59,10 @@ public class StudentProfile extends BaseActivity {
             @Override
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
+                SharedPreferences pref = getApplicationContext().getSharedPreferences("details", 0); //Mode_private
+                SharedPreferences.Editor editor = pref.edit();
+                editor.putString("user", null);
+                editor.commit();
                 Intent intent = new Intent(StudentProfile.this, MainActivity.class);
                 startActivity(intent);
                 finish();

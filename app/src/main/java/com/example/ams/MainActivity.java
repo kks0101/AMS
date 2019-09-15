@@ -55,6 +55,23 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("details", 0); //Mode_private
+        if(pref!=null){
+
+            String userType = pref.getString("user", null);
+            if(userType != null){
+                if(userType.equals("student")){
+                    Intent intent = new Intent(MainActivity.this, StudentActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+                else if(userType.equals("teacher")){
+                    Intent intent = new Intent(MainActivity.this, TeacherActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            }
+        }
 
         emailField = (EditText) findViewById(R.id.email);
         passwordField = (EditText) findViewById(R.id.password);
@@ -254,11 +271,20 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                         FirebaseAuth.getInstance().signOut();
                     }
                     else if(user.equals("student")){
+
+                        SharedPreferences pref = getApplicationContext().getSharedPreferences("details", 0); //Mode_private
+                        SharedPreferences.Editor editor = pref.edit();
+                        editor.putString("user", "student");
+                        editor.commit();
                         Intent intent = new Intent(MainActivity.this, StudentActivity.class);
                         startActivity(intent);
                         finish();
                     }
                     else if(user.equals("teacher")){
+                        SharedPreferences pref = getApplicationContext().getSharedPreferences("details", 0); //Mode_private
+                        SharedPreferences.Editor editor = pref.edit();
+                        editor.putString("user", "teacher");
+                        editor.commit();
                         Intent intent = new Intent(MainActivity.this, TeacherActivity.class);
                         startActivity(intent);
                         finish();
