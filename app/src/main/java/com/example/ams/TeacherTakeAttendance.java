@@ -303,8 +303,8 @@ public class TeacherTakeAttendance extends BaseActivity {
     //class to generate QR Code
     class GenerateQr extends AsyncTask<String, String, String>{
         String subject, branch;
-        double longitude, latitude;
         String getCurrentDate , getCurrentTime;
+        String latitude = "", longitude="";
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -317,7 +317,8 @@ public class TeacherTakeAttendance extends BaseActivity {
             getCurrentTime = sdf1.format(new Date());
 
 
-                LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                /*LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
                 Location location = null;
                 try {
                     location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -327,9 +328,21 @@ public class TeacherTakeAttendance extends BaseActivity {
                 if(location!=null) {
                     longitude = location.getLongitude();
                     latitude = location.getLatitude();
-                }
+                }*/
+            GPSTracker gps = new GPSTracker(TeacherTakeAttendance.this);
 
+            if(gps.canGetLocation()){
+                latitude = Double.toString(gps.getLatitude());
+                longitude = Double.toString(gps.getLongitude());
+                // \n is for new line
+            }else{
+                // can't get location
+                // GPS or Network is not enabled
+                // Ask user to enable GPS/network in settings
+                gps.showSettingsAlert();
+            }
 
+            Log.d("DIS", latitude + " " + longitude);
         }
 
         @Override

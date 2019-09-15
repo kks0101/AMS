@@ -63,7 +63,7 @@ public class TeacherRegister extends BaseActivity implements View.OnClickListene
         setContentView(R.layout.activity_teacher_register);
 
         ///check for permission
-        if (ContextCompat.checkSelfPermission( TeacherRegister.this,android.Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED )
+        if (ContextCompat.checkSelfPermission( TeacherRegister.this, Manifest.permission.READ_PHONE_STATE ) != PackageManager.PERMISSION_GRANTED )
         {
 
             ActivityCompat.requestPermissions(TeacherRegister.this,
@@ -114,6 +114,19 @@ public class TeacherRegister extends BaseActivity implements View.OnClickListene
                         hideProgressDialog();
                     }
                 });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (ContextCompat.checkSelfPermission( TeacherRegister.this, Manifest.permission.READ_PHONE_STATE ) != PackageManager.PERMISSION_GRANTED )
+        {
+
+            ActivityCompat.requestPermissions(TeacherRegister.this,
+                    new String[]{Manifest.permission.READ_PHONE_STATE},
+                    MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+
+        }
     }
 
     private boolean validateForm(){

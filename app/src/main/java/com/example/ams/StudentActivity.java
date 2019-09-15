@@ -240,27 +240,42 @@ public class StudentActivity extends BaseActivity {
                     String dateObtained = obj.getString("date");
                     String timeObtained = obj.getString("time");
                     LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-                    Double longitude = 0.00, latitude = 0.00;
-                    Location location = null;
-                    try {
-                        location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                    } catch (SecurityException e) {
-                        e.printStackTrace();
-                    }
-                    if(location!=null) {
-                        longitude = location.getLongitude();
-                        latitude = location.getLatitude();
+                    //Double longitude = 0.00, latitude = 0.00;
+                    String longitude="", latitude="";
+//                    Location location = null;
+//                    try {
+//                        location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+//                    } catch (SecurityException e) {
+//                        e.printStackTrace();
+//                    }
+//                    if(location!=null) {
+//                        longitude = location.getLongitude();
+//                        latitude = location.getLatitude();
+//                    }
+
+                    GPSTracker gps = new GPSTracker(StudentActivity.this);
+
+                    if(gps.canGetLocation()){
+                        latitude = Double.toString(gps.getLatitude());
+                        longitude = Double.toString(gps.getLongitude());
+                        // \n is for new line
+                    }else{
+                        // can't get location
+                        // GPS or Network is not enabled
+                        // Ask user to enable GPS/network in settings
+                        gps.showSettingsAlert();
                     }
                     Location location1 = new Location("");
                     location1.setLongitude(Double.parseDouble(long1));
                     location1.setLatitude(Double.parseDouble(lat1));
                     Location location2 = new Location("");
-                    location2.setLongitude(longitude);
-                    location2.setLatitude(latitude);
-                    double distance = distanceLoc(Double.parseDouble(lat1), Double.parseDouble(long1), latitude, longitude)/1000;
+                    location2.setLongitude(Double.parseDouble(longitude));
+                    location2.setLatitude(Double.parseDouble(latitude));
+                    double distance = distanceLoc(Double.parseDouble(lat1), Double.parseDouble(long1), Double.parseDouble(latitude), Double.parseDouble(longitude))*1000;
+                    //double distance = location1.distanceTo(location2);
                     int valid = 1;
                     Log.d("DIS", Double.toString(distance) + " " + latitude +" "+ longitude);
-                    if(distance>=10.00000){
+                    if(distance>=5.0000){
                         valid =0;
                     }
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
