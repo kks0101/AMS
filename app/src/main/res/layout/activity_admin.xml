@@ -5,11 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AdminActivity"
-    android:background="@drawable/login">
+    android:background="@drawable/profileBack3">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="250dp"
-        android:background="#80485563"
         android:id="@+id/adminRelative">
         <TextView
             android:layout_width="match_parent"
@@ -41,7 +40,7 @@
         android:layout_marginTop="50dp"
         android:layout_marginLeft="70dp"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/signup"
+        android:background="@drawable/profilebutton"
         android:text="Verfiy Teacher"
         android:textColor="@color/colorAccent1"
         android:id="@+id/verifyTeacher"/>
@@ -52,7 +51,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginLeft="70dp"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/signup"
+        android:background="@drawable/profilebutton"
         android:text="Create batch"
         android:textColor="@color/colorAccent1"
         android:id="@+id/createBatch"/>
@@ -63,9 +62,9 @@
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="70dp"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/shape2"
+        android:background="@drawable/profilebtnborder"
         android:text="Logout"
-        android:textColor="@color/colorPrimaryDark1"
+        android:textColor="@color/colorAccent1"
         android:id="@+id/logoutAdmin"/>
 
 </RelativeLayout>
