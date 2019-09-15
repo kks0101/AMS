@@ -2,10 +2,13 @@ package com.example.ams;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -24,6 +27,7 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -37,6 +41,7 @@ public class DisplayShortAttendance extends BaseActivity {
     ListView listView;
     ArrayList<ShortAttendanceDetail> shortAttendanceDetailArrayList = new ArrayList<>();
     private ShortAttendanceListAdapter shortAttendanceListAdapter;
+    String emailIdList = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,12 +50,30 @@ public class DisplayShortAttendance extends BaseActivity {
         String subjectCode = getIntent().getStringExtra("subject");
         String group = getIntent().getStringExtra("group");
 
+        Button notify = (Button)findViewById(R.id.notifyEmail);
+        notify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendMail();
+            }
+        });
+
         GetListLessThan75 getListLessThan75 = new GetListLessThan75();
         getListLessThan75.execute(group, subjectCode);
 
 
     }
 
+    private void sendMail() {
+        String recipientList = emailIdList;
+        String[] recipients = recipientList.split(",");
+
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_EMAIL, recipients);
+
+        intent.setType("message/rfc822");
+        startActivity(Intent.createChooser(intent, "Choose an email client"));
+    }
     //class to get the list of students having attendance less than 75 %
     private class GetListLessThan75 extends AsyncTask<String, String , String > {
 
@@ -163,19 +186,18 @@ public class DisplayShortAttendance extends BaseActivity {
                     org.json.JSONArray st2 = job2.getJSONArray("percent_attendance");
                     org.json.JSONArray st3 = job3.getJSONArray("emailId");
                     Log.d("TAG", Integer.toString(st1.length()));
+
                     for(int i=0;i<st1.length();i++){
                         Toast.makeText(DisplayShortAttendance.this, "Made it ", Toast.LENGTH_LONG).show();
-                        ShortAttendanceDetail shortAttendanceDetail = new ShortAttendanceDetail(st1.getString(i), st3.getString(i), st2.getDouble(i));
+                        double percent = Double.parseDouble(st2.getString(i));
+                        DecimalFormat decimalFormat = new DecimalFormat("##.00");
+                        String dec = decimalFormat.format(percent);
+                        ShortAttendanceDetail shortAttendanceDetail = new ShortAttendanceDetail(st1.getString(i), st3.getString(i), Double.parseDouble(dec));
                         shortAttendanceDetailArrayList.add(shortAttendanceDetail);
-                        //HashMap<String , String> map = new HashMap<>();
-                        //map.put("name", st1.getString(i));
-                        //map.put("percent", st2.getString(i));
-                        //map.put("emailId", st3.getString(i));
-                        //shortList.add(map);
-                        //subjectList.add(st1.getString(i) + "-" + st2.getString(i));
+                        emailIdList += st3.getString(i) + ",";
                         Log.d("TAG", st1.getString(i)+ st3.getString(i)+ st2.getDouble(i));
                     }
-
+                    emailIdList.substring(0, emailIdList.length()-1);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
