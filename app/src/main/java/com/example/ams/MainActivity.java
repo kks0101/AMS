@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
@@ -54,12 +55,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-//        if(user!=null){
-//            Intent intent = new Intent(this, TeacherActivity.class);
-//            startActivity(intent);
-//            finish();
-//        }
 
         emailField = (EditText) findViewById(R.id.email);
         passwordField = (EditText) findViewById(R.id.password);

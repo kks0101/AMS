@@ -1,10 +1,18 @@
 package com.example.ams;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -44,6 +52,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -55,6 +64,9 @@ public class TeacherTakeAttendance extends BaseActivity {
     private static int QRCodeWidth = 500;
     private final String BASE_URL = "http://192.168.43.99:1234/ams/";
     private Bitmap bitmap;
+
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+    //Boolean isLocationPermissionGranted = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +82,15 @@ public class TeacherTakeAttendance extends BaseActivity {
         generatePdf = (Button) findViewById(R.id.generatePDF);
         backToDashboard = (Button)findViewById(R.id.backToDashboard);
 
+        if (ContextCompat.checkSelfPermission( TeacherTakeAttendance.this,android.Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED )
+        {
+
+            ActivityCompat.requestPermissions(TeacherTakeAttendance.this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    MY_PERMISSIONS_REQUEST_LOCATION );
+
+        }
+
         if(teacherSubjectDetail!=null) {
             displaySubjectCode.setText(teacherSubjectDetail.getSubjectCode());
             displayGroup.setText(teacherSubjectDetail.getBranch());
@@ -80,8 +101,14 @@ public class TeacherTakeAttendance extends BaseActivity {
             @Override
             public void onClick(View view) {
                 //to refresh the flush field to note the current present absent for the desired subject
-                RefreshTheFlushField refreshTheFlushField = new RefreshTheFlushField();
-                refreshTheFlushField.execute(displayGroup.getText().toString(), displaySubjectCode.getText().toString());
+                if (ContextCompat.checkSelfPermission(TeacherTakeAttendance.this,
+                        Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+                    Toast.makeText(getApplicationContext(), "You need to provide the location access Permission", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    RefreshTheFlushField refreshTheFlushField = new RefreshTheFlushField();
+                    refreshTheFlushField.execute(displayGroup.getText().toString(), displaySubjectCode.getText().toString());
+                }
 
             }
         });
@@ -118,9 +145,6 @@ public class TeacherTakeAttendance extends BaseActivity {
             }
         });
     }
-
-
-
 
     //inorder to refresh the flush field of the database
     private class RefreshTheFlushField extends AsyncTask<String, String , String >{
@@ -279,20 +303,47 @@ public class TeacherTakeAttendance extends BaseActivity {
     //class to generate QR Code
     class GenerateQr extends AsyncTask<String, String, String>{
         String subject, branch;
+        double longitude, latitude;
+        String getCurrentDate , getCurrentTime;
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             showProgressDialog("Generating QR Code..Please Wait");
             subject = displaySubjectCode.getText().toString();
             branch = displayGroup.getText().toString();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
+            getCurrentDate = sdf.format(new Date());
+            SimpleDateFormat sdf1 = new SimpleDateFormat("HH:mm");
+            getCurrentTime = sdf1.format(new Date());
+
+
+                LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                Location location = null;
+                try {
+                    location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                } catch (SecurityException e) {
+                    e.printStackTrace();
+                }
+                if(location!=null) {
+                    longitude = location.getLongitude();
+                    latitude = location.getLatitude();
+                }
+
+
         }
 
         @Override
         protected String doInBackground(String... strings) {
             JSONObject credentials = new JSONObject();
+
+
             try{
                 credentials.put("subject", subject);
                 credentials.put("group", branch);
+                credentials.put("latitude", latitude);
+                credentials.put("longitude", longitude);
+                credentials.put("date", getCurrentDate);
+                credentials.put("time", getCurrentTime);
             }catch (JSONException e){
                 e.printStackTrace();
             }
