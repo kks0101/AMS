@@ -41,6 +41,7 @@
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity android:name=".TeacherActivity" />
         <activity android:name=".StudentActivity" />
+        <activity android:name=".StudentProfile" />
         <activity android:name=".TeacherSubject" />
         <activity android:name=".TeacherProfile" />
         <activity android:name=".MainActivity">

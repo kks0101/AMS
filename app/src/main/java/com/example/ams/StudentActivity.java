@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -38,6 +40,7 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -79,7 +82,21 @@ public class StudentActivity extends BaseActivity {
         linlaHeaderProgress = (LinearLayout) findViewById(R.id.progressBar);
         linlaHeaderProgress.setVisibility(View.VISIBLE);
         scanQrCodeButton = (Button) findViewById(R.id.giveAttendance);
+
+        ImageButton profileButton = (ImageButton)findViewById(R.id.profileButton);
+        profileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(StudentActivity.this, StudentProfile.class);
+                startActivity(intent);
+            }
+        });
+
+
         mAuth = FirebaseAuth.getInstance();
+
+
+
         GetProfileDetails getProfileDetails = new GetProfileDetails();
         getProfileDetails.execute();
 
@@ -90,6 +107,28 @@ public class StudentActivity extends BaseActivity {
                 qrScan.initiateScan();
             }
         });
+
+        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                String deviceId = null;
+                TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+                try {
+                    //uniquely identifies phone
+                    deviceId = telephonyManager.getDeviceId();
+                }
+                catch(SecurityException e){
+                    Log.i("PERMISSION", e.toString());
+                }
+                    GetSpecificDetails getSpecificDetails = new GetSpecificDetails();
+                    getSpecificDetails.execute(deviceId, groupName, recievedList.get(position).getSubjectCode());
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));
     }
 
     //to get the result after scan
@@ -498,6 +537,160 @@ public class StudentActivity extends BaseActivity {
                     e.printStackTrace();
                 }
 
+            }
+        }
+    }
+
+    private class GetSpecificDetails extends AsyncTask<String, String , String > {
+
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            showProgressDialog("Retrieving details\n..please wait..");
+        }
+
+
+        @Override
+        protected String doInBackground(String... strings) {
+            ///ContentValues params = new ContentValues();
+
+            HashMap<String, Object> params = new HashMap<String, Object>();
+            params.put("deviceId", strings[0].toLowerCase().trim());
+            params.put("table_name",  "table_" + strings[1].toLowerCase().trim());
+            params.put("subjectCode_tp", strings[2].toLowerCase().trim() + "_tp");
+            params.put("subjectCode_tc", strings[2].toLowerCase().trim() + "_tc");
+
+            String link = BASE_URL + "get_attendance_detail.php";
+
+            Set set = params.entrySet();
+            Iterator iterator = set.iterator();
+            try {
+                String data = "";
+                while (iterator.hasNext()) {
+                    Map.Entry mEntry = (Map.Entry) iterator.next();
+                    data += URLEncoder.encode(mEntry.getKey().toString(), "UTF-8") + "=" +
+                            URLEncoder.encode(mEntry.getValue().toString(), "UTF-8");
+                    data += "&";
+                }
+
+                if (data != null && data.length() > 0 && data.charAt(data.length() - 1) == '&') {
+                    data = data.substring(0, data.length() - 1);
+                }
+                Log.d("Debug", data);
+
+                URL url=new URL(link);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoInput(true);
+                httpURLConnection.setDoOutput(true);
+                httpURLConnection.setRequestProperty("Accept","*/*");
+                OutputStream out = httpURLConnection.getOutputStream();
+                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
+
+                Log.d("data", data);
+                bufferedWriter.write(data);
+                bufferedWriter.flush();
+                bufferedWriter.close();
+                InputStream inputStream = new BufferedInputStream(httpURLConnection.getInputStream());
+
+
+                String result = convertStreamToString(inputStream);
+                httpURLConnection.disconnect();
+                Log.d("TAG",result);
+                return result;
+            }
+            catch(Exception e){
+                Log.d("debug",e.getMessage());
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        private String convertStreamToString(InputStream inputStream) {
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+            StringBuilder sb = new StringBuilder("");
+            String line;
+            try {
+                while ((line = bufferedReader.readLine()) != null) {
+                    sb.append(line + "\n");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                inputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return sb.toString();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            //if string returned from doinbackground is null, that means Exception occured while connectioon to server
+            hideProgressDialog();
+            if(s==null){
+                Toast.makeText(StudentActivity.this, "Coudlnt connect to PHPServer", Toast.LENGTH_LONG).show();
+                //if could not know whether the current user is student or teacher
+            }
+            else {
+
+                //otherwise string would contain the JSON returned from php
+                JSONParser parser = new JSONParser();
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = (JSONObject) parser.parse(s);
+                }catch(ParseException e){
+                    e.printStackTrace();
+                }
+                int successCode = 0;
+                if(jsonObject!=null) {
+                    Object p = jsonObject.get("success");
+                    successCode = Integer.parseInt(p.toString());
+                }
+                if( jsonObject==null || successCode==0){
+                    Toast.makeText(StudentActivity.this, "Some error occurred", Toast.LENGTH_LONG).show();
+                    //if could not know whether the current user is student or teacher
+
+                }
+                else{
+                    String total_present = jsonObject.get("total_present").toString();
+                    String total_class = jsonObject.get("total_class").toString();
+
+                    final Dialog dialog = new Dialog(StudentActivity.this);
+                    dialog.setContentView(R.layout.student_dialog);
+                    dialog.setTitle("Details :");
+
+                    TextView totalClassTextView = (TextView) dialog.findViewById(R.id.totalClassTextView);
+                    TextView totalPresentTextView = (TextView) dialog.findViewById(R.id.totalPresentTextView);
+                    TextView totalAbsentTextView = (TextView) dialog.findViewById(R.id.totalAbsentTextView);
+                    TextView moreToAttendTextView = (TextView) dialog.findViewById(R.id.moreToAttendTextView);
+                    TextView percentTextView = (TextView) dialog.findViewById(R.id.percentTextView);
+
+                    totalClassTextView.setText(total_class);
+                    totalPresentTextView.setText(total_present);
+                    totalAbsentTextView.setText(Integer.toString(Integer.parseInt(total_class) - Integer.parseInt(total_present)));
+                    int totC = Integer.parseInt(total_class);
+                    int totP = Integer.parseInt(total_present);
+                    int d = 3*totC - 4*totP;
+                    moreToAttendTextView.setText(Integer.toString(d));
+                    double percent = (double)totP/totC;
+                    DecimalFormat decimalFormat = new DecimalFormat("##.00");
+                    String dec = decimalFormat.format(percent);
+                    percentTextView.setText(dec + " %");Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+                    // if button is clicked, close the custom dialog
+                    dialogButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                        }
+                    });
+                    if(!isFinishing())
+                        dialog.show();
+
+                }
             }
         }
     }

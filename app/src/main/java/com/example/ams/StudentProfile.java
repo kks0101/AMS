@@ -2,9 +2,12 @@ package com.example.ams;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,13 +38,31 @@ public class StudentProfile extends BaseActivity {
     FirebaseAuth mAuth;
     private final String BASE_URL = "http://192.168.43.99:1234/ams/";
     private TextView nameTextView, emailIdTextView, regNoTextView, branchTextView, phoneNoTextView, semesterTextView, groupTextView;
+    String name , regNo, emailId, branch, semester, phoneNo,groupName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_profile);
         mAuth = FirebaseAuth.getInstance();
 
+        nameTextView = (TextView)findViewById(R.id.nameTextView);
+        emailIdTextView = (TextView)findViewById(R.id.emailIdTextView);
+        regNoTextView = (TextView)findViewById(R.id.regNoTextView);
+        branchTextView = (TextView)findViewById(R.id.branchTextView);
+        phoneNoTextView = (TextView)findViewById(R.id.phoneNoTextView);
+        semesterTextView = (TextView)findViewById(R.id.semesterTextView);
+        groupTextView = (TextView)findViewById(R.id.groupNameTextView);
 
+        Button logout = (Button)findViewById(R.id.logoutStudent);
+        logout.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(StudentProfile.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         GetProfileDetails getProfileDetails = new GetProfileDetails();
         getProfileDetails.execute();
@@ -160,14 +181,21 @@ public class StudentProfile extends BaseActivity {
 
                 }
                 else{
-                    String name = jsonObject.get("name").toString();
-                    String regNo = jsonObject.get("regNo").toString();
-                    String emailId = jsonObject.get("emailId").toString();
-                    String branch = jsonObject.get("branch").toString();
-                    String semester = jsonObject.get("semester").toString();
-                    String phoneNo = jsonObject.get("phoneNo").toString();
-                    String groupName = jsonObject.get("groupName").toString();
+                    name = jsonObject.get("name").toString();
+                    regNo = jsonObject.get("regNo").toString();
+                    emailId = jsonObject.get("emailId").toString();
+                    branch = jsonObject.get("branch").toString();
+                    semester = jsonObject.get("semester").toString();
+                    phoneNo = jsonObject.get("phoneNo").toString();
+                    groupName = jsonObject.get("groupName").toString();
 
+                    nameTextView.setText(name);
+                    regNoTextView.setText(regNo);
+                    emailIdTextView.setText(emailId);
+                    groupTextView.setText(groupName);
+                    semesterTextView.setText(semester);
+                    phoneNoTextView.setText(phoneNo);
+                    branchTextView.setText(branch);
                 }
             }
         }
