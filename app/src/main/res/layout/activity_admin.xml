@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AdminActivity"
+    android:background="@drawable/login">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:background="#80485563"
+        android:id="@+id/adminRelative">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="70dp"
+            android:gravity="center"
+            android:text="ADMIN"
+            android:textColor="@color/white"
+            style="@style/TextAppearance.AppCompat.Headline"
+            android:fontFamily="sans-serif"
+            android:textSize="35dp"
+            android:id="@+id/adminText"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/adminText"
+            android:textColor="@color/colorPrimary1"
+            style="@style/TextAppearance.AppCompat.Headline"
+            android:fontFamily="sans-serif"
+            android:textSize="15dp"
+            android:gravity="center"
+            android:text="AHAM BRAMHASMI"
+            />
+    </RelativeLayout>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/adminRelative"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="70dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/signup"
+        android:text="Verfiy Teacher"
+        android:textColor="@color/colorAccent1"
+        android:id="@+id/verifyTeacher"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/verifyTeacher"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="70dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/signup"
+        android:text="Create batch"
+        android:textColor="@color/colorAccent1"
+        android:id="@+id/createBatch"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="70dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/shape2"
+        android:text="Logout"
+        android:textColor="@color/colorPrimaryDark1"
+        android:id="@+id/logoutAdmin"/>
+
+</RelativeLayout>

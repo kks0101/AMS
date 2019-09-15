@@ -13,6 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".AdminBatch"></activity>
+        <activity android:name=".AdminActivity" />
         <activity android:name=".TeacherAfterAttendance" />
         <activity android:name=".DisplayShortAttendance" />
         <activity
