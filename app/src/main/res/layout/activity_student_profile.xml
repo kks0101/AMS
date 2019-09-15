@@ -191,27 +191,28 @@
 
     <Button
         android:id="@+id/showQR"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="242dp"
+        android:textAllCaps="false"
+        android:layout_height="45dp"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/shape2"
+        android:background="@drawable/profilebutton"
         android:text="Unique QR"
         android:layout_above="@+id/logoutStudent"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="10dp"
-        android:textColor="@color/colorPrimaryDark1" />
+        android:textColor="@color/colorAccent1" />
 
     <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="242dp"
+        android:layout_height="45dp"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/shape2"
+        android:background="@drawable/profilebtnborder"
         android:text="Logout"
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20dp"
-        android:textColor="@color/colorPrimaryDark1"
+        android:textColor="@color/colorAccent1"
         android:id="@+id/logoutStudent"/>
 </RelativeLayout>
