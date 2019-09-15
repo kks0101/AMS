@@ -229,10 +229,7 @@ public class StudentActivity extends BaseActivity {
             } else {
                 //if qr contains data
                 try {
-                    //converting the data to json
                     org.json.JSONObject obj = new org.json.JSONObject(result.getContents());
-                    //setting values to textviews
-                    //name.setText(obj.getString("name"));
                     String subjectCode = obj.getString("subject");
                     String groupName = obj.getString("group");
                     String long1 = obj.getString("longitude");
@@ -240,18 +237,7 @@ public class StudentActivity extends BaseActivity {
                     String dateObtained = obj.getString("date");
                     String timeObtained = obj.getString("time");
                     LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-                    //Double longitude = 0.00, latitude = 0.00;
                     String longitude="", latitude="";
-//                    Location location = null;
-//                    try {
-//                        location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-//                    } catch (SecurityException e) {
-//                        e.printStackTrace();
-//                    }
-//                    if(location!=null) {
-//                        longitude = location.getLongitude();
-//                        latitude = location.getLatitude();
-//                    }
 
                     GPSTracker gps = new GPSTracker(StudentActivity.this);
 
@@ -286,11 +272,6 @@ public class StudentActivity extends BaseActivity {
                     String getCurrentTime = sdf1.format(new Date());
                     //Date date1  = sdf1.parse(getCurrentTime);
                     Log.d("DIS", Double.toString(distance) + " " + latitude +" "+ longitude +" " +  getCurrentDate + " "+getCurrentTime);
-                   // long millis = Time.valueOf(timeObtained).getTime() - Time.valueOf(getCurrentTime).getTime();
-                   // int minute = (int)(millis/(1000*60));
-                    //time should be less than 20 minutes
-                    //if(minute>20)
-                      //  valid = 0;
                     if(valid==1) {
                         GiveAttendance giveAttendance = new GiveAttendance();
                         giveAttendance.execute(subjectCode.toLowerCase().trim(), groupName.toLowerCase().trim());
@@ -298,13 +279,9 @@ public class StudentActivity extends BaseActivity {
                     else{
                         Toast.makeText(getApplicationContext(), "Your Attendance could not be updated\nCredentials mismatch", Toast.LENGTH_LONG).show();
                     }
-                    //address.setText(obj.getString("address"));
+
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    //if control comes here
-                    //that means the encoded format not matches
-                    //in this case you can display whatever data is available on the qrcode
-                    //to a toast
                     Toast.makeText(this, result.getContents(), Toast.LENGTH_LONG).show();
                 }
             }

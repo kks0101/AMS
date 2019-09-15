@@ -1,13 +1,13 @@
 package com.example.ams;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 
 public class BaseActivity extends AppCompatActivity {
     public ProgressDialog progressDialog;
-
     public void showProgressDialog( String message){
         if(progressDialog==null){
             progressDialog = new ProgressDialog(this);

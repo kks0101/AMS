@@ -316,19 +316,6 @@ public class TeacherTakeAttendance extends BaseActivity {
             SimpleDateFormat sdf1 = new SimpleDateFormat("HH:mm");
             getCurrentTime = sdf1.format(new Date());
 
-
-                /*LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-                Location location = null;
-                try {
-                    location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                } catch (SecurityException e) {
-                    e.printStackTrace();
-                }
-                if(location!=null) {
-                    longitude = location.getLongitude();
-                    latitude = location.getLatitude();
-                }*/
             GPSTracker gps = new GPSTracker(TeacherTakeAttendance.this);
 
             if(gps.canGetLocation()){
