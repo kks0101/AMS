@@ -10,10 +10,18 @@
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:id="@+id/adminRelative">
+        <ImageView
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/AdminprofileImage"
+            android:background="@drawable/image_shape"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="70dp"
+            android:layout_marginTop="150dp"
             android:gravity="center"
             android:text="ADMIN"
             android:textColor="@color/white"
