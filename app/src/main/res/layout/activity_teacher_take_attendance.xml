@@ -63,7 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_below="@id/details"
-            android:background="#D9ff0000"
+            android:background="@color/colorButton"
             android:textColor="@color/colorAccent1"
             android:text="Take attendance"
             />
@@ -74,7 +74,7 @@
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/scanQrCode"
             android:layout_marginTop="10dp"
-            android:background="#D9ff0000"
+            android:background="@color/colorButton"
             android:textColor="@color/colorAccent1"
             android:text="less than 75%"
             />
@@ -84,7 +84,7 @@
             android:layout_centerHorizontal="true"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:background="#D9ff0000"
+            android:background="@color/colorButton"
             android:textColor="@color/colorAccent1"
             android:text="generate pdf"
             />

@@ -63,7 +63,7 @@
         android:layout_below="@id/subjectSpinner"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
-        android:background="#ff0000"
+        android:background="@color/colorButton"
         android:text="Add"
         android:textColor="@color/colorAccent1"
         android:id="@+id/addSubject"/>

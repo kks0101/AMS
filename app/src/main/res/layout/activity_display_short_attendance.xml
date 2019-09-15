@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DisplayShortAttendance">
+    tools:context=".DisplayShortAttendance"
+    android:background="@drawable/login">
     <ListView
         android:id="@+id/listView"
         android:layout_width="wrap_content"
@@ -17,6 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:background="@drawable/shape2"
         android:id="@+id/notifyEmail"
         android:text="Notify via Email"/>
 </RelativeLayout>

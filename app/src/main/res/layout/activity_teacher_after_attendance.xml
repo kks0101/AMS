@@ -83,7 +83,7 @@
         android:layout_marginTop="5dp"
         android:paddingRight="7dp"
         android:textAlignment="center"
-        android:textColor="#ff0000"
+        android:textColor="#D81919"
         style="@style/TextAppearance.AppCompat.Headline"
         android:fontFamily="sans-serif"
         android:textStyle="bold"
