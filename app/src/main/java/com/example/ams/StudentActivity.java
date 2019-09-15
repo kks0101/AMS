@@ -229,10 +229,7 @@ public class StudentActivity extends BaseActivity {
             } else {
                 //if qr contains data
                 try {
-                    //converting the data to json
                     org.json.JSONObject obj = new org.json.JSONObject(result.getContents());
-                    //setting values to textviews
-                    //name.setText(obj.getString("name"));
                     String subjectCode = obj.getString("subject");
                     String groupName = obj.getString("group");
                     String long1 = obj.getString("longitude");
@@ -240,27 +237,31 @@ public class StudentActivity extends BaseActivity {
                     String dateObtained = obj.getString("date");
                     String timeObtained = obj.getString("time");
                     LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-                    Double longitude = 0.00, latitude = 0.00;
-                    Location location = null;
-                    try {
-                        location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                    } catch (SecurityException e) {
-                        e.printStackTrace();
-                    }
-                    if(location!=null) {
-                        longitude = location.getLongitude();
-                        latitude = location.getLatitude();
+                    String longitude="", latitude="";
+
+                    GPSTracker gps = new GPSTracker(StudentActivity.this);
+
+                    if(gps.canGetLocation()){
+                        latitude = Double.toString(gps.getLatitude());
+                        longitude = Double.toString(gps.getLongitude());
+                        // \n is for new line
+                    }else{
+                        // can't get location
+                        // GPS or Network is not enabled
+                        // Ask user to enable GPS/network in settings
+                        gps.showSettingsAlert();
                     }
                     Location location1 = new Location("");
                     location1.setLongitude(Double.parseDouble(long1));
                     location1.setLatitude(Double.parseDouble(lat1));
                     Location location2 = new Location("");
-                    location2.setLongitude(longitude);
-                    location2.setLatitude(latitude);
-                    double distance = distanceLoc(Double.parseDouble(lat1), Double.parseDouble(long1), latitude, longitude)/1000;
+                    location2.setLongitude(Double.parseDouble(longitude));
+                    location2.setLatitude(Double.parseDouble(latitude));
+                    double distance = distanceLoc(Double.parseDouble(lat1), Double.parseDouble(long1), Double.parseDouble(latitude), Double.parseDouble(longitude))*1000;
+                    //double distance = location1.distanceTo(location2);
                     int valid = 1;
                     Log.d("DIS", Double.toString(distance) + " " + latitude +" "+ longitude);
-                    if(distance>=10.00000){
+                    if(distance>=5.0000){
                         valid =0;
                     }
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
@@ -271,11 +272,6 @@ public class StudentActivity extends BaseActivity {
                     String getCurrentTime = sdf1.format(new Date());
                     //Date date1  = sdf1.parse(getCurrentTime);
                     Log.d("DIS", Double.toString(distance) + " " + latitude +" "+ longitude +" " +  getCurrentDate + " "+getCurrentTime);
-                   // long millis = Time.valueOf(timeObtained).getTime() - Time.valueOf(getCurrentTime).getTime();
-                   // int minute = (int)(millis/(1000*60));
-                    //time should be less than 20 minutes
-                    //if(minute>20)
-                      //  valid = 0;
                     if(valid==1) {
                         GiveAttendance giveAttendance = new GiveAttendance();
                         giveAttendance.execute(subjectCode.toLowerCase().trim(), groupName.toLowerCase().trim());
@@ -283,13 +279,9 @@ public class StudentActivity extends BaseActivity {
                     else{
                         Toast.makeText(getApplicationContext(), "Your Attendance could not be updated\nCredentials mismatch", Toast.LENGTH_LONG).show();
                     }
-                    //address.setText(obj.getString("address"));
+
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    //if control comes here
-                    //that means the encoded format not matches
-                    //in this case you can display whatever data is available on the qrcode
-                    //to a toast
                     Toast.makeText(this, result.getContents(), Toast.LENGTH_LONG).show();
                 }
             }

@@ -1,18 +1,34 @@
 package com.example.ams;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
 
+import org.json.JSONException;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -21,6 +37,7 @@ import org.w3c.dom.Text;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -29,6 +46,8 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -36,7 +55,10 @@ import java.util.Set;
 
 public class StudentProfile extends BaseActivity {
     FirebaseAuth mAuth;
+    private static int QRCodeWidth = 500;
     private final String BASE_URL = "http://192.168.43.99:1234/ams/";
+    private Bitmap bitmap;
+    private Button showQr, logOut;
     private TextView nameTextView, emailIdTextView, regNoTextView, branchTextView, phoneNoTextView, semesterTextView, groupTextView;
     String name , regNo, emailId, branch, semester, phoneNo,groupName;
     @Override
@@ -52,20 +74,63 @@ public class StudentProfile extends BaseActivity {
         phoneNoTextView = (TextView)findViewById(R.id.phoneNoTextView);
         semesterTextView = (TextView)findViewById(R.id.semesterTextView);
         groupTextView = (TextView)findViewById(R.id.groupNameTextView);
+         showQr = (Button)findViewById(R.id.showQR);
+         logOut = (Button)findViewById(R.id.logoutStudent);
 
-        Button logout = (Button)findViewById(R.id.logoutStudent);
-        logout.setOnClickListener(new View.OnClickListener(){
+        GetProfileDetails getProfileDetails = new GetProfileDetails();
+        getProfileDetails.execute();
+
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (ContextCompat.checkSelfPermission( StudentProfile.this, Manifest.permission.READ_PHONE_STATE ) != PackageManager.PERMISSION_GRANTED ){
+            requestPermission();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        showQr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ContextCompat.checkSelfPermission(StudentProfile.this,
+                        Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(getApplicationContext(), "Permission Needed to read Phone state", Toast.LENGTH_LONG).show();
+                } else {
+                    GenerateQr generateQr = new GenerateQr();
+                    generateQr.execute();
+                }
+            }
+        });
+
+        logOut.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
+                SharedPreferences pref = getApplicationContext().getSharedPreferences("details", 0); //Mode_private
+                SharedPreferences.Editor editor = pref.edit();
+                editor.putString("user", null);
+                editor.commit();
                 Intent intent = new Intent(StudentProfile.this, MainActivity.class);
                 startActivity(intent);
                 finish();
             }
         });
+    }
 
-        GetProfileDetails getProfileDetails = new GetProfileDetails();
-        getProfileDetails.execute();
+    private void requestPermission(){
+        if (ContextCompat.checkSelfPermission( StudentProfile.this, Manifest.permission.READ_PHONE_STATE ) != PackageManager.PERMISSION_GRANTED )
+        {
+
+            ActivityCompat.requestPermissions(StudentProfile.this,
+                    new String[]{Manifest.permission.READ_PHONE_STATE},
+                    1);
+
+        }
     }
 
     private class GetProfileDetails extends AsyncTask<String, String , String > {
@@ -74,7 +139,7 @@ public class StudentProfile extends BaseActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            showProgressDialog("Retrieving details\n..please wait..");
+            showProgressDialog("Getting details\n..please wait..");
             userId = mAuth.getCurrentUser().getUid();
         }
 
@@ -198,6 +263,97 @@ public class StudentProfile extends BaseActivity {
                     branchTextView.setText(branch);
                 }
             }
+        }
+    }
+
+    private Bitmap TextToImageEncode(String Value) throws WriterException {
+        BitMatrix bitMatrix;
+        try {
+            bitMatrix = new MultiFormatWriter().encode(
+                    Value,
+                    BarcodeFormat.DATA_MATRIX.QR_CODE,
+                    QRCodeWidth, QRCodeWidth, null
+            );
+
+        } catch (IllegalArgumentException Illegalargumentexception) {
+
+            return null;
+        }
+        int bitMatrixWidth = bitMatrix.getWidth();
+
+        int bitMatrixHeight = bitMatrix.getHeight();
+
+        int[] pixels = new int[bitMatrixWidth * bitMatrixHeight];
+
+        for (int y = 0; y < bitMatrixHeight; y++) {
+            int offset = y * bitMatrixWidth;
+
+            for (int x = 0; x < bitMatrixWidth; x++) {
+
+                pixels[offset + x] = bitMatrix.get(x, y) ?
+                        getResources().getColor(R.color.black):getResources().getColor(R.color.white);
+            }
+        }
+        Bitmap bitmap = Bitmap.createBitmap(bitMatrixWidth, bitMatrixHeight, Bitmap.Config.ARGB_8888);
+
+        bitmap.setPixels(pixels, 0, QRCodeWidth, 0, 0, bitMatrixWidth, bitMatrixHeight);
+        return bitmap;
+    }
+
+    private class GenerateQr extends AsyncTask<String, String, String>{
+        String deviceId;
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            showProgressDialog("Generating QR code..Please Wait");
+            if (ContextCompat.checkSelfPermission(StudentProfile.this,
+                    Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                requestPermission();
+            }
+            else{
+                TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+                try {
+                    //uniquely identifies phone
+                    deviceId = telephonyManager.getDeviceId();
+                }
+                catch(SecurityException e){
+                    Log.i("PERMISSION", e.toString());
+                }
+            }
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            org.json.JSONObject credentials = new org.json.JSONObject();
+
+
+            try{
+                credentials.put("deviceId", deviceId);
+            }catch (JSONException e){
+                e.printStackTrace();
+            }
+            String value = credentials.toString();
+            try {
+                bitmap = TextToImageEncode(value);
+
+            } catch (WriterException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            hideProgressDialog();
+            final Dialog dialog = new Dialog(StudentProfile.this);
+            dialog.setContentView(R.layout.layout_qr_display);
+            ImageView showQrImageView = (ImageView)dialog.findViewById(R.id.showQrImageView);
+            showQrImageView.setImageBitmap(bitmap);
+            dialog.setTitle("Details :");
+
+            if(!isFinishing())
+                dialog.show();
         }
     }
 }
