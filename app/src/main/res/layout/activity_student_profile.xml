@@ -18,13 +18,13 @@
             android:layout_marginTop="20dp"
             android:layout_gravity="center"
             android:layout_centerHorizontal="true"
-            android:id="@+id/profileImage"
+            android:id="@+id/StudentProfileImage"
             android:background="@drawable/image_shape"/>
         <TextView
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:id="@+id/nameTextView"
-            android:layout_below="@+id/profileImage"
+            android:layout_below="@+id/StudentProfileImage"
             android:text="Your Name"
             android:textAlignment="center"
             android:textColor="@color/white"
