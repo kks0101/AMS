@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:background="@drawable/login"
     tools:context=".StudentActivity">
-
     <LinearLayout
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"

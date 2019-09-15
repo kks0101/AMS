@@ -19,9 +19,7 @@
             android:layout_gravity="center"
             android:layout_centerHorizontal="true"
             android:id="@+id/profileImage"
-            android:src="@drawable/ic_profile2"
-            android:background="@color/imageBackground"/>
-
+            android:background="@drawable/teacherimage"/>
 
         <TextView
             android:layout_width="300dp"
@@ -46,10 +44,10 @@
         android:layout_below="@+id/relative1"
         android:layout_marginTop="10dp"
         android:gravity="center"
+        android:layout_above="@+id/showQR"
         android:orientation="vertical"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="20dp">
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
