@@ -63,7 +63,7 @@
         android:layout_below="@id/subjectSpinner"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
-        android:background="@color/colorButton"
+        android:background="@drawable/profilebutton"
         android:text="Add"
         android:textColor="@color/colorAccent1"
         android:id="@+id/addSubject"/>
@@ -84,9 +84,9 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="10dp"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/shape2"
+        android:background="@drawable/profilebtnborder"
         android:text="Add Subject"
-        android:textColor="@color/colorPrimaryDark1"
+        android:textColor="@color/colorAccent1"
         android:id="@+id/addSubjectsToDb"/>
 
 </RelativeLayout>
