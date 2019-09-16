@@ -529,12 +529,12 @@ public class StudentActivity extends BaseActivity {
 
                 }
                 else{
-//                    name = jsonObject.get("name").toString();
-//                    regNo = jsonObject.get("regNo").toString();
-//                    emailId = jsonObject.get("emailId").toString();
-//                    branch = jsonObject.get("branch").toString();
-//                    semester = jsonObject.get("semester").toString();
-//                    phoneNo = jsonObject.get("phoneNo").toString();
+                    name = jsonObject.get("name").toString();
+                    regNo = jsonObject.get("regNo").toString();
+                    emailId = jsonObject.get("emailId").toString();
+                    branch = jsonObject.get("branch").toString();
+                    semester = jsonObject.get("semester").toString();
+                    phoneNo = jsonObject.get("phoneNo").toString();
                     groupName = jsonObject.get("groupName").toString();
 
                     GetSubjectDetails getSubjectDetails = new GetSubjectDetails();

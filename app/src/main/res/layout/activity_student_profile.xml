@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:background="@drawable/profileBack3">
+    android:background="@drawable/profile_back3">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -114,7 +114,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:padding="10dp"
-                    android:background="@drawable/regId3"
+                    android:background="@drawable/reg_id3"
                     android:textSize="20sp" />
 
                 <TextView
