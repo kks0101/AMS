@@ -95,8 +95,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/shape2"
-        android:textColor="@color/colorPrimaryDark1"
+        android:background="@drawable/profilebutton"
+        android:textColor="@color/colorAccent1"
         android:text="Dashboard"
         />
 

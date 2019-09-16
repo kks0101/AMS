@@ -63,7 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_below="@id/details"
-            android:background="@color/colorButton"
+            android:background="@drawable/profilebutton"
             android:textColor="@color/colorAccent1"
             android:text="Take attendance"
             />
@@ -74,7 +74,7 @@
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/scanQrCode"
             android:layout_marginTop="10dp"
-            android:background="@color/colorButton"
+            android:background="@drawable/profilebutton"
             android:textColor="@color/colorAccent1"
             android:text="less than 75%"
             />
@@ -84,7 +84,7 @@
             android:layout_centerHorizontal="true"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:background="@color/colorButton"
+            android:background="@drawable/profilebutton"
             android:textColor="@color/colorAccent1"
             android:text="generate pdf"
             />
@@ -95,8 +95,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/shape2"
-        android:textColor="@color/colorPrimaryDark1"
+        android:background="@drawable/profilebtnborder"
+        android:textColor="@color/colorAccent1"
         android:text="Dashboard"
         />
 

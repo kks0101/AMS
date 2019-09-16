@@ -73,9 +73,10 @@
     <Button
         android:id="@+id/giveAttendance"
         android:layout_width="match_parent"
+        android:textAllCaps="false"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/shape2"
+        android:background="@drawable/profilebutton"
         android:textColor="@color/colorPrimaryDark1"
         android:text="Give Attendance"/>
 
