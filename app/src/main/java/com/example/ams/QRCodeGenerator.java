@@ -366,4 +366,6 @@ public class QRCodeGenerator extends BaseActivity implements View.OnClickListene
         }
     }
 
+
+
 }
