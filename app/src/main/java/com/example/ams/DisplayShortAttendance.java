@@ -54,7 +54,13 @@ public class DisplayShortAttendance extends BaseActivity {
         notify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendMail();
+                if (!AppStatus.getInstance(getApplicationContext()).isOnline()) {
+
+                    Toast.makeText(getApplicationContext(),"You are not online!!!!",Toast.LENGTH_LONG).show();
+                }
+                else {
+                    sendMail();
+                }
             }
         });
 

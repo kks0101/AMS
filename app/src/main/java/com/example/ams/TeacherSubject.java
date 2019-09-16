@@ -141,20 +141,25 @@ public class TeacherSubject extends BaseActivity {
             @Override
             public void onClick(View view) {
                 //to ensure that Teacher do provide subjects
-                if(teacherSubjectDetailsList==null){
-                    Toast.makeText(getApplicationContext(), "Please enter subjects", Toast.LENGTH_LONG).show();
-                }
-                else {
-                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                    //if user is currently logged in
-                    if (user != null) {
-                        String userId = user.getUid();
 
-                        mDatabase.child(userId).setValue(teacherSubjectDetailsList);
-                        Intent intent = new Intent(TeacherSubject.this, TeacherActivity.class);
-                        intent.putExtra("TeacherSubjectDetail", teacherSubjectDetailsList);
-                        startActivity(intent);
-                        finish();
+                if (!AppStatus.getInstance(getApplicationContext()).isOnline()) {
+
+                    Toast.makeText(getApplicationContext(),"You are not online!!!!",Toast.LENGTH_LONG).show();
+                }else {
+                    if (teacherSubjectDetailsList == null) {
+                        Toast.makeText(getApplicationContext(), "Please enter subjects", Toast.LENGTH_LONG).show();
+                    } else {
+                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                        //if user is currently logged in
+                        if (user != null) {
+                            String userId = user.getUid();
+
+                            mDatabase.child(userId).setValue(teacherSubjectDetailsList);
+                            Intent intent = new Intent(TeacherSubject.this, TeacherActivity.class);
+                            intent.putExtra("TeacherSubjectDetail", teacherSubjectDetailsList);
+                            startActivity(intent);
+                            finish();
+                        }
                     }
                 }
             }

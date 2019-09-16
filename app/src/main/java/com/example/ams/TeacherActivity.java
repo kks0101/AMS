@@ -79,8 +79,13 @@ public class TeacherActivity extends BaseActivity{
         profileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(TeacherActivity.this, TeacherProfile.class);
-                startActivity(intent);
+                if (!AppStatus.getInstance(getApplicationContext()).isOnline()) {
+
+                    Toast.makeText(getApplicationContext(),"You are not online!!!!",Toast.LENGTH_LONG).show();
+                }else {
+                    Intent intent = new Intent(TeacherActivity.this, TeacherProfile.class);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -124,9 +129,14 @@ public class TeacherActivity extends BaseActivity{
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
                 @Override
                 public void onClick(View view, int position) {
-                    Intent intent = new Intent(TeacherActivity.this, TeacherTakeAttendance.class);
-                    intent.putExtra("TeacherSubjectDetail", recievedList.get(position));
-                    startActivity(intent);
+                    if (!AppStatus.getInstance(getApplicationContext()).isOnline()) {
+
+                        Toast.makeText(getApplicationContext(),"You are not online!!!!",Toast.LENGTH_LONG).show();
+                    }else {
+                        Intent intent = new Intent(TeacherActivity.this, TeacherTakeAttendance.class);
+                        intent.putExtra("TeacherSubjectDetail", recievedList.get(position));
+                        startActivity(intent);
+                    }
                 }
 
                 @Override

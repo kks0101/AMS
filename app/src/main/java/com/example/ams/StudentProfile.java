@@ -259,12 +259,17 @@ public class StudentProfile extends BaseActivity {
         showQr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ContextCompat.checkSelfPermission(StudentProfile.this,
-                        Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(getApplicationContext(), "Permission Needed to read Phone state", Toast.LENGTH_LONG).show();
-                } else {
-                    GenerateQr generateQr = new GenerateQr();
-                    generateQr.execute();
+                if (!AppStatus.getInstance(getApplicationContext()).isOnline()) {
+
+                    Toast.makeText(getApplicationContext(),"You are not online!!!!",Toast.LENGTH_LONG).show();
+                }else {
+                    if (ContextCompat.checkSelfPermission(StudentProfile.this,
+                            Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                        Toast.makeText(getApplicationContext(), "Permission Needed to read Phone state", Toast.LENGTH_LONG).show();
+                    } else {
+                        GenerateQr generateQr = new GenerateQr();
+                        generateQr.execute();
+                    }
                 }
             }
         });
@@ -272,14 +277,19 @@ public class StudentProfile extends BaseActivity {
         logOut.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
-                SharedPreferences pref = getApplicationContext().getSharedPreferences("details", 0); //Mode_private
-                SharedPreferences.Editor editor = pref.edit();
-                editor.putString("user", null);
-                editor.commit();
-                Intent intent = new Intent(StudentProfile.this, MainActivity.class);
-                startActivity(intent);
-                finish();
+                if (!AppStatus.getInstance(getApplicationContext()).isOnline()) {
+
+                    Toast.makeText(getApplicationContext(),"You are not online!!!!",Toast.LENGTH_LONG).show();
+                }else {
+                    FirebaseAuth.getInstance().signOut();
+                    SharedPreferences pref = getApplicationContext().getSharedPreferences("details", 0); //Mode_private
+                    SharedPreferences.Editor editor = pref.edit();
+                    editor.putString("user", null);
+                    editor.commit();
+                    Intent intent = new Intent(StudentProfile.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
     }

@@ -56,21 +56,14 @@ public class TeacherRegister extends BaseActivity implements View.OnClickListene
     private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS= 1;
     private final String BASE_URL = "http://192.168.43.99:1234/ams/";
     private static final String TAG_SUCCESS = "success";
-    private boolean isPermissionGranted = false;   //to check for the permission to READ_PHONE_STATE
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_teacher_register);
 
         ///check for permission
-        if (ContextCompat.checkSelfPermission( TeacherRegister.this, Manifest.permission.READ_PHONE_STATE ) != PackageManager.PERMISSION_GRANTED )
-        {
-
-            ActivityCompat.requestPermissions(TeacherRegister.this,
-                    new String[]{Manifest.permission.READ_PHONE_STATE},
-                    MY_PERMISSIONS_REQUEST_READ_CONTACTS);
-
-        }
+        requestPermission();
 
         nameField = (EditText) findViewById(R.id.teacherName);
         teacherIdField = (EditText) findViewById(R.id.teacherId);
@@ -99,7 +92,7 @@ public class TeacherRegister extends BaseActivity implements View.OnClickListene
 
                             //Account created successfully
                             //store rest of the fields in relational database
-                            Toast.makeText(TeacherRegister.this, "Registered Successfully!!", Toast.LENGTH_LONG).show();
+                            //Toast.makeText(TeacherRegister.this, "Registered Successfully!!", Toast.LENGTH_LONG).show();
                             //Intent intent = new Intent(getApplicationContext(), TeacherActivity.class);
 
                             CreateNewTeacher createNewTeacher = new CreateNewTeacher();
@@ -116,6 +109,16 @@ public class TeacherRegister extends BaseActivity implements View.OnClickListene
                 });
     }
 
+    private void requestPermission(){
+        if (ContextCompat.checkSelfPermission( TeacherRegister.this, Manifest.permission.READ_PHONE_STATE ) != PackageManager.PERMISSION_GRANTED )
+        {
+
+            ActivityCompat.requestPermissions(TeacherRegister.this,
+                    new String[]{Manifest.permission.READ_PHONE_STATE},
+                    MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+
+        }
+    }
     @Override
     protected void onStart() {
         super.onStart();
@@ -168,18 +171,25 @@ public class TeacherRegister extends BaseActivity implements View.OnClickListene
                 valid = false;
             }
         }
-         if(!isPermissionGranted) {
-             valid = false;
-             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-             if(user!=null)
+        if (ContextCompat.checkSelfPermission( TeacherRegister.this, Manifest.permission.READ_PHONE_STATE ) != PackageManager.PERMISSION_GRANTED )
+        {
+            valid = false;
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            if(user!=null)
                 user.delete();
-             Toast.makeText(this, "You shoould provide permission!! ", Toast.LENGTH_LONG).show();
-         }
+            Toast.makeText(this, "You shoould provide permission!! ", Toast.LENGTH_LONG).show();
+
+
+        }
 
         return valid;
     }
     @Override
     public void onClick(View view) {
+        if (!AppStatus.getInstance(this).isOnline()) {
+            Toast.makeText(this,"You are not online!!!!",Toast.LENGTH_LONG).show();
+            return;
+        }
         if(view.getId() == R.id.teacherRegisterButton){
             createAccount(emailField.getText().toString(), passwordField.getText().toString());
         }
@@ -188,8 +198,10 @@ public class TeacherRegister extends BaseActivity implements View.OnClickListene
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if(requestCode == MY_PERMISSIONS_REQUEST_READ_CONTACTS){
-            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                isPermissionGranted = true;
+            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+
+            }
+
         }
     }
 
@@ -307,6 +319,9 @@ public class TeacherRegister extends BaseActivity implements View.OnClickListene
             //if string returned from doinbackground is null, that means Exception occured while connectioon to server
             if(s==null){
                 Toast.makeText(TeacherRegister.this, "Coudlnt connect to PHPServer", Toast.LENGTH_LONG).show();
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                if (user != null)
+                    user.delete();
             }
             else {
 
@@ -323,7 +338,7 @@ public class TeacherRegister extends BaseActivity implements View.OnClickListene
                     Object p = jsonObject.get("success");
                     successCode = Integer.parseInt(p.toString());
                 }
-                if(jsonObject!=null && successCode==0){
+                if(jsonObject==null || successCode==0){
                     Toast.makeText(TeacherRegister.this, "Some error occurred", Toast.LENGTH_LONG).show();
                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                     if (user != null)
@@ -338,6 +353,7 @@ public class TeacherRegister extends BaseActivity implements View.OnClickListene
                     Toast.makeText(TeacherRegister.this, "Teacher Id/Device Id already exists", Toast.LENGTH_LONG).show();
                 }
                 else {
+                    Toast.makeText(TeacherRegister.this, "Registered Successfully!!", Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(getApplicationContext(), TeacherSubject.class);
                     startActivity(intent);
                     finish();

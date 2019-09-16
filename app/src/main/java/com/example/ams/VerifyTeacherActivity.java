@@ -86,11 +86,16 @@ public class VerifyTeacherActivity extends BaseActivity {
                 approveButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        VerifyTeacher verifyTeacher = new VerifyTeacher();
-                        verifyTeacher.execute(teacherID);
-                        teacherDetailsArrayList.remove(pos);
-                        teacherDetailAdapter.notifyDataSetChanged();
-                        dialog.dismiss();
+                        if (!AppStatus.getInstance(getApplicationContext()).isOnline()) {
+
+                            Toast.makeText(getApplicationContext(),"You are not online!!!!",Toast.LENGTH_LONG).show();
+                        }else {
+                            VerifyTeacher verifyTeacher = new VerifyTeacher();
+                            verifyTeacher.execute(teacherID);
+                            teacherDetailsArrayList.remove(pos);
+                            teacherDetailAdapter.notifyDataSetChanged();
+                            dialog.dismiss();
+                        }
                     }
                 });
                 disApproveButton.setOnClickListener(new View.OnClickListener() {

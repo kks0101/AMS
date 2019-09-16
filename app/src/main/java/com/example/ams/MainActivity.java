@@ -78,6 +78,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
             }
         }
 
+
+
+
         emailField = (EditText) findViewById(R.id.email);
         passwordField = (EditText) findViewById(R.id.password);
         loginButton = (Button) findViewById(R.id.loginButton);
@@ -145,6 +148,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
 
     @Override
     public void onClick(View view) {
+        if (!AppStatus.getInstance(this).isOnline()) {
+
+            Toast.makeText(this,"You are not online!!!!",Toast.LENGTH_LONG).show();
+            return;
+        }
         if(view.getId() == R.id.loginButton){
             //login
             signIn(emailField.getText().toString(), passwordField.getText().toString());

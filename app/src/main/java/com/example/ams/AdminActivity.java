@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -23,8 +24,14 @@ public class AdminActivity extends AppCompatActivity {
         verifyTeacher.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(AdminActivity.this, VerifyTeacherActivity.class);
-                startActivity(intent);
+                if (!AppStatus.getInstance(getApplicationContext()).isOnline()) {
+
+                    Toast.makeText(getApplicationContext(),"You are not online!!!!",Toast.LENGTH_LONG).show();
+                }
+                else {
+                    Intent intent = new Intent(AdminActivity.this, VerifyTeacherActivity.class);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -32,14 +39,20 @@ public class AdminActivity extends AppCompatActivity {
         logOut.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
-                SharedPreferences pref = getApplicationContext().getSharedPreferences("details", 0); //Mode_private
-                SharedPreferences.Editor editor = pref.edit();
-                editor.putString("user", null);
-                editor.commit();
-                Intent intent  = new Intent(AdminActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
+                if (!AppStatus.getInstance(getApplicationContext()).isOnline()) {
+
+                    Toast.makeText(getApplicationContext(),"You are not online!!!!",Toast.LENGTH_LONG).show();
+                }
+                else {
+                    FirebaseAuth.getInstance().signOut();
+                    SharedPreferences pref = getApplicationContext().getSharedPreferences("details", 0); //Mode_private
+                    SharedPreferences.Editor editor = pref.edit();
+                    editor.putString("user", null);
+                    editor.commit();
+                    Intent intent = new Intent(AdminActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
 

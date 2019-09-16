@@ -116,8 +116,13 @@ public class TeacherTakeAttendance extends BaseActivity {
         generatePdf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GeneratePdf generatePdf = new GeneratePdf();
-                generatePdf.execute();
+                if (!AppStatus.getInstance(getApplicationContext()).isOnline()) {
+
+                    Toast.makeText(getApplicationContext(),"You are not online!!!!",Toast.LENGTH_LONG).show();
+                }else {
+                    GeneratePdf generatePdf = new GeneratePdf();
+                    generatePdf.execute();
+                }
 //                Intent intent = new Intent(TeacherTakeAttendance.this, PdfViewer.class);
 //                intent.putExtra("group", displayGroup.getText().toString());
 //                intent.putExtra("subject", displaySubjectCode.getText().toString());

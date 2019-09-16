@@ -68,6 +68,10 @@ public class QRCodeGenerator extends BaseActivity implements View.OnClickListene
 
     @Override
     public void onClick(View view) {
+        if (!AppStatus.getInstance(getApplicationContext()).isOnline()) {
+            Toast.makeText(getApplicationContext(),"You are not online!!!!",Toast.LENGTH_LONG).show();
+            return;
+        }
         if(view == view.findViewById(R.id.finishQrCode)){
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setCancelable(false);

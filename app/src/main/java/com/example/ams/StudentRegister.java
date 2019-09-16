@@ -183,7 +183,7 @@ public class StudentRegister extends BaseActivity implements View.OnClickListene
 
                             //Account created successfully
                             //store rest of the fields in relational database
-                            Toast.makeText(StudentRegister.this, "Registered Successfully!!", Toast.LENGTH_LONG).show();
+                            //Toast.makeText(StudentRegister.this, "Registered Successfully!!", Toast.LENGTH_LONG).show();
                             //Intent intent = new Intent(getApplicationContext(), TeacherActivity.class);
 
                             CreateNewStudent createNewStudent = new CreateNewStudent();
@@ -390,6 +390,9 @@ public class StudentRegister extends BaseActivity implements View.OnClickListene
             //if string returned from doinbackground is null, that means Exception occured while connectioon to server
             if (s == null) {
                 Toast.makeText(StudentRegister.this, "Coudlnt connect to PHPServer", Toast.LENGTH_LONG).show();
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                if (user != null)
+                    user.delete();
             } else {
 
                 //otherwise string would contain the JSON returned from php
@@ -405,8 +408,11 @@ public class StudentRegister extends BaseActivity implements View.OnClickListene
                     Object p = jsonObject.get("success");
                     successCode = Integer.parseInt(p.toString());
                 }
-                if (successCode == 0) {
+                if (jsonObject== null || successCode == 0) {
                     Toast.makeText(StudentRegister.this, "Some error occurred", Toast.LENGTH_LONG).show();
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    if (user != null)
+                        user.delete();
                 }
                 if (s.toLowerCase().contains("duplicate")) {
 
@@ -416,6 +422,7 @@ public class StudentRegister extends BaseActivity implements View.OnClickListene
                     //if data is Not updated to mysql server
                     Toast.makeText(StudentRegister.this, "Student Reg No already exists", Toast.LENGTH_LONG).show();
                 } else {
+                    Toast.makeText(StudentRegister.this, "Registered Successfully!!", Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(getApplicationContext(), StudentActivity.class);
                     startActivity(intent);
                     finish();
@@ -425,9 +432,15 @@ public class StudentRegister extends BaseActivity implements View.OnClickListene
     }
     @Override
     public void onClick(View view) {
-        if(view.getId() == R.id.studentRegister){
+        if (!AppStatus.getInstance(this).isOnline()) {
+            Toast.makeText(this,"You are not online!!!!",Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if (view.getId() == R.id.studentRegister) {
             createAccount(studentEmailField.getText().toString(), studentPassword.getText().toString());
         }
+
     }
 
     @Override
