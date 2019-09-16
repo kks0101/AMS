@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:id="@+id/relative1"
+        android:background="@drawable/profile_back3"
         >
         <RelativeLayout
             android:layout_width="wrap_content"
