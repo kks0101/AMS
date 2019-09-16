@@ -12,6 +12,11 @@
         android:layout_height="200dp"
         android:id="@+id/relative1"
         >
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageContainer"
+            android:layout_centerHorizontal="true">
         <ImageView
             android:layout_width="128dp"
             android:layout_height="128dp"
@@ -19,34 +24,23 @@
             android:layout_gravity="center"
             android:layout_centerHorizontal="true"
             android:id="@+id/profileImage"
-            android:src="@drawable/ic_profile2"
-            android:background="@color/imageBackground"/>
 
-        <ImageButton
+            android:background="@color/imageBackground">
+
+        </ImageView>
+
+        <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:background="@null"
-            android:id="@+id/addProfileImage"
-            android:src="@drawable/add_photo" />
-
-        <ImageButton
-            android:id="@+id/uploadProfileImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentBottom="true"
-            android:background="@null"
-            android:src="@drawable/upload" />
-
+            android:id="@+id/imageProgressBar"
+            android:layout_centerInParent="true"
+            />
+        </RelativeLayout>
         <TextView
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:id="@+id/nameTextView"
-            android:layout_below="@+id/profileImage"
+            android:layout_below="@+id/imageContainer"
             android:text="Your Name"
             android:textAlignment="center"
             android:textColor="@color/white"
@@ -59,14 +53,16 @@
 
     </RelativeLayout>
 
+
+
     <ScrollView
-        android:layout_width="381dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/showQR"
         android:layout_below="@+id/relative1"
         android:layout_marginLeft="30dp"
-        android:layout_marginTop="-3dp"
-
+        android:layout_marginTop="30dp"
+        android:id="@+id/scrollView"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="10dp"
         android:gravity="center"
@@ -262,4 +258,11 @@
         android:layout_marginBottom="20dp"
         android:textColor="@color/colorAccent1"
         android:id="@+id/logoutStudent"/>
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_alignParentBottom="true" />
 </RelativeLayout>

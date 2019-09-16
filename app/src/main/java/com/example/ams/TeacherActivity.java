@@ -257,6 +257,8 @@ public class TeacherActivity extends BaseActivity{
                     if(verified.equals("0")){
                         TextView displayText = (TextView)findViewById(R.id.displayText);
                         displayText.setText("You are a teacher\n and yet to be verified");
+                        TextView textView = (TextView) findViewById(R.id.countSubjectTextView);
+                        textView.setText("");
                         displayText.setVisibility(View.VISIBLE);
                         recyclerView.setVisibility(View.INVISIBLE);
                         //recyclerView.setClickable(false);

@@ -1,5 +1,6 @@
 package com.example.ams;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -7,6 +8,7 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,23 +18,43 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.telephony.TelephonyManager;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.simple.JSONObject;
@@ -53,6 +75,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -63,17 +86,30 @@ public class StudentProfile extends BaseActivity {
     FirebaseAuth mAuth;
     private static int QRCodeWidth = 500;
     private final String BASE_URL = "http://192.168.43.99:1234/ams/";
-    private final String UPLOAD_URL = "http://192.168.43.99:1234/ams/photos/";
-    public static final String UPLOAD_KEY = "image";
+
+    private static int request_code = 20;
+
     private int PICK_IMAGE_REQUEST = 1;
     private Bitmap bitmapUpload;
     private Bitmap bitmap;
+    private StorageReference mStorage;
     private Uri filePath;
     private Button showQr, logOut;
     private ImageButton addProfileImage, uplaoadProfileImage;
     private ImageView profileImage;
+    private FirebaseDatabase firebaseDatabase;
     private TextView nameTextView, emailIdTextView, regNoTextView, branchTextView, phoneNoTextView, semesterTextView, groupTextView;
     String name , regNo, emailId, branch, semester, phoneNo,groupName;
+    private DatabaseReference mDatabase;
+
+
+
+    private Uri mImageUri;
+    private ProgressBar mProgressBar;
+    private StorageReference mStorageRef;
+    private DatabaseReference mDatabaseRef;
+
+    private StorageTask mUploadTask;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,179 +125,124 @@ public class StudentProfile extends BaseActivity {
         groupTextView = (TextView)findViewById(R.id.groupNameTextView);
         showQr = (Button)findViewById(R.id.showQR);
         logOut = (Button)findViewById(R.id.logoutStudent);
-        addProfileImage = (ImageButton)findViewById(R.id.addProfileImage);
-        uplaoadProfileImage = (ImageButton)findViewById(R.id.uploadProfileImage);
+
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        mDatabase = firebaseDatabase.getReference("profileImages");
+
 
         profileImage = (ImageView) findViewById(R.id.profileImage);
+        mProgressBar = findViewById(R.id.progress_bar);
+        final ProgressBar imageLoaderProgressBar = (ProgressBar)findViewById(R.id.imageProgressBar);
+        mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference("uploads");
+        profileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mUploadTask != null && mUploadTask.isInProgress()) {
+                    Toast.makeText(StudentProfile.this, "Upload in progress", Toast.LENGTH_SHORT).show();
+                } else {
+                    openFileChooser();
+
+                }
+            }
+        });
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("uploads");
+        reference.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                imageLoaderProgressBar.setVisibility(View.GONE);
+                //fetch data from Firebase database corresponding to current user
+                Upload upload = dataSnapshot.getValue(Upload.class);
+                if(upload!=null) {
+
+                    Picasso.get().load(upload.getImageUrl()).into(profileImage);
+                    //Toast.makeText(getApplicationContext(), "Profile Updated", Toast.LENGTH_LONG).show();
+                }
+                else{
+                    profileImage.setImageResource(R.drawable.ic_profile2);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         GetProfileDetails getProfileDetails = new GetProfileDetails();
         getProfileDetails.execute();
-
-        addProfileImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showFileChooser();
-            }
-        });
-
-        uplaoadProfileImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                UploadImage uploadImage = new UploadImage();
-                uploadImage.execute(bitmap);
-            }
-        });
-    }
-    private void showFileChooser() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
     }
 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
+            mImageUri = data.getData();
+            uploadFile();
+            Picasso.get().load(mImageUri).into(profileImage);
+        }
+    }
+    private void openFileChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+    }
 
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+    private String getFileExtension(Uri uri) {
+        ContentResolver cR = getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cR.getType(uri));
+    }
 
-            filePath = data.getData();
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                profileImage.setImageBitmap(bitmap);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+
+    private void uploadFile() {
+        if (mImageUri != null) {
+            final StorageReference fileReference = mStorageRef.child(System.currentTimeMillis()
+                    + "." + getFileExtension(mImageUri));
+
+            mUploadTask = fileReference.putFile(mImageUri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mProgressBar.setProgress(0);
+                                }
+                            }, 500);
+
+                            fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    Uri downloadUrl = uri;
+                                    Upload upload = new Upload("photo", uri.toString());
+                                    String uploadId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                                    mDatabaseRef.child(uploadId).setValue(upload);
+                                }
+                            });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(StudentProfile.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                            mProgressBar.setProgress((int) progress);
+                        }
+                    });
+        } else {
+            Toast.makeText(this, "No file selected", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private class UploadImage extends AsyncTask<Bitmap,Void,String> {
-
-            ProgressDialog loading;
-            String userId;
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                loading = ProgressDialog.show(StudentProfile.this, "Uploading Image", "Please wait...", true, true);
-                userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-            }
-
-            @Override
-            protected String doInBackground(Bitmap... params) {
-                Bitmap bitmap = params[0];
-                String uploadImage = getStringImage(bitmap);
-
-                HashMap<String, String> dataServer = new HashMap<>();
-                dataServer.put("image", uploadImage);
-                dataServer.put("userId", userId);
-                String link = BASE_URL + "upload_photo.php";
-                Set set = dataServer.entrySet();
-                Iterator iterator = set.iterator();
-                try {
-                    String data = "";
-                    while (iterator.hasNext()) {
-                        Map.Entry mEntry = (Map.Entry) iterator.next();
-                        data += URLEncoder.encode(mEntry.getKey().toString(), "UTF-8") + "=" +
-                                URLEncoder.encode(mEntry.getValue().toString(), "UTF-8");
-                        data += "&";
-                    }
-
-                    if (data != null && data.length() > 0 && data.charAt(data.length() - 1) == '&') {
-                        data = data.substring(0, data.length() - 1);
-                    }
-                    Log.d("Debug", data);
-
-                    URL url = new URL(link);
-                    HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-                    httpURLConnection.setRequestMethod("POST");
-                    httpURLConnection.setDoInput(true);
-                    httpURLConnection.setDoOutput(true);
-                    httpURLConnection.setRequestProperty("Accept", "*/*");
-                    OutputStream out = httpURLConnection.getOutputStream();
-                    BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
-
-                    Log.d("data", data);
-                    bufferedWriter.write(data);
-                    bufferedWriter.flush();
-                    bufferedWriter.close();
-                    InputStream inputStream = new BufferedInputStream(httpURLConnection.getInputStream());
-
-
-                    String result = convertStreamToString(inputStream);
-                    httpURLConnection.disconnect();
-                    Log.d("TAG", result);
-                    return result;
-
-                } catch (Exception e) {
-                    Log.d("debug", e.getMessage());
-                    e.printStackTrace();
-                }
-                return null;
-            }
-        private String convertStreamToString(InputStream inputStream) {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-            StringBuilder sb = new StringBuilder("");
-            String line;
-            try {
-                while ((line = bufferedReader.readLine()) != null) {
-                    sb.append(line + "\n");
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            try {
-                inputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return sb.toString();
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            loading.dismiss();
-            //Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
-            if (s == null) {
-                Toast.makeText(StudentProfile.this, "Coudlnt connect to PHPServer", Toast.LENGTH_LONG).show();
-            } else {
-
-                //otherwise string would contain the JSON returned from php
-                JSONParser parser = new JSONParser();
-                JSONObject jsonObject = null;
-                try {
-                    jsonObject = (JSONObject) parser.parse(s);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                int successCode = 0;
-                if (jsonObject != null) {
-                    Object p = jsonObject.get("success");
-                    successCode = Integer.parseInt(p.toString());
-                }
-                if (jsonObject == null || successCode == 0) {
-                    Toast.makeText(StudentProfile.this, "Some error occurred", Toast.LENGTH_LONG).show();
-                }
-                else{
-                    //loading.dismiss();
-                    Toast.makeText(getApplicationContext(), "Successfully Uploaded!", Toast.LENGTH_LONG).show();
-                }
-
-            }
-        }
-
-
-    }
-
-    public String getStringImage(Bitmap bmp){
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] imageBytes = baos.toByteArray();
-        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-
-        //return str;
-        return encodedImage;
-    }
 
 
     @Override
@@ -434,12 +415,7 @@ public class StudentProfile extends BaseActivity {
                     semester = jsonObject.get("semester").toString();
                     phoneNo = jsonObject.get("phoneNo").toString();
                     groupName = jsonObject.get("groupName").toString();
-                    String profile = jsonObject.get("profilephoto").toString();
-                    if(!profile.equals("null")) {
-                        byte[] data = Base64.decode(profile, Base64.DEFAULT);
-                        bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-                        profileImage.setImageBitmap(bitmap);
-                    }
+
                     nameTextView.setText(name);
                     regNoTextView.setText(regNo);
                     emailIdTextView.setText(emailId);
