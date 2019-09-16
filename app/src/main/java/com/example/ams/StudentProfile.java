@@ -12,17 +12,23 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.telephony.TelephonyManager;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
@@ -57,8 +63,15 @@ public class StudentProfile extends BaseActivity {
     FirebaseAuth mAuth;
     private static int QRCodeWidth = 500;
     private final String BASE_URL = "http://192.168.43.99:1234/ams/";
+    private final String UPLOAD_URL = "http://192.168.43.99:1234/ams/photos/";
+    public static final String UPLOAD_KEY = "image";
+    private int PICK_IMAGE_REQUEST = 1;
+    private Bitmap bitmapUpload;
     private Bitmap bitmap;
+    private Uri filePath;
     private Button showQr, logOut;
+    private ImageButton addProfileImage, uplaoadProfileImage;
+    private ImageView profileImage;
     private TextView nameTextView, emailIdTextView, regNoTextView, branchTextView, phoneNoTextView, semesterTextView, groupTextView;
     String name , regNo, emailId, branch, semester, phoneNo,groupName;
     @Override
@@ -74,14 +87,300 @@ public class StudentProfile extends BaseActivity {
         phoneNoTextView = (TextView)findViewById(R.id.phoneNoTextView);
         semesterTextView = (TextView)findViewById(R.id.semesterTextView);
         groupTextView = (TextView)findViewById(R.id.groupNameTextView);
-         showQr = (Button)findViewById(R.id.showQR);
-         logOut = (Button)findViewById(R.id.logoutStudent);
+        showQr = (Button)findViewById(R.id.showQR);
+        logOut = (Button)findViewById(R.id.logoutStudent);
+        addProfileImage = (ImageButton)findViewById(R.id.addProfileImage);
+        uplaoadProfileImage = (ImageButton)findViewById(R.id.uploadProfileImage);
 
+        profileImage = (ImageView) findViewById(R.id.profileImage);
         GetProfileDetails getProfileDetails = new GetProfileDetails();
         getProfileDetails.execute();
 
+        addProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFileChooser();
+            }
+        });
+
+        uplaoadProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UploadImage uploadImage = new UploadImage();
+                uploadImage.execute(bitmap);
+            }
+        });
+    }
+    private void showFileChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+
+            filePath = data.getData();
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                profileImage.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private class UploadImage extends AsyncTask<Bitmap,Void,String> {
+
+            ProgressDialog loading;
+            String userId;
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                loading = ProgressDialog.show(StudentProfile.this, "Uploading Image", "Please wait...", true, true);
+                userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            }
+
+            @Override
+            protected String doInBackground(Bitmap... params) {
+                Bitmap bitmap = params[0];
+                String uploadImage = getStringImage(bitmap);
+
+                HashMap<String, String> dataServer = new HashMap<>();
+                dataServer.put("image", uploadImage);
+                dataServer.put("userId", userId);
+                String link = BASE_URL + "upload_photo.php";
+                Set set = dataServer.entrySet();
+                Iterator iterator = set.iterator();
+                try {
+                    String data = "";
+                    while (iterator.hasNext()) {
+                        Map.Entry mEntry = (Map.Entry) iterator.next();
+                        data += URLEncoder.encode(mEntry.getKey().toString(), "UTF-8") + "=" +
+                                URLEncoder.encode(mEntry.getValue().toString(), "UTF-8");
+                        data += "&";
+                    }
+
+                    if (data != null && data.length() > 0 && data.charAt(data.length() - 1) == '&') {
+                        data = data.substring(0, data.length() - 1);
+                    }
+                    Log.d("Debug", data);
+
+                    URL url = new URL(link);
+                    HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                    httpURLConnection.setRequestMethod("POST");
+                    httpURLConnection.setDoInput(true);
+                    httpURLConnection.setDoOutput(true);
+                    httpURLConnection.setRequestProperty("Accept", "*/*");
+                    OutputStream out = httpURLConnection.getOutputStream();
+                    BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
+
+                    Log.d("data", data);
+                    bufferedWriter.write(data);
+                    bufferedWriter.flush();
+                    bufferedWriter.close();
+                    InputStream inputStream = new BufferedInputStream(httpURLConnection.getInputStream());
+
+
+                    String result = convertStreamToString(inputStream);
+                    httpURLConnection.disconnect();
+                    Log.d("TAG", result);
+                    return result;
+
+                } catch (Exception e) {
+                    Log.d("debug", e.getMessage());
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        private String convertStreamToString(InputStream inputStream) {
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+            StringBuilder sb = new StringBuilder("");
+            String line;
+            try {
+                while ((line = bufferedReader.readLine()) != null) {
+                    sb.append(line + "\n");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                inputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return sb.toString();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            loading.dismiss();
+            //Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+            if (s == null) {
+                Toast.makeText(StudentProfile.this, "Coudlnt connect to PHPServer", Toast.LENGTH_LONG).show();
+            } else {
+
+                //otherwise string would contain the JSON returned from php
+                JSONParser parser = new JSONParser();
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = (JSONObject) parser.parse(s);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                int successCode = 0;
+                if (jsonObject != null) {
+                    Object p = jsonObject.get("success");
+                    successCode = Integer.parseInt(p.toString());
+                }
+                if (jsonObject == null || successCode == 0) {
+                    Toast.makeText(StudentProfile.this, "Some error occurred", Toast.LENGTH_LONG).show();
+                }
+                else{
+                    //loading.dismiss();
+                    Toast.makeText(getApplicationContext(), "Successfully Uploaded!", Toast.LENGTH_LONG).show();
+                }
+
+            }
+        }
+
 
     }
+
+    private class DownloadImage extends AsyncTask<Bitmap,Void,String> {
+
+        ProgressDialog loading;
+        String userId;
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            loading = ProgressDialog.show(StudentProfile.this, "Uploading Image", "Please wait...", true, true);
+            userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        }
+
+        @Override
+        protected String doInBackground(Bitmap... params) {
+            Bitmap bitmap = params[0];
+            String uploadImage = getStringImage(bitmap);
+
+            HashMap<String, String> dataServer = new HashMap<>();
+            dataServer.put("image", uploadImage);
+            dataServer.put("userId", userId);
+            String link = BASE_URL + "upload_photo.php";
+            Set set = dataServer.entrySet();
+            Iterator iterator = set.iterator();
+            try {
+                String data = "";
+                while (iterator.hasNext()) {
+                    Map.Entry mEntry = (Map.Entry) iterator.next();
+                    data += URLEncoder.encode(mEntry.getKey().toString(), "UTF-8") + "=" +
+                            URLEncoder.encode(mEntry.getValue().toString(), "UTF-8");
+                    data += "&";
+                }
+
+                if (data != null && data.length() > 0 && data.charAt(data.length() - 1) == '&') {
+                    data = data.substring(0, data.length() - 1);
+                }
+                Log.d("Debug", data);
+
+                URL url = new URL(link);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoInput(true);
+                httpURLConnection.setDoOutput(true);
+                httpURLConnection.setRequestProperty("Accept", "*/*");
+                OutputStream out = httpURLConnection.getOutputStream();
+                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
+
+                Log.d("data", data);
+                bufferedWriter.write(data);
+                bufferedWriter.flush();
+                bufferedWriter.close();
+                InputStream inputStream = new BufferedInputStream(httpURLConnection.getInputStream());
+
+
+                String result = convertStreamToString(inputStream);
+                httpURLConnection.disconnect();
+                Log.d("TAG", result);
+                return result;
+
+            } catch (Exception e) {
+                Log.d("debug", e.getMessage());
+                e.printStackTrace();
+            }
+            return null;
+        }
+        private String convertStreamToString(InputStream inputStream) {
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+            StringBuilder sb = new StringBuilder("");
+            String line;
+            try {
+                while ((line = bufferedReader.readLine()) != null) {
+                    sb.append(line + "\n");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                inputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return sb.toString();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            loading.dismiss();
+            //Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+            if (s == null) {
+                Toast.makeText(StudentProfile.this, "Coudlnt connect to PHPServer", Toast.LENGTH_LONG).show();
+            } else {
+
+                //otherwise string would contain the JSON returned from php
+                JSONParser parser = new JSONParser();
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = (JSONObject) parser.parse(s);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                int successCode = 0;
+                if (jsonObject != null) {
+                    Object p = jsonObject.get("success");
+                    successCode = Integer.parseInt(p.toString());
+                }
+                if (jsonObject == null || successCode == 0) {
+                    Toast.makeText(StudentProfile.this, "Some error occurred", Toast.LENGTH_LONG).show();
+                }
+                else{
+                    //loading.dismiss();
+                    Toast.makeText(getApplicationContext(), "Successfully Uploaded!", Toast.LENGTH_LONG).show();
+                }
+
+            }
+        }
+
+
+    }
+
+    public String getStringImage(Bitmap bmp){
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] imageBytes = baos.toByteArray();
+        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+
+        //return str;
+        return encodedImage;
+    }
+
 
     @Override
     protected void onStart() {
@@ -253,7 +552,12 @@ public class StudentProfile extends BaseActivity {
                     semester = jsonObject.get("semester").toString();
                     phoneNo = jsonObject.get("phoneNo").toString();
                     groupName = jsonObject.get("groupName").toString();
-
+                    String profile = jsonObject.get("profilephoto").toString();
+                    if(!profile.equals("null")) {
+                        byte[] data = Base64.decode(profile, Base64.DEFAULT);
+                        bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+                        profileImage.setImageBitmap(bitmap);
+                    }
                     nameTextView.setText(name);
                     regNoTextView.setText(regNo);
                     emailIdTextView.setText(emailId);

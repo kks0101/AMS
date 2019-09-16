@@ -523,18 +523,18 @@ public class StudentActivity extends BaseActivity {
                     Object p = jsonObject.get("success");
                     successCode = Integer.parseInt(p.toString());
                 }
-                if( jsonObject!=null && successCode==0){
+                if( jsonObject==null || successCode==0){
                     Toast.makeText(StudentActivity.this, "Some error occurred", Toast.LENGTH_LONG).show();
                     //if could not know whether the current user is student or teacher
 
                 }
                 else{
-                    name = jsonObject.get("name").toString();
-                    regNo = jsonObject.get("regNo").toString();
-                    emailId = jsonObject.get("emailId").toString();
-                    branch = jsonObject.get("branch").toString();
-                    semester = jsonObject.get("semester").toString();
-                    phoneNo = jsonObject.get("phoneNo").toString();
+//                    name = jsonObject.get("name").toString();
+//                    regNo = jsonObject.get("regNo").toString();
+//                    emailId = jsonObject.get("emailId").toString();
+//                    branch = jsonObject.get("branch").toString();
+//                    semester = jsonObject.get("semester").toString();
+//                    phoneNo = jsonObject.get("phoneNo").toString();
                     groupName = jsonObject.get("groupName").toString();
 
                     GetSubjectDetails getSubjectDetails = new GetSubjectDetails();

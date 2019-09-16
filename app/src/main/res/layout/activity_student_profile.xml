@@ -21,6 +21,27 @@
             android:id="@+id/profileImage"
             android:src="@drawable/ic_profile2"
             android:background="@color/imageBackground"/>
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:background="@null"
+            android:id="@+id/addProfileImage"
+            android:src="@drawable/add_photo" />
+
+        <ImageButton
+            android:id="@+id/uploadProfileImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:background="@null"
+            android:src="@drawable/upload" />
+
         <TextView
             android:layout_width="300dp"
             android:layout_height="wrap_content"
