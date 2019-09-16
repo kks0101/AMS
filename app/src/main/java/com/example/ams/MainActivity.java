@@ -70,6 +70,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                     startActivity(intent);
                     finish();
                 }
+                else if (userType.equals("admin")){
+                    Intent intent = new Intent(MainActivity.this, AdminActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
             }
         }
 
@@ -97,8 +102,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
                             Log.d("Debug", "Successfully Logged in");
-                            SearchUser searchUser = new SearchUser();
-                            searchUser.execute();
+                            if(emailField.getText().toString().equals("admin@gmail.com")){
+                                SharedPreferences pref = getApplicationContext().getSharedPreferences("details", 0); //Mode_private
+                                SharedPreferences.Editor editor = pref.edit();
+                                editor.putString("user", "admin");
+                                editor.commit();
+                                Intent intent = new Intent(MainActivity.this, AdminActivity.class);
+                                startActivity(intent);
+                                finish();
+                            }
+                            else{
+                                SearchUser searchUser = new SearchUser();
+                                searchUser.execute();
+                            }
                         }
                         else{
                             Toast.makeText(getApplicationContext(), "Authentication Field", Toast.LENGTH_LONG).show();

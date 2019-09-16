@@ -5,7 +5,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="Manifest.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="Manifest.permission.ACCESS_COARSE_LOCATION" />
+
     <uses-feature android:name="android.hardware.location.gps" />
 
     <application
@@ -16,9 +17,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <service android:name=".GPSTracker"/>
+        <activity android:name=".VerifyTeacherActivity"></activity>
+
+        <service android:name=".GPSTracker" />
+
         <activity android:name=".TeacherAfterAttendance" />
         <activity android:name=".DisplayShortAttendance" />
+        <activity android:name=".AdminActivity" />
         <activity
             android:name=".QRCodeGenerator"
             android:theme="@style/Theme.AppCompat" />
