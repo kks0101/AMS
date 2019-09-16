@@ -803,7 +803,8 @@ public class StudentActivity extends BaseActivity {
                     double percent = (double)totP/totC;
                     DecimalFormat decimalFormat = new DecimalFormat("##.00");
                     String dec = decimalFormat.format(percent);
-                    percentTextView.setText(dec + " %");Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+                    percentTextView.setText(dec + " %");
+                    Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
                     // if button is clicked, close the custom dialog
                     dialogButton.setOnClickListener(new View.OnClickListener() {
                         @Override

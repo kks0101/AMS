@@ -61,16 +61,24 @@
                 android:background="@color/imageBackground"
                 android:src="@drawable/ic_profile" />
 
+
+
         </RelativeLayout>
 
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp" />
+            android:id="@+id/displayText"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            />
+
 
 
     </LinearLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="150dp" />
 
 </RelativeLayout>
