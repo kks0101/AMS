@@ -1,5 +1,12 @@
 package com.example.ams;
 
+/**
+ * This class is used to encapsulate the profile image data, that is to be stored on Firebase.
+ * It is used, because it is very convenient to write data to Firebase Database using class objects.
+ * Firebase itself converts it into JSON form to store in JSON tree.
+ */
+
+
 public class Upload {
     private String mName;
     private String mImageUrl;

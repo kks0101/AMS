@@ -1,17 +1,13 @@
 package com.example.ams;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
-import android.app.ProgressDialog;
-import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -21,7 +17,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -33,9 +28,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -48,25 +43,29 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import org.json.JSONException;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
+/**
+ * This Activity handles Teacher registration. It uses Firebase Authentication along with Php server
+ * verification to create teacher account.
+ */
+
+
 public class TeacherRegister extends BaseActivity implements View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
+
     private EditText nameField, teacherIdField, emailField, phnNoField, passwordField, retypePasswordField;
     private Button registerButton;
-    FirebaseAuth mAuth;
+    private FirebaseAuth mAuth;
 
     private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1;
     private final String BASE_URL = "http://192.168.43.99:1234/ams/";
-    private static final String TAG_SUCCESS = "success";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +88,12 @@ public class TeacherRegister extends BaseActivity implements View.OnClickListene
 
     }
 
+    /**
+     * uses Firebase email and password authentication methods to handle teacher registration.
+     * Once successfully Authenticated, updates the data on the php server.
+     * @param email
+     * @param password
+     */
     private void createAccount(String email, String password) {
         if (!validateForm()) {
             return;
@@ -101,15 +106,8 @@ public class TeacherRegister extends BaseActivity implements View.OnClickListene
                     public void onComplete(@NonNull Task<AuthResult> task) {
 
                         if (task.isSuccessful()) {
-
-                            //Account created successfully
-                            //store rest of the fields in relational database
-                            //Toast.makeText(TeacherRegister.this, "Registered Successfully!!", Toast.LENGTH_LONG).show();
-                            //Intent intent = new Intent(getApplicationContext(), TeacherActivity.class);
-
                             CreateNewTeacher createNewTeacher = new CreateNewTeacher();
                             createNewTeacher.execute();
-                            // startActivity(intent);
                         } else {
                             Toast.makeText(TeacherRegister.this, "Account Authentication failed!!", Toast.LENGTH_LONG).show();
                             Log.e("Error Registering", task.getException().toString());
@@ -120,6 +118,10 @@ public class TeacherRegister extends BaseActivity implements View.OnClickListene
                 });
     }
 
+    /**
+     * This method checks for the required permission. We require user permission to read
+     * the phone state of the user. This is required to access phone details using Telephony Manager.
+     */
     private void requestPermission() {
         if (ContextCompat.checkSelfPermission(TeacherRegister.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
 
@@ -284,10 +286,6 @@ public class TeacherRegister extends BaseActivity implements View.OnClickListene
                 String result = convertStreamToString(inputStream);
                 httpURLConnection.disconnect();
                 Log.d("TAG", result);
-                //teacherId is defined in sql as primary key
-                //so if any user login with the same teacherId, delete this already created user in Firebase
-
-
                 return result;
             } catch (Exception e) {
                 Log.d("debug", e.getMessage());
@@ -318,9 +316,9 @@ public class TeacherRegister extends BaseActivity implements View.OnClickListene
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            //if string returned from doinbackground is null, that means Exception occured while connectioon to server
+            //if string returned from doinbackground is null, that means Exception occurred while connection to server
             if (s == null) {
-                Toast.makeText(TeacherRegister.this, "Coudlnt connect to PHPServer", Toast.LENGTH_LONG).show();
+                Toast.makeText(TeacherRegister.this, "Could not connect to PHPServer", Toast.LENGTH_LONG).show();
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 if (user != null)
                     user.delete();
@@ -332,36 +330,59 @@ public class TeacherRegister extends BaseActivity implements View.OnClickListene
                     Object p = jsonObject.get("success");
                     int successCode = Integer.parseInt(p.toString());
                     Log.d("TAGS", Integer.toString(successCode));
+
+
                     if (successCode == 0) {
-                        Toast.makeText(TeacherRegister.this, "Some error occurred", Toast.LENGTH_LONG).show();
+
+                        Toast.makeText(TeacherRegister.this, "Error occurred: device Id /teacher Id already present", Toast.LENGTH_LONG).show();
+                        //in this case delete the already authenticated user from Firebase
                         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                         if (user != null)
                             user.delete();
+
                     } else {
+
                         Toast.makeText(TeacherRegister.this, "Registered Successfully!!", Toast.LENGTH_LONG).show();
+                        SharedPreferences pref = getApplicationContext().getSharedPreferences("details", 0); //Mode_private
+                        SharedPreferences.Editor editor = pref.edit();
+                        editor.putString("user", "teacher");
+                        editor.apply();
 
+                        //To get the token in order to send notification to this user when the request to verify is
+                        //approved by the admin
+                        //Uses Firebase database to store these token in form of key value pair, with teacherId as key
+                        //This is retrieved when the admin verifies
+                        FirebaseInstanceId.getInstance().getInstanceId()
+                                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                                        if (!task.isSuccessful()) {
+                                            Log.w("TAG", "getInstanceId failed", task.getException());
+                                            return;
+                                        }
+                                        String token = task.getResult().getToken();
+                                        // Log and toast
+                                        Log.d("TAG", token);
+                                        //Firebase database
+                                        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("tokens");
+                                        mDatabase.child(id).setValue(token);
+                                    }
+                                });
+
+                        //getting the admin token to send notification to the admin
+                        //that new teacher is registered.
                         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-                        String userID = FirebaseAuth.getInstance().getUid();
-
                         reference.child("admin").addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                                //Log.d("admin", dataSnapshot.toString());
-                                //Log.d("admin", dataSnapshot.getValue().toString());
-
                                     String token = dataSnapshot.getValue().toString();
                                     Log.d("admin", token);
                                     try {
                                         FireMessage fm = new FireMessage("New Request For Verification", name + " Requested for verification");
                                         fm.sendToToken(token);
-                                        //String topic="Weather";
-                                        //fm.sendToTopic(topic);
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                     }
-
-
                             }
 
                             @Override
@@ -377,7 +398,6 @@ public class TeacherRegister extends BaseActivity implements View.OnClickListene
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                //}
             }
         }
     }

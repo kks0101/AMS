@@ -2,6 +2,10 @@ package com.example.ams;
 
 import androidx.annotation.Nullable;
 
+/**
+ * Class to encapsulate Teacher Details.
+ */
+
 public class TeacherDetails {
     private String name, emailId, teacherId, phoneNo, verified;
     TeacherDetails(String name, String emailId, String teacherId, String phoneNo, String verified){

@@ -1,20 +1,16 @@
 package com.example.ams;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -34,52 +30,68 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+/*This Activity displays List of students having attendance less than 75 %.*/
+
+
 public class DisplayShortAttendance extends BaseActivity {
 
     private final String BASE_URL = "http://192.168.43.99:1234/ams/";
-    ArrayList<HashMap<String, String>> shortList = new ArrayList<>();
-    ListView listView;
-    ArrayList<ShortAttendanceDetail> shortAttendanceDetailArrayList = new ArrayList<>();
+
+
+    private ListView listView;
+    private ArrayList<ShortAttendanceDetail> shortAttendanceDetailArrayList = new ArrayList<>();
     private ShortAttendanceListAdapter shortAttendanceListAdapter;
-    String emailIdList = "";
+    private String emailIdList = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_short_attendance);
-        listView = (ListView)findViewById(R.id.listView);
-        String subjectCode = getIntent().getStringExtra("subject");
-        String group = getIntent().getStringExtra("group");
 
+        listView = (ListView)findViewById(R.id.listView);
         Button notify = (Button)findViewById(R.id.notifyEmail);
+
+        //get subjectCode and group to display the short attendance particulars
+        final String subjectCode = getIntent().getStringExtra("subject");
+        final String group = getIntent().getStringExtra("group");
+
+        //This provides teacher the facility to send email to all the students having short attendance
         notify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!AppStatus.getInstance(getApplicationContext()).isOnline()) {
-
                     Toast.makeText(getApplicationContext(),"You are not online!!!!",Toast.LENGTH_LONG).show();
                 }
                 else {
-                    sendMail();
+                    sendMail(subjectCode, group);
                 }
             }
         });
 
+        //Async Task class which retrieves the list of the students with attendance less than 75 %
         GetListLessThan75 getListLessThan75 = new GetListLessThan75();
         getListLessThan75.execute(group, subjectCode);
 
-
     }
 
-    private void sendMail() {
+    //method to send email via Intent
+    private void sendMail(String subjectCode, String group) {
+        //list of the short attendance students who are to be notified
         String recipientList = emailIdList;
         String[] recipients = recipientList.split(",");
 
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.putExtra(Intent.EXTRA_EMAIL, recipients);
-
+        intent.putExtra(Intent.EXTRA_SUBJECT, subjectCode + " Short Attendance" );
+        String email_body = "\tThis is to notify that your attendance is below 75%\nKindly attend clases or you will be debarred from examinations";
+        intent.putExtra(Intent.EXTRA_TEXT, email_body);
         intent.setType("message/rfc822");
         startActivity(Intent.createChooser(intent, "Choose an email client"));
+
     }
+
+
     //class to get the list of students having attendance less than 75 %
     private class GetListLessThan75 extends AsyncTask<String, String , String > {
 
@@ -93,7 +105,6 @@ public class DisplayShortAttendance extends BaseActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-            ///ContentValues params = new ContentValues();
 
             HashMap<String, Object> params = new HashMap<String, Object>();
             params.put("table_name",  "table_" + strings[0].toLowerCase().trim());
@@ -136,9 +147,6 @@ public class DisplayShortAttendance extends BaseActivity {
                 String result = convertStreamToString(inputStream);
                 httpURLConnection.disconnect();
                 Log.d("TAG",result);
-                //teacherId is defined in sql as primary key
-                //so if any user login with the same teacherId, delete this already created user in Firebase
-
 
                 return result;
             }
@@ -194,20 +202,24 @@ public class DisplayShortAttendance extends BaseActivity {
                     Log.d("TAG", Integer.toString(st1.length()));
 
                     for(int i=0;i<st1.length();i++){
-                        Toast.makeText(DisplayShortAttendance.this, "Made it ", Toast.LENGTH_LONG).show();
                         double percent = Double.parseDouble(st2.getString(i));
                         DecimalFormat decimalFormat = new DecimalFormat("##.00");
                         String dec = decimalFormat.format(percent);
+
+                        //handling the recyclerView display via Custom Adapter
                         ShortAttendanceDetail shortAttendanceDetail = new ShortAttendanceDetail(st1.getString(i), st3.getString(i), Double.parseDouble(dec));
                         shortAttendanceDetailArrayList.add(shortAttendanceDetail);
+                        //Email Id list of short attendance students (used in sending email)
                         emailIdList += st3.getString(i) + ",";
+
                         Log.d("TAG", st1.getString(i)+ st3.getString(i)+ st2.getDouble(i));
                     }
-                    emailIdList.substring(0, emailIdList.length()-1);
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 Log.d("TAG", shortAttendanceDetailArrayList.toString());
+                //configuring the adapter to display the student list in recycler view
                 shortAttendanceListAdapter = new ShortAttendanceListAdapter(getApplicationContext(), shortAttendanceDetailArrayList);
                 listView.setAdapter(shortAttendanceListAdapter);
             }

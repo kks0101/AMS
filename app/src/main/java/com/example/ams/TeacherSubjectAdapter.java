@@ -12,6 +12,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+/**
+ * This provides adapter to bind the view to the list Layout. Every Recycler View implementation requires
+ * a adapter that defines the View Holder to display the data in list form.
+ */
+
 public class TeacherSubjectAdapter extends RecyclerView.Adapter<TeacherSubjectAdapter.TeacherSubjectViewHolder> {
     private Context mContext;
     private ArrayList<TeacherSubjectDetail> subjectList = new ArrayList<>();
@@ -25,6 +30,7 @@ public class TeacherSubjectAdapter extends RecyclerView.Adapter<TeacherSubjectAd
     @Override
     public TeacherSubjectViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(mContext);
+        //setting the appropriate layout
         View view = inflater.inflate(R.layout.layout_teacher_subject, null);
 
         return new TeacherSubjectViewHolder(view);
@@ -48,7 +54,9 @@ public class TeacherSubjectAdapter extends RecyclerView.Adapter<TeacherSubjectAd
 
     @Override
     public int getItemCount() {
+        if(subjectList!=null)
         return subjectList.size();
+        return 0;
     }
 
     class TeacherSubjectViewHolder extends RecyclerView.ViewHolder {

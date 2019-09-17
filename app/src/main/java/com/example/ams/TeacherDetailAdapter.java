@@ -12,6 +12,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+/**
+ * Adapter class to bind the view, in order to display data in recycler View.
+ */
+
+
 public class TeacherDetailAdapter extends RecyclerView.Adapter<TeacherDetailAdapter.TeacherDetailViewHolder> {
     private Context mContext;
     private ArrayList<TeacherDetails> teacherList = new ArrayList<>();

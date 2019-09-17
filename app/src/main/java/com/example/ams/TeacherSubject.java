@@ -1,15 +1,10 @@
 package com.example.ams;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -28,10 +23,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -51,40 +44,48 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * This Activity is used to get the subjects of the teacher.
+ *
+ * Provides a list of subjects based on Groups, which teacher can add to the list before adding it
+ * to the database. Uses Firebase Database to store the subjbects of each teacher in form of list.
+ */
+
 public class TeacherSubject extends BaseActivity {
+
     private Spinner branchSpinner, subjectSpinner;
     private List<String> subjectList;
     private ListView listView;
 
     //to get the list of objects of TeacherSubjectDetail to be used in Firebase realtime db
     ArrayList<TeacherSubjectDetail> teacherSubjectDetailsList = new ArrayList<>();
+
     private Button addSubject, adddSubjectsToDb;
     private SubjectListAdapter subjectListAdapter;
+
     private DatabaseReference mDatabase;
+
     private FirebaseDatabase firebaseDatabase;
+
     private final String BASE_URL = "http://192.168.43.99:1234/ams/";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_teacher_subject);
 
         branchSpinner = (Spinner)findViewById(R.id.branch);
         subjectSpinner = (Spinner) findViewById(R.id.subjectSpinner);
-
         listView = (ListView) findViewById(R.id.listView);
-
         addSubject = (Button)findViewById(R.id.addSubject);
         adddSubjectsToDb = (Button) findViewById(R.id.addSubjectsToDb);
-        //to store list of subjects and grouups selected
-
-        ImageButton deleteButton = (ImageButton)findViewById(R.id.deleteButton);
 
         firebaseDatabase = FirebaseDatabase.getInstance();
         mDatabase = firebaseDatabase.getReference("teachers");
 
         subjectListAdapter = new SubjectListAdapter(getApplicationContext(), teacherSubjectDetailsList);
         listView.setAdapter(subjectListAdapter);
-
 
         ArrayAdapter<CharSequence> branchAdapter = ArrayAdapter.createFromResource(this,
                 R.array.groups, android.R.layout.simple_spinner_item);
@@ -98,7 +99,6 @@ public class TeacherSubject extends BaseActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 subjectList.clear();
                 String branch =  adapterView.getItemAtPosition(i).toString();
-                //Toast.makeText(TeacherSubject.this, branch, Toast.LENGTH_LONG).show();
                 searchForSubject(branch);
             }
 
@@ -107,6 +107,7 @@ public class TeacherSubject extends BaseActivity {
 
             }
         });
+
         subjectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -118,8 +119,6 @@ public class TeacherSubject extends BaseActivity {
 
             }
         });
-
-
 
 
         //add onClickListener on add button
@@ -165,22 +164,6 @@ public class TeacherSubject extends BaseActivity {
             }
         });
 
-        //to change the list when item is deleted
-        /*recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-                Toast.makeText(getApplicationContext(), "Inside click", Toast.LENGTH_SHORT).show();
-                if(view == view.findViewById(R.id.deleteButton)){
-                    teacherSubjectDetailsList.remove(position);
-                    subjectListAdapter.notifyDataSetChanged();
-                }
-            }
-
-            @Override
-            public void onLongClick(View view, int position) {
-
-            }
-        }));*/
 
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
@@ -216,7 +199,6 @@ public class TeacherSubject extends BaseActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-            ///ContentValues params = new ContentValues();
 
             HashMap<String, Object> params = new HashMap<String, Object>();
             String branch_table_name = "subject_" + branch.toLowerCase();
@@ -259,10 +241,6 @@ public class TeacherSubject extends BaseActivity {
                 String result = convertStreamToString(inputStream);
                 httpURLConnection.disconnect();
                 Log.d("TAG", result);
-                //teacherId is defined in sql as primary key
-                //so if any user login with the same teacherId, delete this already created user in Firebase
-
-
                 return result;
             } catch (Exception e) {
                 Log.d("debug", e.getMessage());

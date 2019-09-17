@@ -1,5 +1,6 @@
 package com.example.ams;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,6 +18,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -90,11 +97,40 @@ public class VerifyTeacherActivity extends BaseActivity {
 
                             Toast.makeText(getApplicationContext(),"You are not online!!!!",Toast.LENGTH_LONG).show();
                         }else {
+                            final String teacherId = teacherDetailsArrayList.get(pos).getTeacherId();
                             VerifyTeacher verifyTeacher = new VerifyTeacher();
                             verifyTeacher.execute(teacherID);
                             teacherDetailsArrayList.remove(pos);
                             teacherDetailAdapter.notifyDataSetChanged();
-                            dialog.dismiss();
+                            DatabaseReference reference = FirebaseDatabase.getInstance().getReference("tokens");
+                            reference.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    for(DataSnapshot childSnapshot : dataSnapshot.getChildren()){
+                                        Log.d("TAG", childSnapshot.toString());
+                                        if(childSnapshot.getKey().equals(teacherId)){
+                                            String token = childSnapshot.getValue().toString();
+                                            Log.d("TAG", token);
+                                            try {
+                                                FireMessage fm = new FireMessage("New Request For Verification", "Your Requested is approved!!");
+                                                fm.sendToToken(token);
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+                                            dialog.dismiss();
+                                            break;
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
+
+
+
                         }
                     }
                 });

@@ -11,6 +11,8 @@ import android.util.Log;
 
 import androidx.appcompat.app.AlertDialog;
 
+/*This class is used to check for Internet connectivity in each activity */
+
 
 public class AppStatus {
 

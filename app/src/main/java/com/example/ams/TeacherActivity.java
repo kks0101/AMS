@@ -74,7 +74,7 @@ public class TeacherActivity extends BaseActivity{
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
+        recyclerView.setVisibility(View.VISIBLE);
         ImageButton profileButton = (ImageButton)findViewById(R.id.profileButton);
         profileButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,7 +89,8 @@ public class TeacherActivity extends BaseActivity{
             }
         });
 
-
+        GetProfileDetails getProfileDetails = new GetProfileDetails();
+        getProfileDetails.execute();
 
         final LinearLayout linlaHeaderProgress = (LinearLayout) findViewById(R.id.progressBar);
         linlaHeaderProgress.setVisibility(View.VISIBLE);
@@ -114,7 +115,8 @@ public class TeacherActivity extends BaseActivity{
                 //setting adapter to recyclerview
                 recyclerView.setAdapter(adapter);
                 TextView textView = (TextView) findViewById(R.id.countSubjectTextView);
-                textView.setText(recievedList.size() + " subjects");
+                if(recievedList!=null)
+                    textView.setText(recievedList.size() + " subjects");
             }
 
             @Override
@@ -122,8 +124,7 @@ public class TeacherActivity extends BaseActivity{
 
             }
         });
-        GetProfileDetails getProfileDetails = new GetProfileDetails();
-        getProfileDetails.execute();
+
 
 
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {

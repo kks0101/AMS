@@ -1,7 +1,5 @@
 package com.example.ams;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -32,14 +30,19 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Activity to display the day's attendance details
+ */
+
+
 public class TeacherAfterAttendance extends BaseActivity {
 
     private TextView subjectCodeTextView, branchAttendanceTextView,subjectNameTextView, totalPresentTextView, totalAbsentTextView;
-    Button backToDashboard;
+    private Button backToDashboard;
     private final String BASE_URL = "http://192.168.43.99:1234/ams/";
-    String subjectCode, groupName;
-    ListView listView;
-    ArrayList<ShortAttendanceDetail> attendanceDetails = new ArrayList<>();
+    private String subjectCode, groupName;
+    private ListView listView;
+    private ArrayList<ShortAttendanceDetail> attendanceDetails = new ArrayList<>();
     //using the same adapter as Short Attendance
     private ShortAttendanceListAdapter shortAttendanceListAdapter;
     @Override
@@ -53,13 +56,16 @@ public class TeacherAfterAttendance extends BaseActivity {
         totalPresentTextView = (TextView) findViewById(R.id.totalPresent);
         totalAbsentTextView = (TextView)findViewById(R.id.totalAbsent);
         backToDashboard = (Button) findViewById(R.id.backToDashboard);
-
         listView = (ListView)findViewById(R.id.listView);
+
+
         subjectCode = getIntent().getStringExtra("subjectCode");
         groupName = getIntent().getStringExtra("groupName");
 
+
         GetCurrentAttendance getCurrentAttendance = new GetCurrentAttendance();
         getCurrentAttendance.execute(subjectCode, groupName);
+
         subjectCodeTextView.setText(subjectCode);
         branchAttendanceTextView.setText(groupName);
 
@@ -128,10 +134,6 @@ public class TeacherAfterAttendance extends BaseActivity {
                 String result = convertStreamToString(inputStream);
                 httpURLConnection.disconnect();
                 Log.d("TAG",result);
-                //teacherId is defined in sql as primary key
-                //so if any user login with the same teacherId, delete this already created user in Firebase
-
-
                 return result;
             }
             catch(Exception e){
@@ -183,24 +185,24 @@ public class TeacherAfterAttendance extends BaseActivity {
                     org.json.JSONArray st1 = job1.getJSONArray("name");
                     org.json.JSONArray st2 = job2.getJSONArray("percent_attendance");
                     org.json.JSONArray st3 = job3.getJSONArray("emailId");
+
                     Log.d("TAG", Integer.toString(st1.length()));
+
                     for(int i=0;i<st1.length();i++){
+
                         Toast.makeText(TeacherAfterAttendance.this, "Made it ", Toast.LENGTH_LONG).show();
                         ShortAttendanceDetail shortAttendanceDetail = new ShortAttendanceDetail(st1.getString(i), st3.getString(i), st2.getDouble(i));
                         attendanceDetails.add(shortAttendanceDetail);
-                        //HashMap<String , String> map = new HashMap<>();
-                        //map.put("name", st1.getString(i));
-                        //map.put("percent", st2.getString(i));
-                        //map.put("emailId", st3.getString(i));
-                        //shortList.add(map);
-                        //subjectList.add(st1.getString(i) + "-" + st2.getString(i));
+
                         Log.d("TAG", st1.getString(i)+ st3.getString(i)+ st2.getDouble(i));
+
                     }
 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 Log.d("TAG", attendanceDetails.toString());
+
                 shortAttendanceListAdapter = new ShortAttendanceListAdapter(getApplicationContext(), attendanceDetails);
                 listView.setAdapter(shortAttendanceListAdapter);
             }

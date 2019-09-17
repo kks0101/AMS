@@ -1,13 +1,11 @@
 package com.example.ams;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,21 +29,34 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.sql.Ref;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * This is the activity which displays the QRCode. This QRCode is obtained after the teacher clicks
+ * "Take Attendance" Button in previous Activity. The QR image is send in form of byte Array via Intent.
+ * This byte Array is converted into Bitmap, which is then rendered in ImageView.
+ *
+ * This Activity is provided with a Back Button and "Finish Attendance" button. Whenever teacher clicks on
+ * Finish Attendance button, the backend is configured such that the attendance is recorded successfully.
+ *
+ * In case, teacher clicks back Button or press phone back button, it is assumed that teacher does not want to take attendance.
+ * In this case, attendance record is reset, to avoid inconsistency in attendance record.
+ */
+
 public class QRCodeGenerator extends BaseActivity implements View.OnClickListener{
+
     private ImageView qrCodeImage;
     private Button finishTakingAttendance;
-    ImageButton backButton;
-    String subjectCode, groupName;
+    private ImageButton backButton;
+    private String subjectCode, groupName;
+
     private final String BASE_URL = "http://192.168.43.99:1234/ams/";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,15 +65,18 @@ public class QRCodeGenerator extends BaseActivity implements View.OnClickListene
         qrCodeImage = (ImageView)findViewById(R.id.qrCodeImage);
         finishTakingAttendance = (Button) findViewById(R.id.finishQrCode);
         backButton = (ImageButton)findViewById(R.id.back_Button);
+
+        //getting QR Image in form of Byte Array
         Intent intent = getIntent();
         byte [] byteArray = intent.getByteArrayExtra("bitmap");
         Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-
+        qrCodeImage.setImageBitmap(bmp);
 
         backButton.setOnClickListener(this);
+
         subjectCode = intent.getStringExtra("subject");
         groupName = intent.getStringExtra("group");
-        qrCodeImage.setImageBitmap(bmp);
+
         finishTakingAttendance.setOnClickListener(this);
     }
 
@@ -72,7 +86,13 @@ public class QRCodeGenerator extends BaseActivity implements View.OnClickListene
             Toast.makeText(getApplicationContext(),"You are not online!!!!",Toast.LENGTH_LONG).show();
             return;
         }
+
+        //if finish taking attendance button is clicked, successfully record the attendance and
+        //direct teacher to a activity that displays the stats of that class(total present, total absent,
+        //list of absentees)
         if(view == view.findViewById(R.id.finishQrCode)){
+
+            //showing an alert dialog box
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setCancelable(false);
             builder.setMessage("Finish Taking Attendance? This cant be undone.");
@@ -80,6 +100,8 @@ public class QRCodeGenerator extends BaseActivity implements View.OnClickListene
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     Toast.makeText(getApplicationContext(), "Attendance Successfully taken", Toast.LENGTH_LONG).show();
+
+                    //Successfully storing the attendance record: stores server side code, so must be done on different thread
                     AlterTable alterTable = new AlterTable();
                     alterTable.execute();
                     Intent intent = new Intent(QRCodeGenerator.this, TeacherAfterAttendance.class);
@@ -100,6 +122,7 @@ public class QRCodeGenerator extends BaseActivity implements View.OnClickListene
             alert.show();
         }
         else if (view == view.findViewById(R.id.back_Button)){
+
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setCancelable(false);
             builder.setMessage("All attendance will be lost. Do You want to exit?");
@@ -220,10 +243,6 @@ public class QRCodeGenerator extends BaseActivity implements View.OnClickListene
                 String result = convertStreamToString(inputStream);
                 httpURLConnection.disconnect();
                 Log.d("TAG",result);
-                //teacherId is defined in sql as primary key
-                //so if any user login with the same teacherId, delete this already created user in Firebase
-
-
                 return result;
             }
             catch(Exception e){

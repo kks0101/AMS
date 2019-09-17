@@ -156,7 +156,6 @@ public class StudentProfile extends BaseActivity {
                 if(upload!=null) {
 
                     Picasso.get().load(upload.getImageUrl()).into(profileImage);
-                    //Toast.makeText(getApplicationContext(), "Profile Updated", Toast.LENGTH_LONG).show();
                 }
                 else{
                     profileImage.setImageResource(R.drawable.ic_profile2);

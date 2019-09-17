@@ -1,7 +1,6 @@
 package com.example.ams;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -11,7 +10,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.strictmode.IntentReceiverLeakedViolation;
 import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
@@ -39,7 +37,6 @@ import com.squareup.picasso.Picasso;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.w3c.dom.Text;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -57,12 +54,17 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * This is the activity that handles and configures Teacher Profile display.
+ * Retrieves teacher credentials from php server and display it.
+ */
+
 public class TeacherProfile extends BaseActivity {
-    FirebaseAuth mAuth;
+    private FirebaseAuth mAuth;
     private TextView nameTextView, emailIdTextView, teacherIdTextView, verifiedTextView, phoneNoTextView;
     private final String BASE_URL = "http://192.168.43.99:1234/ams/";
 
-
+    private Button logoutButton;
     private Uri mImageUri;
     private ProgressBar mProgressBar;
     private StorageReference mStorageRef;
@@ -77,38 +79,22 @@ public class TeacherProfile extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_teacher_profile);
 
-
         mAuth = FirebaseAuth.getInstance();
         nameTextView = (TextView)findViewById(R.id.nameTextView);
         emailIdTextView = (TextView)findViewById(R.id.emailIdTextView);
         teacherIdTextView = (TextView)findViewById(R.id.teacherIdTextView);
         verifiedTextView = (TextView)findViewById(R.id.verifiedTextView);
         phoneNoTextView = (TextView)findViewById(R.id.phoneNoTextView);
-
-        Button logoutButton = (Button) findViewById(R.id.logoutTeacher);
-        logoutButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                SharedPreferences pref = getApplicationContext().getSharedPreferences("details", 0); //Mode_private
-                SharedPreferences.Editor editor = pref.edit();
-                editor.putString("user", null);
-                editor.commit();
-                FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(TeacherProfile.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        mDatabase = firebaseDatabase.getReference("profileImages");
-
-
+        logoutButton = (Button) findViewById(R.id.logoutTeacher);
         profileImage = (ImageView) findViewById(R.id.profileImage);
         mProgressBar = findViewById(R.id.progress_bar);
         final ProgressBar imageLoaderProgressBar = (ProgressBar)findViewById(R.id.imageProgressBar);
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        mDatabase = firebaseDatabase.getReference("profileImages");
+
         mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
         mDatabaseRef = FirebaseDatabase.getInstance().getReference("uploads");
+
         profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -146,6 +132,24 @@ public class TeacherProfile extends BaseActivity {
         GetProfileDetails getProfileDetails = new GetProfileDetails();
         getProfileDetails.execute();
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        logoutButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                SharedPreferences pref = getApplicationContext().getSharedPreferences("details", 0); //Mode_private
+                SharedPreferences.Editor editor = pref.edit();
+                editor.putString("user", null);
+                editor.apply();
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(TeacherProfile.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 
     @Override
@@ -231,7 +235,6 @@ public class TeacherProfile extends BaseActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-            ///ContentValues params = new ContentValues();
 
             HashMap<String, Object> params = new HashMap<String, Object>();
             params.put("userId", userId);
@@ -317,20 +320,15 @@ public class TeacherProfile extends BaseActivity {
                 JSONObject jsonObject = null;
                 try {
                     jsonObject = (JSONObject) parser.parse(s);
-                }catch(ParseException e){
-                    e.printStackTrace();
-                }
-                int successCode = 0;
-                if(jsonObject!=null) {
                     Object p = jsonObject.get("success");
-                    successCode = Integer.parseInt(p.toString());
-                }
-                if( jsonObject!=null && successCode==0){
-                    Toast.makeText(TeacherProfile.this, "Some error occurred", Toast.LENGTH_LONG).show();
-                    //if could not know whether the current user is student or teacher
+                    int successCode = Integer.parseInt(p.toString());
 
-                }
-                else{
+                    if( successCode==0){
+                        Toast.makeText(TeacherProfile.this, "Some error occurred", Toast.LENGTH_LONG).show();
+                        //if could not know whether the current user is student or teacher
+
+                    }
+                    else{
                         String name = jsonObject.get("name").toString();
                         String teacherId = jsonObject.get("teacherId").toString();
                         String emailId = jsonObject.get("emailId").toString();
@@ -349,6 +347,9 @@ public class TeacherProfile extends BaseActivity {
                             verifiedTextView.setTextColor(Color.GREEN);
                         }
                         phoneNoTextView.setText(phoneNo);
+                    }
+                }catch(ParseException e){
+                    e.printStackTrace();
                 }
             }
         }

@@ -4,11 +4,16 @@ import androidx.annotation.Nullable;
 
 import java.io.Serializable;
 
-//implements Serializable, inorder to pass the object of this class directly through intent
+/**
+ * This Class is used to encapsulate Teacher Subject Detail which is used in recyclerView.
+ *
+ * It implements Serializable. Implementing Serializable allows us to pass Class object via Intent
+ */
+
 public class TeacherSubjectDetail implements Serializable {
-    public String subjectCode;
-    public String subjectName;
-    public String branch;
+    private String subjectCode;
+    private String subjectName;
+    private String branch;
 
     TeacherSubjectDetail(String subjectCode, String branch, String subjectName){
         this.subjectCode = subjectCode;

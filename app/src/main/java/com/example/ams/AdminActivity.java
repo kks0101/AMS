@@ -11,10 +11,17 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+
+/* This Activity provides interface to admin to verify teacher*/
+
+
 public class AdminActivity extends AppCompatActivity {
+
     private Button verifyTeacher, logOut;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin);
 
@@ -22,10 +29,11 @@ public class AdminActivity extends AppCompatActivity {
         logOut = (Button)findViewById(R.id.logoutAdmin);
 
         verifyTeacher.setOnClickListener(new View.OnClickListener(){
+
             @Override
             public void onClick(View v) {
-                if (!AppStatus.getInstance(getApplicationContext()).isOnline()) {
 
+                if (!AppStatus.getInstance(getApplicationContext()).isOnline()) {
                     Toast.makeText(getApplicationContext(),"You are not online!!!!",Toast.LENGTH_LONG).show();
                 }
                 else {
@@ -37,13 +45,15 @@ public class AdminActivity extends AppCompatActivity {
 
 
         logOut.setOnClickListener(new View.OnClickListener(){
+
             @Override
             public void onClick(View v) {
-                if (!AppStatus.getInstance(getApplicationContext()).isOnline()) {
 
+                if (!AppStatus.getInstance(getApplicationContext()).isOnline()) {
                     Toast.makeText(getApplicationContext(),"You are not online!!!!",Toast.LENGTH_LONG).show();
                 }
                 else {
+
                     FirebaseAuth.getInstance().signOut();
                     SharedPreferences pref = getApplicationContext().getSharedPreferences("details", 0); //Mode_private
                     SharedPreferences.Editor editor = pref.edit();
@@ -52,6 +62,7 @@ public class AdminActivity extends AppCompatActivity {
                     Intent intent = new Intent(AdminActivity.this, MainActivity.class);
                     startActivity(intent);
                     finish();
+
                 }
             }
         });
