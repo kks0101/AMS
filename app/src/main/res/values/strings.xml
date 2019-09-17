@@ -14,7 +14,8 @@
         <item>ME</item>
 
     </string-array>
-
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
+    <string name="asm_message">ASM</string>
     <string-array name="groups">
         <item>Select group..</item>
         <item>A</item>

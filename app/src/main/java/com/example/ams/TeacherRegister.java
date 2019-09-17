@@ -21,6 +21,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -28,6 +29,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -40,20 +48,23 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+
+import org.json.JSONException;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
-public class TeacherRegister extends BaseActivity implements View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback{
+public class TeacherRegister extends BaseActivity implements View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
     private EditText nameField, teacherIdField, emailField, phnNoField, passwordField, retypePasswordField;
     private Button registerButton;
     FirebaseAuth mAuth;
 
-    private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS= 1;
+    private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1;
     private final String BASE_URL = "http://192.168.43.99:1234/ams/";
     private static final String TAG_SUCCESS = "success";
 
@@ -77,8 +88,9 @@ public class TeacherRegister extends BaseActivity implements View.OnClickListene
         mAuth = FirebaseAuth.getInstance();
 
     }
-    private void createAccount(String email, String password){
-        if(!validateForm()){
+
+    private void createAccount(String email, String password) {
+        if (!validateForm()) {
             return;
         }
         showProgressDialog("Registering..Please wait");
@@ -88,7 +100,7 @@ public class TeacherRegister extends BaseActivity implements View.OnClickListene
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
 
-                        if(task.isSuccessful()){
+                        if (task.isSuccessful()) {
 
                             //Account created successfully
                             //store rest of the fields in relational database
@@ -97,9 +109,8 @@ public class TeacherRegister extends BaseActivity implements View.OnClickListene
 
                             CreateNewTeacher createNewTeacher = new CreateNewTeacher();
                             createNewTeacher.execute();
-                           // startActivity(intent);
-                        }
-                        else{
+                            // startActivity(intent);
+                        } else {
                             Toast.makeText(TeacherRegister.this, "Account Authentication failed!!", Toast.LENGTH_LONG).show();
                             Log.e("Error Registering", task.getException().toString());
 
@@ -109,9 +120,8 @@ public class TeacherRegister extends BaseActivity implements View.OnClickListene
                 });
     }
 
-    private void requestPermission(){
-        if (ContextCompat.checkSelfPermission( TeacherRegister.this, Manifest.permission.READ_PHONE_STATE ) != PackageManager.PERMISSION_GRANTED )
-        {
+    private void requestPermission() {
+        if (ContextCompat.checkSelfPermission(TeacherRegister.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
 
             ActivityCompat.requestPermissions(TeacherRegister.this,
                     new String[]{Manifest.permission.READ_PHONE_STATE},
@@ -119,11 +129,11 @@ public class TeacherRegister extends BaseActivity implements View.OnClickListene
 
         }
     }
+
     @Override
     protected void onStart() {
         super.onStart();
-        if (ContextCompat.checkSelfPermission( TeacherRegister.this, Manifest.permission.READ_PHONE_STATE ) != PackageManager.PERMISSION_GRANTED )
-        {
+        if (ContextCompat.checkSelfPermission(TeacherRegister.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
 
             ActivityCompat.requestPermissions(TeacherRegister.this,
                     new String[]{Manifest.permission.READ_PHONE_STATE},
@@ -132,7 +142,7 @@ public class TeacherRegister extends BaseActivity implements View.OnClickListene
         }
     }
 
-    private boolean validateForm(){
+    private boolean validateForm() {
         boolean valid = true;
         String name = nameField.getText().toString();
         String id = teacherIdField.getText().toString();
@@ -141,41 +151,34 @@ public class TeacherRegister extends BaseActivity implements View.OnClickListene
         String password = passwordField.getText().toString();
         String rePassword = retypePasswordField.getText().toString();
 
-        if(TextUtils.isEmpty(name)){
+        if (TextUtils.isEmpty(name)) {
             nameField.setError("Required!");
             valid = false;
-        }
-        else if(TextUtils.isEmpty(id)){
+        } else if (TextUtils.isEmpty(id)) {
             teacherIdField.setError("Required!");
             valid = false;
-        }
-        else if(TextUtils.isEmpty(email)){
+        } else if (TextUtils.isEmpty(email)) {
             emailField.setError("Required!");
             valid = false;
-        }
-        else if (TextUtils.isEmpty(phnNo)){
+        } else if (TextUtils.isEmpty(phnNo)) {
             phnNoField.setError("Required!");
             valid = false;
-        }
-        else if (TextUtils.isEmpty(password)){
+        } else if (TextUtils.isEmpty(password)) {
             passwordField.setError("Required!");
             valid = false;
-        }
-        else if (TextUtils.isEmpty((rePassword))){
+        } else if (TextUtils.isEmpty((rePassword))) {
             retypePasswordField.setError("Required!");
             valid = false;
-        }
-        else{
-            if(!password.equals(rePassword)){
+        } else {
+            if (!password.equals(rePassword)) {
                 retypePasswordField.setError("Password dindn't match");
                 valid = false;
             }
         }
-        if (ContextCompat.checkSelfPermission( TeacherRegister.this, Manifest.permission.READ_PHONE_STATE ) != PackageManager.PERMISSION_GRANTED )
-        {
+        if (ContextCompat.checkSelfPermission(TeacherRegister.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             valid = false;
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            if(user!=null)
+            if (user != null)
                 user.delete();
             Toast.makeText(this, "You shoould provide permission!! ", Toast.LENGTH_LONG).show();
 
@@ -184,29 +187,30 @@ public class TeacherRegister extends BaseActivity implements View.OnClickListene
 
         return valid;
     }
+
     @Override
     public void onClick(View view) {
         if (!AppStatus.getInstance(this).isOnline()) {
-            Toast.makeText(this,"You are not online!!!!",Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "You are not online!!!!", Toast.LENGTH_LONG).show();
             return;
         }
-        if(view.getId() == R.id.teacherRegisterButton){
+        if (view.getId() == R.id.teacherRegisterButton) {
             createAccount(emailField.getText().toString(), passwordField.getText().toString());
         }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if(requestCode == MY_PERMISSIONS_REQUEST_READ_CONTACTS){
-            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+        if (requestCode == MY_PERMISSIONS_REQUEST_READ_CONTACTS) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
             }
 
         }
     }
 
-    private class CreateNewTeacher extends AsyncTask<String, String , String >{
-        String name, id, email, phnNo, deviceId, userId ;
+    private class CreateNewTeacher extends AsyncTask<String, String, String> {
+        String name, id, email, phnNo, deviceId, userId;
         Boolean verified = false;
 
         @Override
@@ -218,14 +222,13 @@ public class TeacherRegister extends BaseActivity implements View.OnClickListene
             id = teacherIdField.getText().toString();
             email = emailField.getText().toString();
             phnNo = phnNoField.getText().toString();
-            if(mAuth.getCurrentUser()!=null)
+            if (mAuth.getCurrentUser() != null)
                 userId = mAuth.getCurrentUser().getUid();
             TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
             try {
                 //uniquely identifies phone
                 deviceId = telephonyManager.getDeviceId();
-            }
-            catch(SecurityException e){
+            } catch (SecurityException e) {
                 Log.i("PERMISSION", e.toString());
             }
         }
@@ -262,12 +265,12 @@ public class TeacherRegister extends BaseActivity implements View.OnClickListene
                 }
                 Log.d("Debug", data);
 
-                URL url=new URL(link);
+                URL url = new URL(link);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                 httpURLConnection.setRequestMethod("POST");
                 httpURLConnection.setDoInput(true);
                 httpURLConnection.setDoOutput(true);
-                httpURLConnection.setRequestProperty("Accept","*/*");
+                httpURLConnection.setRequestProperty("Accept", "*/*");
                 OutputStream out = httpURLConnection.getOutputStream();
                 BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
 
@@ -280,15 +283,14 @@ public class TeacherRegister extends BaseActivity implements View.OnClickListene
 
                 String result = convertStreamToString(inputStream);
                 httpURLConnection.disconnect();
-                Log.d("TAG",result);
+                Log.d("TAG", result);
                 //teacherId is defined in sql as primary key
                 //so if any user login with the same teacherId, delete this already created user in Firebase
 
 
                 return result;
-            }
-            catch(Exception e){
-                    Log.d("debug",e.getMessage());
+            } catch (Exception e) {
+                Log.d("debug", e.getMessage());
                 e.printStackTrace();
             }
             return null;
@@ -317,48 +319,67 @@ public class TeacherRegister extends BaseActivity implements View.OnClickListene
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             //if string returned from doinbackground is null, that means Exception occured while connectioon to server
-            if(s==null){
+            if (s == null) {
                 Toast.makeText(TeacherRegister.this, "Coudlnt connect to PHPServer", Toast.LENGTH_LONG).show();
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 if (user != null)
                     user.delete();
-            }
-            else {
-
+            } else {
                 //otherwise string would contain the JSON returned from php
                 JSONParser parser = new JSONParser();
-                JSONObject jsonObject = null;
                 try {
-                    jsonObject = (JSONObject) parser.parse(s);
-                }catch(ParseException e){
+                    JSONObject jsonObject = (JSONObject) parser.parse(s);
+                    Object p = jsonObject.get("success");
+                    int successCode = Integer.parseInt(p.toString());
+                    Log.d("TAGS", Integer.toString(successCode));
+                    if (successCode == 0) {
+                        Toast.makeText(TeacherRegister.this, "Some error occurred", Toast.LENGTH_LONG).show();
+                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                        if (user != null)
+                            user.delete();
+                    } else {
+                        Toast.makeText(TeacherRegister.this, "Registered Successfully!!", Toast.LENGTH_LONG).show();
+
+                        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+                        String userID = FirebaseAuth.getInstance().getUid();
+
+                        reference.child("admin").addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                //Log.d("admin", dataSnapshot.toString());
+                                //Log.d("admin", dataSnapshot.getValue().toString());
+
+                                    String token = dataSnapshot.getValue().toString();
+                                    Log.d("admin", token);
+                                    try {
+                                        FireMessage fm = new FireMessage("New Request For Verification", name + " Requested for verification");
+                                        fm.sendToToken(token);
+                                        //String topic="Weather";
+                                        //fm.sendToTopic(topic);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
+                        Intent intent = new Intent(getApplicationContext(), TeacherSubject.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                int successCode = 0;
-                if(jsonObject!=null) {
-                    Object p = jsonObject.get("success");
-                    successCode = Integer.parseInt(p.toString());
-                }
-                if(jsonObject==null || successCode==0){
-                    Toast.makeText(TeacherRegister.this, "Some error occurred", Toast.LENGTH_LONG).show();
-                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                    if (user != null)
-                        user.delete();
-                }
-                if (s.toLowerCase().contains("duplicate")) {
-
-                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                    if (user != null)
-                        user.delete();
-                    //if data is Not updated to mysql server
-                    Toast.makeText(TeacherRegister.this, "Teacher Id/Device Id already exists", Toast.LENGTH_LONG).show();
-                }
-                else {
-                    Toast.makeText(TeacherRegister.this, "Registered Successfully!!", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(getApplicationContext(), TeacherSubject.class);
-                    startActivity(intent);
-                    finish();
-                }
+                //}
             }
         }
     }
+
 }

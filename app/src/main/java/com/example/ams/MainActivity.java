@@ -23,6 +23,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -108,6 +112,29 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                             if(emailField.getText().toString().equals("admin@gmail.com")){
                                 SharedPreferences pref = getApplicationContext().getSharedPreferences("details", 0); //Mode_private
                                 SharedPreferences.Editor editor = pref.edit();
+                                FirebaseInstanceId.getInstance().getInstanceId()
+                                        .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                                                if (!task.isSuccessful()) {
+                                                    Log.w("TAG", "getInstanceId failed", task.getException());
+                                                    return;
+                                                }
+
+                                                // Get new Instance ID token
+                                                String token = task.getResult().getToken();
+                                                // Log and toast
+                                                Log.d("TAG", token);
+                                               /* String msg = getString(R.string.msg_token_fmt, token);
+                                                Log.d(TAG, msg);
+                                                Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();*/
+                                                DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+                                                String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                                                //Token token1 = new Token(token, userId);
+                                                mDatabase.child("admin").setValue(token);
+                                            }
+                                        });
+
                                 editor.putString("user", "admin");
                                 editor.commit();
                                 Intent intent = new Intent(MainActivity.this, AdminActivity.class);
