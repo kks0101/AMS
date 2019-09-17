@@ -2,15 +2,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/login">
+    android:background="@drawable/profile_back3">
 
     <LinearLayout
         android:id="@+id/details"
         android:layout_width="match_parent"
-        android:layout_height="245dp"
+        android:layout_height="200dp"
         android:layout_centerHorizontal="true"
         android:orientation="vertical"
-        android:background="#80485563">
+        android:background="@drawable/profile_back3">
 
         <TextView
             android:id="@+id/displaySubjectCode"
@@ -22,7 +22,7 @@
             style="@style/TextAppearance.AppCompat.Headline"
             android:fontFamily="sans-serif"
             android:textSize="30dp"
-            android:text="sub_code"/>
+            android:text="Subject Code: "/>
 
         <TextView
             android:id="@+id/subjectName"
@@ -34,19 +34,19 @@
             style="@style/TextAppearance.AppCompat.Headline"
             android:fontFamily="sans-serif"
             android:textSize="20dp"
-            android:text="sub_name" />
+            android:text="Subject Name: " />
 
         <TextView
             android:id="@+id/displayGroup"
             android:layout_width="290dp"
             android:layout_height="30dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="10dp"
             android:paddingLeft="10dp"
             android:textColor="@color/colorAccent1"
             style="@style/TextAppearance.AppCompat.Headline"
             android:fontFamily="sans-serif"
             android:textSize="20dp"
-            android:text="sub_branch" />
+            android:text="Branch: " />
 
     </LinearLayout>
     <LinearLayout
@@ -63,7 +63,8 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_below="@id/details"
-            android:background="@drawable/profilebutton"
+            android:layout_marginTop="45dp"
+            android:background="@drawable/signup1"
             android:textColor="@color/colorAccent1"
             android:text="Take attendance"
             />
@@ -74,7 +75,7 @@
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/scanQrCode"
             android:layout_marginTop="10dp"
-            android:background="@drawable/profilebutton"
+            android:background="@drawable/signup1"
             android:textColor="@color/colorAccent1"
             android:text="less than 75%"
             />
@@ -84,7 +85,7 @@
             android:layout_centerHorizontal="true"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:background="@drawable/profilebutton"
+            android:background="@drawable/signup1"
             android:textColor="@color/colorAccent1"
             android:text="generate pdf"
             />

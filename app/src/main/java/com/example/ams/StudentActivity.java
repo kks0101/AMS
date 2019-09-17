@@ -64,6 +64,8 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.wang.avi.AVLoadingIndicatorView;
+
 import javax.security.auth.Subject;
 
 public class StudentActivity extends BaseActivity {
@@ -81,6 +83,16 @@ public class StudentActivity extends BaseActivity {
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS= 1;
     String name , regNo, emailId, branch, semester, phoneNo,groupName;
+    AVLoadingIndicatorView avi;
+    /*void startAnim(){
+        avi.show();
+        // or avi.smoothToShow();
+    }
+
+    void stopAnim(){
+        avi.hide();
+        // or avi.smoothToHide();
+    }*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

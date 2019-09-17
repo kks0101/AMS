@@ -9,7 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/login"
+        android:background="@drawable/profile_back3"
         android:gravity="center"/>
 
     <LinearLayout
@@ -63,7 +63,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginLeft="70dp"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/profilebutton"
+        android:background="@drawable/profilebtnborder"
         android:text="Login"
         android:textColor="@color/colorAccent1"
         android:id="@+id/loginButton"/>
@@ -73,6 +73,7 @@
         android:layout_marginTop="350dp"
         android:layout_centerHorizontal="true"
         android:text="Don't have an account?"
+        android:textSize="20dp"
         android:id="@+id/text2"/>
     <Button
         android:layout_width="match_parent"
