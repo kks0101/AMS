@@ -5,11 +5,15 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -34,7 +38,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
+import org.json.JSONException;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -50,7 +57,9 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -62,6 +71,9 @@ public class TeacherActivity extends BaseActivity{
     private RecyclerView recyclerView;
     ArrayList<String> stringArrayList = new ArrayList<>();
     String verified;
+
+    private SwipeRefreshLayout pullToRefresh;
+    private IntentIntegrator qrScan;
     ArrayList<TeacherSubjectDetail> recievedList = new ArrayList<>();
     private final String BASE_URL = "https://amscollege.000webhostapp.com/";
     //private final String BASE_URL = "http://192.168.43.99:1234/ams/";
@@ -77,6 +89,17 @@ public class TeacherActivity extends BaseActivity{
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setVisibility(View.VISIBLE);
         ImageButton profileButton = (ImageButton)findViewById(R.id.profileButton);
+        Button scanStudentQr = (Button)findViewById(R.id.scanStudentQr);
+        pullToRefresh = (SwipeRefreshLayout)findViewById(R.id.pullToRefresh);
+        qrScan = new IntentIntegrator(this);
+
+        scanStudentQr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                qrScan.initiateScan();
+            }
+        });
+
         profileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,7 +132,7 @@ public class TeacherActivity extends BaseActivity{
                 //fetch data from Firebase database corresponding to current user
                 GenericTypeIndicator<ArrayList<TeacherSubjectDetail>> t = new GenericTypeIndicator<ArrayList<TeacherSubjectDetail>>() {};
                  recievedList = dataSnapshot.getValue(t);
-                stringArrayList = new ArrayList<>();
+              //  stringArrayList = new ArrayList<>();
 
                 TeacherSubjectAdapter adapter = new TeacherSubjectAdapter(getApplicationContext(), recievedList);
 
@@ -147,7 +170,47 @@ public class TeacherActivity extends BaseActivity{
                 }
             }));
 
+
+        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                pullToRefresh.setRefreshing(false);
+                finish();
+                startActivity(getIntent());
+            }
+        });
+
     }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (result != null) {
+            //if qrcode has nothing in it
+            if (result.getContents() == null) {
+                Toast.makeText(this, "Result Not Found", Toast.LENGTH_LONG).show();
+            } else {
+                //if qr contains data
+                try {
+                    org.json.JSONObject obj = new org.json.JSONObject(result.getContents());
+                    String deviceId = obj.getString("deviceId");
+                    Intent intent = new Intent(TeacherActivity.this, StudentDetail.class);
+                    intent.putExtra("deviceId", deviceId);
+                    startActivity(intent);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(this, result.getContents(), Toast.LENGTH_LONG).show();
+                }
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+
 
     private class GetProfileDetails extends AsyncTask<String, String , String > {
         String userId;

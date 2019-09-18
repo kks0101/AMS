@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -52,7 +53,7 @@ public class VerifyTeacherActivity extends BaseActivity {
     private final String BASE_URL = "https://amscollege.000webhostapp.com/";
     //private final String BASE_URL = "http://192.168.43.99:1234/ams/";
     private RecyclerView recyclerView;
-
+    private SwipeRefreshLayout pullToRefresh;
     ArrayList<TeacherDetails> teacherDetailsArrayList= new ArrayList<>();
     private TeacherDetailAdapter teacherDetailAdapter;
     @Override
@@ -63,7 +64,7 @@ public class VerifyTeacherActivity extends BaseActivity {
         recyclerView = (RecyclerView)findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
+        pullToRefresh = (SwipeRefreshLayout)findViewById(R.id.pullToRefresh);
         GetUnverifiedTeachers getUnverifiedTeachers = new GetUnverifiedTeachers();
         getUnverifiedTeachers.execute();
 
@@ -152,6 +153,19 @@ public class VerifyTeacherActivity extends BaseActivity {
             }
         }));
 
+
+        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+//                finish();
+//                startActivity(getIntent());
+                GetUnverifiedTeachers getUnverifiedTeachers = new GetUnverifiedTeachers();
+                getUnverifiedTeachers.execute();
+                teacherDetailsArrayList.clear();
+                pullToRefresh.setRefreshing(false);
+            }
+        });
 
     }
 

@@ -82,6 +82,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 /**
  * This Activity displays the profile of each student. Profile details are fetched from
  * PHP Server. Firebase Storage is used to store the uploaded profile images of each student, link to
@@ -103,7 +105,8 @@ public class StudentProfile extends BaseActivity {
     private StorageReference mStorage;
     private Uri filePath;
     private Button showQr, logOut;
-    private ImageView profileImage;
+    //private ImageView profileImage;
+    private CircleImageView profileImage;
     private ImageButton addProfileImage, uplaoadProfileImage;
     private ImageView uploadDp;
     private FirebaseDatabase firebaseDatabase;
@@ -139,7 +142,8 @@ public class StudentProfile extends BaseActivity {
         mDatabase = firebaseDatabase.getReference("profileImages");
 
 
-        profileImage = (ImageView) findViewById(R.id.profileImage);
+        //profileImage = (ImageView) findViewById(R.id.profileImage);
+        profileImage = (CircleImageView)findViewById(R.id.profileImage);
         uploadDp = (ImageView)findViewById(R.id.uploadDp);
         mProgressBar = findViewById(R.id.progress_bar);
         final ProgressBar imageLoaderProgressBar = (ProgressBar)findViewById(R.id.imageProgressBar);
@@ -165,7 +169,8 @@ public class StudentProfile extends BaseActivity {
                 Upload upload = dataSnapshot.getValue(Upload.class);
                 if(upload!=null) {
 
-                    Picasso.get().load(upload.getImageUrl()).into(profileImage);
+                  //  Picasso.get().load(upload.getImageUrl()).into(profileImage);
+                    Picasso.get().load(upload.getImageUrl()).placeholder(R.drawable.image_shape).error(R.drawable.ic_profile2).into(profileImage);
                 }
                 else{
                     profileImage.setImageResource(R.drawable.ic_profile2);

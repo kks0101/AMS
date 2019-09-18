@@ -63,7 +63,7 @@
         android:layout_below="@id/subjectSpinner"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="10dp"
-        android:background="@drawable/profilebtnborder"
+        android:background="@drawable/profilebtnorder1"
         android:text="Add"
         android:textColor="@color/colorAccent1"
         android:id="@+id/addSubject"/>

@@ -173,9 +173,6 @@ public class TeacherAfterAttendance extends BaseActivity {
             }
             else {
 
-                //otherwise string would contain the JSON returned from php
-                JSONParser parser = new JSONParser();
-                JSONObject jsonObject = null;
                 try {
 
                     //jsonObject = (JSONObject) parser.parse(s);

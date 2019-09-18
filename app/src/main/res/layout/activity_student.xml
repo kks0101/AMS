@@ -14,15 +14,15 @@
         android:layout_height="wrap_content"
         android:background="@color/blackTransparent"
         android:orientation="vertical">
-        <ProgressBar
+        <!--<ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"/>
-       <!-- <com.wang.avi.AVLoadingIndicatorView
+            android:layout_gravity="center"/>-->
+       <com.wang.avi.AVLoadingIndicatorView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:indicatorName="BallPulseIndicator"
-            />-->
+            />
     </LinearLayout>
 
     <LinearLayout

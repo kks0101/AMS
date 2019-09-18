@@ -54,6 +54,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 /**
  * This is the activity that handles and configures Teacher Profile display.
  * Retrieves teacher credentials from php server and display it.
@@ -73,8 +75,9 @@ public class TeacherProfile extends BaseActivity {
     private DatabaseReference mDatabaseRef;
     private DatabaseReference mDatabase;
     private StorageTask mUploadTask;
-    private ImageView profileImage;
+    private ImageView uploadDpTeacaher;
     private FirebaseDatabase firebaseDatabase;
+    private CircleImageView profileImage;
     private int PICK_IMAGE_REQUEST = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,16 +91,20 @@ public class TeacherProfile extends BaseActivity {
         verifiedTextView = (TextView)findViewById(R.id.verifiedTextView);
         phoneNoTextView = (TextView)findViewById(R.id.phoneNoTextView);
         logoutButton = (Button) findViewById(R.id.logoutTeacher);
-        profileImage = (ImageView) findViewById(R.id.profileImage);
+        //profileImage= (ImageView) findViewById(R.id.profileImage);
+
+        profileImage = (CircleImageView) findViewById(R.id.profileImage);
+        uploadDpTeacaher = (ImageView) findViewById(R.id.uploadDpTeacher);
         mProgressBar = findViewById(R.id.progress_bar);
         final ProgressBar imageLoaderProgressBar = (ProgressBar)findViewById(R.id.imageProgressBar);
+        imageLoaderProgressBar.setVisibility(View.VISIBLE);
         firebaseDatabase = FirebaseDatabase.getInstance();
         mDatabase = firebaseDatabase.getReference("profileImages");
 
         mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
         mDatabaseRef = FirebaseDatabase.getInstance().getReference("uploads");
 
-        profileImage.setOnClickListener(new View.OnClickListener() {
+        uploadDpTeacaher.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mUploadTask != null && mUploadTask.isInProgress()) {
@@ -117,8 +124,9 @@ public class TeacherProfile extends BaseActivity {
                 Upload upload = dataSnapshot.getValue(Upload.class);
                 if(upload!=null) {
 
-                    Picasso.get().load(upload.getImageUrl()).into(profileImage);
+                    //Picasso.get().load(upload.getImageUrl()).into(profileImage);
                     //Toast.makeText(getApplicationContext(), "Profile Updated", Toast.LENGTH_LONG).show();
+                    Picasso.get().load(upload.getImageUrl()).placeholder(R.drawable.image_shape).error(R.drawable.ic_profile2).into(profileImage);
                 }
                 else{
                     profileImage.setImageResource(R.drawable.ic_profile2);

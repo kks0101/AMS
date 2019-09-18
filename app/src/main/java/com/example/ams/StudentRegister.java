@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -61,7 +62,6 @@ public class StudentRegister extends BaseActivity implements View.OnClickListene
     private final String BASE_URL = "https://amscollege.000webhostapp.com/";
     //private final String BASE_URL = "http://192.168.43.99:1234/ams/";
     private static final String TAG_SUCCESS = "success";
-    private boolean isPermissionGranted = false;   //to check for the permission to READ_PHONE_STATE
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +82,7 @@ public class StudentRegister extends BaseActivity implements View.OnClickListene
 
         mAuth = FirebaseAuth.getInstance();
         ///check for permission
-        if (ContextCompat.checkSelfPermission( StudentRegister.this,android.Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED )
+        if (ContextCompat.checkSelfPermission( StudentRegister.this, Manifest.permission.READ_PHONE_STATE ) != PackageManager.PERMISSION_GRANTED )
         {
 
             ActivityCompat.requestPermissions(StudentRegister.this,
@@ -255,7 +255,7 @@ public class StudentRegister extends BaseActivity implements View.OnClickListene
         }
         //registration number should only contain integers
 
-        if(!isPermissionGranted) {
+        if (ContextCompat.checkSelfPermission( StudentRegister.this, Manifest.permission.READ_PHONE_STATE ) != PackageManager.PERMISSION_GRANTED ){
             valid = false;
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             if(user!=null)
@@ -269,8 +269,10 @@ public class StudentRegister extends BaseActivity implements View.OnClickListene
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if(requestCode == MY_PERMISSIONS_REQUEST_READ_CONTACTS){
-            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                isPermissionGranted = true;
+            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+
+            }
+
         }
     }
 
@@ -424,6 +426,10 @@ public class StudentRegister extends BaseActivity implements View.OnClickListene
                     Toast.makeText(StudentRegister.this, "Student Reg No already exists", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(StudentRegister.this, "Registered Successfully!!", Toast.LENGTH_LONG).show();
+                    SharedPreferences pref = getApplicationContext().getSharedPreferences("details", 0); //Mode_private
+                    SharedPreferences.Editor editor = pref.edit();
+                    editor.putString("user", "student");
+                    editor.apply();
                     Intent intent = new Intent(getApplicationContext(), StudentActivity.class);
                     startActivity(intent);
                     finish();

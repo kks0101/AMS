@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="400dp"
     android:background="@color/blackT1">
 
     <LinearLayout
@@ -27,6 +27,8 @@
             <TextView
                 android:layout_width="300dp"
                 android:layout_marginLeft="15dp"
+                android:paddingTop="10dp"
+                android:textSize="20dp"
                 android:layout_height="match_parent"
                 android:id="@+id/nameTextView"/>
         </LinearLayout>
@@ -48,6 +50,8 @@
                 android:layout_width="300dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
+                android:paddingTop="10dp"
+                android:textSize="20dp"
                 android:id="@+id/teacherIdTextView"/>
         </LinearLayout>
 
@@ -67,6 +71,8 @@
             <TextView
                 android:layout_width="300dp"
                 android:layout_marginLeft="15dp"
+                android:paddingTop="10dp"
+                android:textSize="20dp"
                 android:layout_height="match_parent"
                 android:id="@+id/emailIdTextView"/>
         </LinearLayout>
@@ -87,9 +93,11 @@
                 android:layout_width="300dp"
                 android:layout_marginLeft="7dp"
                 android:layout_height="match_parent"
+                android:paddingTop="10dp"
+                android:textSize="20dp"
                 android:id="@+id/phoneNoTextView"/>
         </LinearLayout>
-        <LinearLayout
+        <!--<LinearLayout
             android:layout_width="match_parent"
             android:layout_height="35dp"
             android:layout_marginTop="5dp"
@@ -102,34 +110,38 @@
                 android:paddingTop="7dp"
                 android:textColor="@color/white"
                 android:text="Subjects: "/>
-        </LinearLayout>
+        </LinearLayout>-->
 
     </LinearLayout>
     <LinearLayout
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
         android:orientation="horizontal"
         android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
         android:layout_below="@+id/linearLayout"
-        android:layout_margin="30dp">
+        >
         <Button
-            android:layout_width="50dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:id="@+id/approveButton"
             android:layout_marginRight="1dp"
+            android:layout_marginTop="30dp"
             android:background="@drawable/signup"
             android:layout_weight="1"
             android:text="Approve"
             android:textColor="@color/white"/>
 
     <Button
-        android:layout_width="50dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+
         android:id="@+id/disApproveButton"
         android:background="@drawable/signup"
         android:layout_weight="1"
+        android:layout_marginTop="30dp"
         android:layout_marginLeft="1dp"
         android:text="Disapprove"
         android:textColor="@color/white"/>

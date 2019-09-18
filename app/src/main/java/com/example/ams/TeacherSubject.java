@@ -128,11 +128,13 @@ public class TeacherSubject extends BaseActivity {
             public void onClick(View view) {
                 String branch = branchSpinner.getSelectedItem().toString();
                 String subjectCode = subjectSpinner.getSelectedItem().toString();
-                TeacherSubjectDetail teacherSubjectDetail = new TeacherSubjectDetail(subjectCode.substring(0, subjectCode.indexOf("-")), branch, subjectCode.substring(subjectCode.lastIndexOf("-")+1));
-                if(!teacherSubjectDetailsList.contains(teacherSubjectDetail)) {
-                    teacherSubjectDetailsList.add(teacherSubjectDetail);
-                    //selectedSubjectList.add(branch + " -- " + subjectCode);
-                    subjectListAdapter.notifyDataSetChanged();
+                if(branch!=null && subjectCode!=null && !branch.isEmpty() && !subjectCode.isEmpty()) {
+                    TeacherSubjectDetail teacherSubjectDetail = new TeacherSubjectDetail(subjectCode.substring(0, subjectCode.indexOf("-")), branch, subjectCode.substring(subjectCode.lastIndexOf("-") + 1));
+                    if (!teacherSubjectDetailsList.contains(teacherSubjectDetail)) {
+                        teacherSubjectDetailsList.add(teacherSubjectDetail);
+                        //selectedSubjectList.add(branch + " -- " + subjectCode);
+                        subjectListAdapter.notifyDataSetChanged();
+                    }
                 }
             }
         });

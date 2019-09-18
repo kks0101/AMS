@@ -6,18 +6,47 @@
     android:layout_height="match_parent"
     tools:context=".VerifyTeacherActivity"
     android:background="@drawable/profile_back3">
-    <TextView
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Unverified Teachers"
-        android:textSize="20dp"
-        android:textAlignment="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+        android:orientation="vertical"
+        android:id="@+id/description">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="The following is the list of unvereified teachers"
+            android:textSize="20sp"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/black"
+            android:textStyle="italic|bold"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Click on any, to view their profile"
+            android:textSize="10sp"
+            android:layout_margin="5dp"
+            android:textColor="@color/black"
+            android:textStyle="italic|bold"
+            android:textAlignment="center"
+            />
+
+    </LinearLayout>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/pullToRefresh"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp" />
+        android:layout_below="@+id/description"
+        android:layout_height="wrap_content">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
 
+            android:layout_width="match_parent"
+            android:background="#1A148F18"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </RelativeLayout>

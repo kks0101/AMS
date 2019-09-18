@@ -30,21 +30,12 @@
                 app:civ_border_width="2dp"
                 app:civ_border_color="#FF000000"/>
 
-         <ImageView
-             android:id="@+id/uploadDp"
-             android:layout_width="24dp"
-             android:layout_height="24dp"
-             android:layout_marginLeft="90dp"
-             android:layout_marginTop="120dp"
-             android:background="@drawable/ic_add_a_photo_black_24dp"
-             />
-
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageProgressBar"
-            android:layout_centerInParent="true"
-            />
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageProgressBar"
+                android:layout_centerInParent="true"
+                />
         </RelativeLayout>
         <TextView
             android:layout_width="300dp"
@@ -67,9 +58,10 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/relative1"
         android:layout_marginLeft="30dp"
+        android:layout_above="@+id/back_Button"
         android:layout_marginTop="10dp"
         android:id="@+id/scrollView"
         android:layout_marginRight="20dp"
@@ -258,44 +250,18 @@
                 android:background="@color/colorPrimary1" />
         </LinearLayout>
     </ScrollView>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_alignParentBottom="true"
-        android:layout_below="@+id/scrollView">
-    <Button
-        android:id="@+id/showQR"
-        android:layout_weight="1"
-        android:layout_width="wrap_content"
-        android:textAllCaps="false"
-        android:layout_gravity="center"
-        android:layout_height="45dp"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/profilebtnborder"
-        android:text="Unique QR"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:textColor="@color/colorAccent1" />
 
-    <Button
-        android:layout_weight="1"
-        android:layout_height="45dp"
-        android:layout_width="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center"
-        android:background="@drawable/profilebtnborder"
-        android:text="Logout"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:textColor="@color/colorAccent1"
-        android:id="@+id/logoutStudent"/>
-    </LinearLayout>
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:layout_alignParentBottom="true"/>
+        <Button
+            android:id="@+id/back_Button"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:textAllCaps="false"
+            android:layout_gravity="center"
+            android:layout_height="45dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/profilebtnborder"
+            android:layout_alignParentBottom="true"
+            android:text="Go Back"
+            android:textColor="@color/colorAccent1" />
+
 </RelativeLayout>
