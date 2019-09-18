@@ -5,25 +5,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:background="@drawable/login">
+    android:background="@drawable/profile_back3">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="240dp"
         android:id="@+id/linear"
         android:orientation="vertical"
         android:alpha="0.5"
-        android:background="#485563">
+        android:background="@drawable/profile_back3">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:gravity="center"
-        android:text="choose your subjects"
+        android:text="Choose Your Subjects"
         android:textColor="@color/colorAccent1"
         style="@style/TextAppearance.AppCompat.Headline"
         android:fontFamily="sans-serif"
-        android:textSize="20dp"
+        android:textSize="25dp"
         android:id="@+id/txt"
         />
     <Spinner
@@ -61,9 +61,9 @@
         android:layout_marginRight="20dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/subjectSpinner"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:layout_marginBottom="10dp"
-        android:background="@drawable/profilebutton"
+        android:background="@drawable/profilebtnborder"
         android:text="Add"
         android:textColor="@color/colorAccent1"
         android:id="@+id/addSubject"/>

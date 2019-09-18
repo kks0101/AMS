@@ -2,14 +2,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/login">
+    android:background="@drawable/profile_back3">
 
     <LinearLayout
         android:id="@+id/details"
         android:layout_width="match_parent"
-        android:layout_height="245dp"
+        android:layout_height="240dp"
         android:orientation="vertical"
-        android:background="#80485563">
+        android:background="@drawable/profile_back3">
 
         <TextView
             android:id="@+id/subjectCode"
@@ -21,7 +21,7 @@
             style="@style/TextAppearance.AppCompat.Headline"
             android:fontFamily="sans-serif"
             android:textSize="30dp"
-            android:text="sub_code"/>
+            android:text="Subject Code: "/>
 
         <TextView
             android:id="@+id/subjectName"
@@ -33,7 +33,7 @@
             style="@style/TextAppearance.AppCompat.Headline"
             android:fontFamily="sans-serif"
             android:textSize="20dp"
-            android:text="sub_name" />
+            android:text="Subject Name: " />
 
         <TextView
             android:id="@+id/branchAttendance"
@@ -45,7 +45,7 @@
             style="@style/TextAppearance.AppCompat.Headline"
             android:fontFamily="sans-serif"
             android:textSize="20dp"
-            android:text="sub_branch" />
+            android:text="Branch: " />
 
         <TextView
             android:id="@+id/totalPresent"
@@ -58,7 +58,7 @@
             android:fontFamily="sans-serif"
             android:textSize="15dp"
             android:textStyle="bold"
-            android:text="total_present:" />
+            android:text="Total Present: " />
 
         <TextView
             android:id="@+id/totalAbsent"
@@ -71,7 +71,7 @@
             android:fontFamily="sans-serif"
             android:textStyle="bold"
             android:textSize="15dp"
-            android:text="total_absent:" />
+            android:text="Total Absent: " />
 
     </LinearLayout>
 
@@ -95,7 +95,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/profilebutton"
+        android:background="@drawable/profilebtnborder"
         android:textColor="@color/colorAccent1"
         android:text="Dashboard"
         />
@@ -104,6 +104,8 @@
         android:id="@+id/listView"
         android:layout_width="wrap_content"
         android:layout_height="300dp"
+        android:layout_above="@+id/backToDashboard"
+        android:layout_marginBottom="20dp"
         android:layout_below="@id/listOfAbsentees"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="20dp"

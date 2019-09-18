@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grey">
+    android:background="@color/blackT1">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,125 +14,124 @@
         android:id="@+id/linearLayout">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal">
             <TextView
                 android:layout_width="200dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingTop="8dp"
                 android:textAlignment="center"
-                android:text="Total Class "
-                android:background="@drawable/profilebutton"
+                android:text="Total Class: "
+                android:textSize="20dp"
                 android:textColor="@color/white"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
             <TextView
                 android:id="@+id/totalClassTextView"
                 android:layout_width="match_parent"
-                android:background="@drawable/profilebtnborder"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:textColor="@color/white"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:orientation="horizontal"
             android:layout_marginTop="5dp">
             <TextView
                 android:layout_width="200dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingTop="8dp"
                 android:textColor="@color/white"
                 android:textAlignment="center"
-                android:background="@drawable/profilebutton"
-                android:text="Total Present "
+                android:textSize="20dp"
+                android:text="Total Present: "
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
             <TextView
                 android:id="@+id/totalPresentTextView"
                 android:layout_width="match_parent"
-                android:background="@drawable/profilebtnborder"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:textColor="@color/white"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:orientation="horizontal"
             android:layout_marginTop="5dp">
             <TextView
                 android:layout_width="200dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingTop="8dp"
                 android:textColor="@color/white"
-                android:background="@drawable/profilebutton"
+                android:textSize="20dp"
                 android:textAlignment="center"
-                android:text="Total Absent "
+                android:text="Total Absent: "
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
             <TextView
             android:id="@+id/totalAbsentTextView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-                android:background="@drawable/profilebtnborder"
+            android:layout_height="match_parent"
                 android:textColor="@color/white"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:orientation="horizontal"
             android:layout_marginTop="5dp">
             <TextView
                 android:layout_width="200dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingTop="8dp"
                 android:textColor="@color/white"
                 android:textAlignment="center"
-                android:background="@drawable/profilebutton"
-                android:text="Classes to attend "
+                android:textSize="20dp"
+                android:text="Classes To Attend: "
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
             <TextView
                 android:id="@+id/moreToAttendTextView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/profilebtnborder"
+                android:layout_height="match_parent"
                 android:textColor="@color/white"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:orientation="horizontal"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp">
             <TextView
                 android:layout_width="200dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingTop="8dp"
                 android:textColor="@color/white"
-                android:background="@drawable/profilebutton"
                 android:textAlignment="center"
-                android:text="% Attendance "
+                android:text="% Attendance: "
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
             <TextView
                 android:id="@+id/percentTextView"
                 android:layout_width="match_parent"
                 android:textColor="@color/white"
-                android:background="@drawable/profilebtnborder"
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
         </LinearLayout>
-
-
 
     </LinearLayout>
 
     <Button
         android:id="@+id/dialogButtonOK"
-        android:layout_width="match_parent"
-        android:layout_marginTop="10dp"
+        android:layout_width="70dp"
+        android:layout_centerHorizontal="true"
         android:layout_height="wrap_content"
-        android:background="@drawable/profilebtnborder"
         android:layout_below="@+id/linearLayout"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/signup"
         android:text=" Ok "
-        android:textColor="@color/white"/>
+        android:textColor="@color/white" />
 
 </RelativeLayout>

@@ -9,7 +9,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="250dp"
-        android:id="@+id/adminRelative">
+        android:id="@+id/adminRelative"
+        android:background="@drawable/profile_back3">
         <ImageView
             android:layout_width="128dp"
             android:layout_height="128dp"
@@ -17,7 +18,8 @@
             android:layout_gravity="center"
             android:layout_centerHorizontal="true"
             android:id="@+id/AdminprofileImage"
-            android:background="@drawable/image_shape"/>
+            android:background="@drawable/image_shape"
+            android:src="@drawable/ic_profile2"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -35,9 +37,10 @@
             android:layout_below="@+id/adminText"
             android:textColor="@color/colorPrimary1"
             style="@style/TextAppearance.AppCompat.Headline"
-            android:fontFamily="sans-serif"
+            android:fontFamily="serif"
             android:textSize="15dp"
             android:gravity="center"
+            android:textStyle="italic"
             android:text="AHAM BRAMHASMI"
             />
     </RelativeLayout>
@@ -48,7 +51,7 @@
         android:layout_marginTop="50dp"
         android:layout_marginLeft="70dp"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/profilebutton"
+        android:background="@drawable/profilebtnborder"
         android:text="Verfiy Teacher"
         android:textColor="@color/colorAccent1"
         android:id="@+id/verifyTeacher"/>
@@ -59,7 +62,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginLeft="70dp"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/profilebutton"
+        android:background="@drawable/profilebtnborder"
         android:text="Create batch"
         android:textColor="@color/colorAccent1"
         android:id="@+id/createBatch"/>
