@@ -62,7 +62,9 @@ import java.util.Set;
 public class TeacherProfile extends BaseActivity {
     private FirebaseAuth mAuth;
     private TextView nameTextView, emailIdTextView, teacherIdTextView, verifiedTextView, phoneNoTextView;
-    private final String BASE_URL = "http://192.168.43.99:1234/ams/";
+
+    private final String BASE_URL = "https://amscollege.000webhostapp.com/";
+    //private final String BASE_URL = "http://192.168.43.99:1234/ams/";
 
     private Button logoutButton;
     private Uri mImageUri;

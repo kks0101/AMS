@@ -67,7 +67,8 @@ import com.google.zxing.integration.android.IntentResult;
 import javax.security.auth.Subject;
 
 public class StudentActivity extends BaseActivity {
-    private final String BASE_URL = "http://192.168.43.99:1234/ams/";
+    private final String BASE_URL = "https://amscollege.000webhostapp.com/";
+    //private final String BASE_URL = "http://192.168.43.99:1234/ams/";
     private FirebaseAuth mAuth;
     private List<String> subjectList = new ArrayList<>();
     private TextView detailTextView;

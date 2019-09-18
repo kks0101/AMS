@@ -55,7 +55,8 @@ public class QRCodeGenerator extends BaseActivity implements View.OnClickListene
     private ImageButton backButton;
     private String subjectCode, groupName;
 
-    private final String BASE_URL = "http://192.168.43.99:1234/ams/";
+    private final String BASE_URL = "https://amscollege.000webhostapp.com/";
+    //private final String BASE_URL = "http://192.168.43.99:1234/ams/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

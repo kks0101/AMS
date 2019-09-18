@@ -39,7 +39,8 @@ public class TeacherAfterAttendance extends BaseActivity {
 
     private TextView subjectCodeTextView, branchAttendanceTextView,subjectNameTextView, totalPresentTextView, totalAbsentTextView;
     private Button backToDashboard;
-    private final String BASE_URL = "http://192.168.43.99:1234/ams/";
+    private final String BASE_URL = "https://amscollege.000webhostapp.com/";
+    //private final String BASE_URL = "http://192.168.43.99:1234/ams/";
     private String subjectCode, groupName;
     private ListView listView;
     private ArrayList<ShortAttendanceDetail> attendanceDetails = new ArrayList<>();

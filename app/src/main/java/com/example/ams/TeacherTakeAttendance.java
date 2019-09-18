@@ -62,7 +62,8 @@ public class TeacherTakeAttendance extends BaseActivity {
     private TextView displaySubjectCode, displayGroup, displaySubjectName;
     private Button generateQr, lessThan75, generatePdf, backToDashboard;
     private static int QRCodeWidth = 500;
-    private final String BASE_URL = "http://192.168.43.99:1234/ams/";
+    private final String BASE_URL = "https://amscollege.000webhostapp.com/";
+    //private final String BASE_URL = "http://192.168.43.99:1234/ams/";
     private Bitmap bitmap;
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;

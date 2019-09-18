@@ -82,10 +82,18 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * This Activity displays the profile of each student. Profile details are fetched from
+ * PHP Server. Firebase Storage is used to store the uploaded profile images of each student, link to
+ * which is stored in Firebase Database corresponding to each user ID.
+ */
+
 public class StudentProfile extends BaseActivity {
     FirebaseAuth mAuth;
     private static int QRCodeWidth = 500;
-    private final String BASE_URL = "http://192.168.43.99:1234/ams/";
+
+    private final String BASE_URL = "https://amscollege.000webhostapp.com/";
+    //private final String BASE_URL = "http://192.168.43.99:1234/ams/";
 
     private static int request_code = 20;
 
@@ -95,7 +103,6 @@ public class StudentProfile extends BaseActivity {
     private StorageReference mStorage;
     private Uri filePath;
     private Button showQr, logOut;
-    private ImageButton addProfileImage, uplaoadProfileImage;
     private ImageView profileImage;
     private FirebaseDatabase firebaseDatabase;
     private TextView nameTextView, emailIdTextView, regNoTextView, branchTextView, phoneNoTextView, semesterTextView, groupTextView;

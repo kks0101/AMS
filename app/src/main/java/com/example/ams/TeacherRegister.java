@@ -65,7 +65,8 @@ public class TeacherRegister extends BaseActivity implements View.OnClickListene
     private FirebaseAuth mAuth;
 
     private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1;
-    private final String BASE_URL = "http://192.168.43.99:1234/ams/";
+    private final String BASE_URL = "https://amscollege.000webhostapp.com/";
+    //private final String BASE_URL = "http://192.168.43.99:1234/ams/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -213,7 +214,7 @@ public class TeacherRegister extends BaseActivity implements View.OnClickListene
 
     private class CreateNewTeacher extends AsyncTask<String, String, String> {
         String name, id, email, phnNo, deviceId, userId;
-        Boolean verified = false;
+        int verified = 0;
 
         @Override
         protected void onPreExecute() {

@@ -51,7 +51,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
     private EditText emailField, passwordField;
     private Button loginButton, studentSignUpButton, teacherSignUpButton;
     private FirebaseAuth mAuth;
-    private final String BASE_URL = "http://192.168.43.99:1234/ams/";
+    private final String BASE_URL = "https://amscollege.000webhostapp.com/";
+    //private final String BASE_URL = "http://192.168.43.99:1234/ams/";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
