@@ -12,7 +12,6 @@ import android.widget.Toast;
 import com.example.ams.others.AppStatus;
 import com.example.ams.others.MainActivity;
 import com.example.ams.R;
-import com.example.ams.teacher.VerifyTeacherActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 

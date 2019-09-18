@@ -8,7 +8,7 @@ import androidx.annotation.Nullable;
 
 public class TeacherDetails {
     private String name, emailId, teacherId, phoneNo, verified;
-    TeacherDetails(String name, String emailId, String teacherId, String phoneNo, String verified){
+    public TeacherDetails(String name, String emailId, String teacherId, String phoneNo, String verified){
         this.name = name;
         this.emailId = emailId;
         this.teacherId = teacherId;

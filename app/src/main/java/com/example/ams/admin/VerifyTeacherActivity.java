@@ -1,4 +1,4 @@
-package com.example.ams.teacher;
+package com.example.ams.admin;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,6 +19,8 @@ import com.example.ams.others.BaseActivity;
 import com.example.ams.others.FireMessage;
 import com.example.ams.R;
 import com.example.ams.others.RecyclerTouchListener;
+import com.example.ams.teacher.TeacherDetailAdapter;
+import com.example.ams.teacher.TeacherDetails;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -70,15 +72,15 @@ public class VerifyTeacherActivity extends BaseActivity {
         GetUnverifiedTeachers getUnverifiedTeachers = new GetUnverifiedTeachers();
         getUnverifiedTeachers.execute();
 
-        String SHOWCASE_ID = "Verify Teacher";
-        ShowcaseConfig config = new ShowcaseConfig();
-        config.setDelay(500); // half second between each showcase view
-        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, SHOWCASE_ID);
-
-        sequence.setConfig(config);
-        sequence.addSequenceItem(recyclerView, "Click To verify", "GoT it");
-        sequence.addSequenceItem(pullToRefresh, "Pull to refresh", "GOT IT");
-        sequence.start();
+//        String SHOWCASE_ID = "Verify Teacher";
+//        ShowcaseConfig config = new ShowcaseConfig();
+//        config.setDelay(500); // half second between each showcase view
+//        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, SHOWCASE_ID);
+//
+//        sequence.setConfig(config);
+//        sequence.addSequenceItem(recyclerView, "Click To verify", "GoT it");
+//        sequence.addSequenceItem(pullToRefresh, "Pull to refresh", "GOT IT");
+//        sequence.start();
 
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
             @Override

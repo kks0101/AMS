@@ -15,7 +15,7 @@ public class TeacherSubjectDetail implements Serializable {
     private String subjectName;
     private String branch;
 
-    TeacherSubjectDetail(String subjectCode, String branch, String subjectName){
+    public TeacherSubjectDetail(String subjectCode, String branch, String subjectName){
         this.subjectCode = subjectCode;
         this.branch = branch;
         this.subjectName = subjectName;

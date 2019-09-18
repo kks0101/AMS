@@ -407,8 +407,8 @@ public class TeacherTakeAttendance extends BaseActivity {
             //Toast.makeText(getApplicationContext(), currentDate, Toast.LENGTH_LONG).show();
             Log.d("TAG", currentDate);
             HashMap<String, Object> params = new HashMap<String, Object>();
-            params.put("groupName",  displayGroup.getText().toString());
-            params.put("subjectCode", displaySubjectCode.getText().toString());
+            params.put("groupName",  displayGroup.getText().toString().toLowerCase().trim());
+            params.put("subjectCode", displaySubjectCode.getText().toString().toLowerCase().trim());
             String link = BASE_URL + "generate_pdf.php";
 
             Set set = params.entrySet();

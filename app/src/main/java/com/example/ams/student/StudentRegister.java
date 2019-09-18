@@ -285,7 +285,6 @@ public class StudentRegister extends BaseActivity implements View.OnClickListene
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            hideProgressDialog();
             showProgressDialog("Updating..please wait..");
             name = studentNameField.getText().toString();
             regNo = Integer.parseInt(studentRegNo.getText().toString());
@@ -392,6 +391,7 @@ public class StudentRegister extends BaseActivity implements View.OnClickListene
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+            hideProgressDialog();
             //if string returned from doinbackground is null, that means Exception occured while connectioon to server
             if (s == null) {
                 Toast.makeText(StudentRegister.this, "Coudlnt connect to PHPServer", Toast.LENGTH_LONG).show();
@@ -401,40 +401,43 @@ public class StudentRegister extends BaseActivity implements View.OnClickListene
             } else {
 
                 //otherwise string would contain the JSON returned from php
-                JSONParser parser = new JSONParser();
-                JSONObject jsonObject = null;
-                try {
-                    jsonObject = (JSONObject) parser.parse(s);
+                    JSONParser parser = new JSONParser();
+
+                    try {
+                        JSONObject jsonObject = (JSONObject) parser.parse(s);
+
+
+
+                        Object p = jsonObject.get("success");
+                        int successCode = Integer.parseInt(p.toString());
+
+                    if (successCode == 0) {
+                        Toast.makeText(StudentRegister.this, "Some error occurred", Toast.LENGTH_LONG).show();
+                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                        if (user != null)
+                            user.delete();
+                    }
+                    else {
+                        if (s.toLowerCase().contains("duplicate")) {
+
+                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                            if (user != null)
+                                user.delete();
+                            //if data is Not updated to mysql server
+                            Toast.makeText(StudentRegister.this, "Student Reg No already exists", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(StudentRegister.this, "Registered Successfully!!", Toast.LENGTH_LONG).show();
+                            SharedPreferences pref = getApplicationContext().getSharedPreferences("details", 0); //Mode_private
+                            SharedPreferences.Editor editor = pref.edit();
+                            editor.putString("user", "student");
+                            editor.apply();
+                            Intent intent = new Intent(getApplicationContext(), StudentActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    }
                 } catch (ParseException e) {
                     e.printStackTrace();
-                }
-                int successCode = 0;
-                if (jsonObject != null) {
-                    Object p = jsonObject.get("success");
-                    successCode = Integer.parseInt(p.toString());
-                }
-                if (jsonObject== null || successCode == 0) {
-                    Toast.makeText(StudentRegister.this, "Some error occurred", Toast.LENGTH_LONG).show();
-                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                    if (user != null)
-                        user.delete();
-                }
-                if (s.toLowerCase().contains("duplicate")) {
-
-                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                    if (user != null)
-                        user.delete();
-                    //if data is Not updated to mysql server
-                    Toast.makeText(StudentRegister.this, "Student Reg No already exists", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(StudentRegister.this, "Registered Successfully!!", Toast.LENGTH_LONG).show();
-                    SharedPreferences pref = getApplicationContext().getSharedPreferences("details", 0); //Mode_private
-                    SharedPreferences.Editor editor = pref.edit();
-                    editor.putString("user", "student");
-                    editor.apply();
-                    Intent intent = new Intent(getApplicationContext(), StudentActivity.class);
-                    startActivity(intent);
-                    finish();
                 }
             }
         }
