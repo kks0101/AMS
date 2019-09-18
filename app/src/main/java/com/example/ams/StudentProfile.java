@@ -104,6 +104,8 @@ public class StudentProfile extends BaseActivity {
     private Uri filePath;
     private Button showQr, logOut;
     private ImageView profileImage;
+    private ImageButton addProfileImage, uplaoadProfileImage;
+    private ImageView uploadDp;
     private FirebaseDatabase firebaseDatabase;
     private TextView nameTextView, emailIdTextView, regNoTextView, branchTextView, phoneNoTextView, semesterTextView, groupTextView;
     String name , regNo, emailId, branch, semester, phoneNo,groupName;
@@ -138,11 +140,12 @@ public class StudentProfile extends BaseActivity {
 
 
         profileImage = (ImageView) findViewById(R.id.profileImage);
+        uploadDp = (ImageView)findViewById(R.id.uploadDp);
         mProgressBar = findViewById(R.id.progress_bar);
         final ProgressBar imageLoaderProgressBar = (ProgressBar)findViewById(R.id.imageProgressBar);
         mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
         mDatabaseRef = FirebaseDatabase.getInstance().getReference("uploads");
-        profileImage.setOnClickListener(new View.OnClickListener() {
+        uploadDp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mUploadTask != null && mUploadTask.isInProgress()) {

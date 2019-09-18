@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/login"
+    android:background="@drawable/profile_back3"
     tools:context=".StudentActivity">
     <LinearLayout
         android:id="@+id/progressBar"
@@ -12,20 +12,25 @@
         android:gravity="center"
         android:layout_centerInParent="true"
         android:layout_height="wrap_content"
-        android:background="#80485563"
+        android:background="@color/blackTransparent"
         android:orientation="vertical">
         <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"/>
+       <!-- <com.wang.avi.AVLoadingIndicatorView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:indicatorName="BallPulseIndicator"
+            />-->
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:background="#80485563">
+        android:layout_height="150dp"
+        android:background="@drawable/profile_back3">
 
         <RelativeLayout
             android:layout_marginTop="32dp"
@@ -54,7 +59,7 @@
 
                 android:layout_alignParentRight="true"
                 android:id="@+id/profileButton"
-                android:background="@color/imageBackground"
+                android:background="@color/blackTransparent"
                 android:src="@drawable/ic_profile"
                 android:layout_width="62dp"
                 android:layout_height="62dp"/>
@@ -76,8 +81,8 @@
         android:textAllCaps="false"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/profilebutton"
-        android:textColor="@color/colorPrimaryDark1"
+        android:background="@drawable/profilebtnborder"
+        android:textColor="@color/white"
         android:text="Give Attendance"/>
 
 </RelativeLayout>

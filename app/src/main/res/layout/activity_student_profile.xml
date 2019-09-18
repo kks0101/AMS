@@ -25,10 +25,16 @@
             android:layout_gravity="center"
             android:layout_centerHorizontal="true"
             android:id="@+id/profileImage"
+            android:background="@drawable/image_shape"/>
 
-            android:background="@color/imageBackground">
-
-        </ImageView>
+         <ImageView
+             android:id="@+id/uploadDp"
+             android:layout_width="24dp"
+             android:layout_height="24dp"
+             android:layout_marginLeft="90dp"
+             android:layout_marginTop="120dp"
+             android:background="@drawable/ic_add_a_photo_black_24dp"
+             />
 
         <ProgressBar
             android:layout_width="wrap_content"
@@ -84,7 +90,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="30dp"
                     android:padding="10dp"
-                    android:background="@drawable/email3"
+                    android:background="@drawable/email"
                     android:textSize="20sp" />
 
                 <TextView
@@ -94,12 +100,14 @@
                     android:layout_marginTop="30dp"
                     android:padding="10dp"
                     android:textSize="20sp" />
+
             </LinearLayout>
 
             <View
-                android:layout_width="match_parent"
+                android:layout_width="300dp"
+                android:layout_marginLeft="40dp"
                 android:layout_height="1dp"
-                android:background="#0D000000" />
+                android:background="@color/black" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -111,7 +119,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:padding="10dp"
-                    android:background="@drawable/reg_id3"
+                    android:background="@drawable/regiter"
                     android:textSize="20sp" />
 
                 <TextView
@@ -124,9 +132,10 @@
             </LinearLayout>
 
             <View
-                android:layout_width="match_parent"
+                android:layout_width="300dp"
+                android:layout_marginLeft="40dp"
                 android:layout_height="1dp"
-                android:background="#0D000000" />
+                android:background="@color/black" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -137,7 +146,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:background="@drawable/phone3"
+                    android:background="@drawable/phone"
                     android:padding="10dp"
                     android:textSize="20sp" />
 
@@ -151,9 +160,10 @@
             </LinearLayout>
 
             <View
-                android:layout_width="match_parent"
+                android:layout_width="300dp"
+                android:layout_marginLeft="40dp"
                 android:layout_height="1dp"
-                android:background="#0D000000" />
+                android:background="@color/black" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -165,7 +175,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:padding="10dp"
-                    android:background="@drawable/branch3"
+                    android:background="@drawable/semester1"
                     android:textSize="20sp" />
 
                 <TextView
@@ -178,9 +188,10 @@
             </LinearLayout>
 
             <View
-                android:layout_width="match_parent"
+                android:layout_width="300dp"
+                android:layout_marginLeft="40dp"
                 android:layout_height="1dp"
-                android:background="#0D000000" />
+                android:background="@color/black" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -192,7 +203,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:padding="10dp"
-                    android:background="@drawable/semester3"
+                    android:background="@drawable/ic_sem"
                     android:textSize="20sp" />
 
                 <TextView
@@ -205,9 +216,10 @@
             </LinearLayout>
 
             <View
-                android:layout_width="match_parent"
+                android:layout_width="300dp"
+                android:layout_marginLeft="40dp"
                 android:layout_height="1dp"
-                android:background="#0D000000" />
+                android:background="@color/black" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -219,7 +231,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:padding="10dp"
-                    android:background="@drawable/group3"
+                    android:background="@drawable/ic_shortcut_group"
                     android:textSize="20sp" />
 
                 <TextView
@@ -230,6 +242,11 @@
                     android:padding="10dp"
                     android:textSize="20sp" />
             </LinearLayout>
+            <View
+                android:layout_width="300dp"
+                android:layout_marginLeft="40dp"
+                android:layout_height="1dp"
+                android:background="@color/black" />
         </LinearLayout>
     </ScrollView>
 
@@ -239,7 +256,7 @@
         android:textAllCaps="false"
         android:layout_height="45dp"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/profilebutton"
+        android:background="@drawable/profilebtnborder"
         android:text="Unique QR"
         android:layout_above="@+id/logoutStudent"
         android:layout_marginLeft="20dp"
@@ -265,5 +282,5 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:layout_alignParentBottom="true" />
+        android:layout_alignParentBottom="true"/>
 </RelativeLayout>

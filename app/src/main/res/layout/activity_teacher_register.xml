@@ -9,7 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/login"
+        android:background="@drawable/profile_back3"
         android:gravity="center"/>
 
     <LinearLayout
@@ -20,7 +20,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="30dp"
         android:gravity="center"
         android:text="Teacher Registration"
         android:textColor="@color/colorPrimary1"
@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/txt"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="30dp"
         android:layout_marginRight="70dp"
         android:background="@drawable/input_shape"
         android:padding="15dp"
@@ -120,11 +120,11 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/retypePassword"
-        android:layout_marginTop="10dp"
+        android:layout_alignParentBottom="true"
         android:layout_marginLeft="70dp"
+        android:layout_marginBottom="10dp"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/profilebutton"
+        android:background="@drawable/profilebtnborder"
         android:text="Register"
         android:textColor="@color/colorAccent1"
         android:id="@+id/teacherRegisterButton"/>

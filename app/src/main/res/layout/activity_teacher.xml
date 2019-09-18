@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/login"
+    android:background="@drawable/profile_back3"
     tools:context=".MainActivity">
     <LinearLayout
         android:id="@+id/progressBar"
@@ -12,7 +12,7 @@
         android:gravity="center"
         android:layout_centerInParent="true"
         android:layout_height="wrap_content"
-        android:background="#80485563"
+        android:background="@color/blackTransparent"
         android:orientation="vertical">
         <ProgressBar
             android:layout_width="wrap_content"
@@ -23,8 +23,8 @@
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#80485563"
+        android:layout_height="200dp"
+        android:background="@drawable/profile_back3"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -40,7 +40,7 @@
                 android:layout_height="wrap_content"
                 android:text="My Dashboard"
                 android:textColor="#FFFF"
-                android:textSize="24sp" />
+                android:textSize="30dp" />
 
             <TextView
                 android:id="@+id/countSubjectTextView"
@@ -50,23 +50,15 @@
                 android:layout_marginTop="6dp"
                 android:textColor="#52BAFF"
                 android:textSize="14sp" />
-
-
             <ImageButton
-
                 android:id="@+id/profileButton"
                 android:layout_width="62dp"
                 android:layout_height="62dp"
                 android:layout_alignParentRight="true"
-                android:background="@color/imageBackground"
+                android:background="@color/blackTransparent"
                 android:src="@drawable/ic_profile" />
 
-
-
         </RelativeLayout>
-
-
-
 
     </LinearLayout>
     <TextView
