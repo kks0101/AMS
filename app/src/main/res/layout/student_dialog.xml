@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="450dp"
     android:background="@color/blackT1">
 
     <LinearLayout
@@ -30,6 +30,8 @@
                 android:id="@+id/totalClassTextView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:textSize="15dp"
+                android:paddingTop="10dp"
                 android:textColor="@color/white"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
         </LinearLayout>
@@ -52,6 +54,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:textColor="@color/white"
+                android:textSize="15dp"
+                android:paddingTop="10dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
         </LinearLayout>
 
@@ -73,6 +77,8 @@
             android:id="@+id/totalAbsentTextView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+                android:textSize="15dp"
+                android:paddingTop="10dp"
                 android:textColor="@color/white"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
         </LinearLayout>
@@ -95,6 +101,8 @@
                 android:id="@+id/moreToAttendTextView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:textSize="15dp"
+                android:paddingTop="10dp"
                 android:textColor="@color/white"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
         </LinearLayout>
@@ -117,6 +125,8 @@
                 android:id="@+id/percentTextView"
                 android:layout_width="match_parent"
                 android:textColor="@color/white"
+                android:textSize="15dp"
+                android:paddingTop="10dp"
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
         </LinearLayout>
@@ -132,6 +142,7 @@
         android:layout_marginTop="30dp"
         android:background="@drawable/signup"
         android:text=" Ok "
+        android:textSize="16sp"
         android:textColor="@color/white" />
 
 </RelativeLayout>

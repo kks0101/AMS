@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DisplayShortAttendance"
+    tools:context=".teacher.DisplayShortAttendance"
     android:background="@drawable/profile_back3">
     <ListView
         android:id="@+id/listView"

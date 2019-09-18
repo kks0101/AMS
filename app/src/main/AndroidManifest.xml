@@ -18,20 +18,20 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".StudentDetail"></activity>
-        <activity android:name=".VerifyTeacherActivity" />
+        <activity android:name=".student.StudentDetail"></activity>
+        <activity android:name=".teacher.VerifyTeacherActivity" />
 
-        <service android:name=".GPSTracker" />
+        <service android:name=".others.GPSTracker" />
 
-        <activity android:name=".TeacherAfterAttendance" />
-        <activity android:name=".DisplayShortAttendance" />
-        <activity android:name=".AdminActivity" />
+        <activity android:name=".teacher.TeacherAfterAttendance" />
+        <activity android:name=".teacher.DisplayShortAttendance" />
+        <activity android:name=".admin.AdminActivity" />
         <activity
-            android:name=".QRCodeGenerator"
+            android:name=".teacher.QRCodeGenerator"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
-        <activity android:name=".TeacherTakeAttendance" />
+        <activity android:name=".teacher.TeacherTakeAttendance" />
         <activity
-            android:name=".SplashActivity"
+            android:name=".others.SplashActivity"
             android:label="AMS"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -45,24 +45,24 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".MyFirebaseMessagingService">
+        <service android:name=".others.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
         <activity
-            android:name=".TeacherRegister"
+            android:name=".teacher.TeacherRegister"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
-            android:name=".StudentRegister"
+            android:name=".student.StudentRegister"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
-        <activity android:name=".TeacherActivity" />
-        <activity android:name=".StudentActivity" />
-        <activity android:name=".StudentProfile" />
-        <activity android:name=".TeacherSubject" />
-        <activity android:name=".TeacherProfile" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".teacher.TeacherActivity" />
+        <activity android:name=".student.StudentActivity" />
+        <activity android:name=".student.StudentProfile" />
+        <activity android:name=".teacher.TeacherSubject" />
+        <activity android:name=".teacher.TeacherProfile" />
+        <activity android:name=".others.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
